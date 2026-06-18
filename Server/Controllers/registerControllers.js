@@ -11,6 +11,11 @@ const handleSignUp = async (req, res) => {
     console.log("data..", req.body);
 
     const { userName, image, email, number, password } = req.body;
+    if (!userName || !email || !number || !password) {
+      return res.status(400).json({
+        message: "All fields are required",
+      });
+    }
 
     const isRegistered = await userModel.findOne({ email });
     if (isRegistered) {
@@ -39,6 +44,7 @@ const handleSignUp = async (req, res) => {
     });
 
     await sendMail(email, "OTP Verification", `Your OTP code is${otp}`, html);
+    // console.log("mail details..", sendMail);
 
     res.status(200).json({
       message: "User registered successfully",
@@ -49,7 +55,9 @@ const handleSignUp = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Something went wrong", error);
+    return res.status(400).json({
+      message: error,
+    });
   }
 };
 
@@ -282,13 +290,12 @@ const handleLogout = async (req, res) => {
     }
 
     const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
-    console.log("dec..",decoded);
-    
+    console.log("dec..", decoded);
+
     const session = await sessionModel.findOne({
       user: decoded.id,
       revoked: false,
     });
-    
 
     if (!session) {
       return res.status(400).json({
@@ -338,4 +345,12 @@ const handleLogoutAll = async (req, res) => {
     console.log(error);
   }
 };
-export { handleSignUp, verifyEmail, handleSignIn, refreshToken, handleGetMe, handleLogoutAll, handleLogout };
+export {
+  handleSignUp,
+  verifyEmail,
+  handleSignIn,
+  refreshToken,
+  handleGetMe,
+  handleLogoutAll,
+  handleLogout,
+};
