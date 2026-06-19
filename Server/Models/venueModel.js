@@ -24,6 +24,14 @@ const venueSchema = mongoose.Schema(
       type: String,
       require: true,
     },
+    type: {
+      type: String,
+      require: true,
+    },
+    rating: {
+      type: String,
+      require: true,
+    },
     capacity: {
       type: String,
       require: true,
