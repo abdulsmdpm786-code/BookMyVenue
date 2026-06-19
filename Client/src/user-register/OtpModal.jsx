@@ -1,47 +1,73 @@
 import React, { useState, useRef } from "react";
+import AXIOS_API from "../Api/api";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { useNavigate } from "react-router-dom";
 
-const OtpModal = ({ isOpen, onClose }) => {
-  const [otp, setOtp] = useState(["", "", "", ""]);
-  const inputRefs = [useRef(), useRef(), useRef(), useRef()];
+const OtpModal = ({ onClose, data }) => {
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const inputRefs = [
+    useRef(),
+    useRef(),
+    useRef(),
+    useRef(),
+    useRef(),
+    useRef(),
+  ];
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  if (!isOpen) return null;
+  const navigate = useNavigate();
 
   const handleChange = (e, index) => {
     const value = e.target.value;
 
-    // Only allow numbers
     if (isNaN(value)) return;
 
     const newOtp = [...otp];
-    // Take only the last character if they paste or type quickly
+
     newOtp[index] = value.substring(value.length - 1);
     setOtp(newOtp);
 
-    // Move to next input if there's a value
-    if (value && index < 3) {
+    if (value && index < 5) {
       inputRefs[index + 1].current.focus();
     }
   };
 
   const handleKeyDown = (e, index) => {
-    // Move to previous input on backspace if current is empty
     if (e.key === "Backspace" && !otp[index] && index > 0) {
       inputRefs[index - 1].current.focus();
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const otpCode = otp.join("");
-    console.log("Verifying OTP:", otpCode);
-    // Add your API verification logic here
+    setIsLoading(true);
+
+    try {
+      const otpResponse = await AXIOS_API.post("/api/v1/register/verify", {
+        email: data.email,
+        otp: otpCode,
+      });
+
+      if (otpResponse.status === 200) {
+        console.log("verified..");
+
+        navigate("/login");
+
+        onClose();
+      }
+
+      setIsLoading(false);
+    } catch (error) {
+      setError(error.response?.data?.message || "Registration failed");
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4 transition-opacity">
-      {/* Modal Container */}
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8 relative animate-in fade-in zoom-in-95 duration-200">
-        {/* Close Button (Optional) */}
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-xl p-8 relative animate-in fade-in zoom-in-95 duration-200">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors"
@@ -62,7 +88,6 @@ const OtpModal = ({ isOpen, onClose }) => {
           </svg>
         </button>
 
-        {/* Header */}
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold text-slate-800 mb-2">
             Verify your account
@@ -71,8 +96,15 @@ const OtpModal = ({ isOpen, onClose }) => {
             We've sent a 4-digit verification code to your email address.
           </p>
         </div>
+        {error && (
+          <div
+            className="p-3 mb-4 text-base text-center bg-rose-600 text-white  rounded-lg animate-fade-in"
+            style={{ animationDuration: "0.3s" }}
+          >
+            {error}
+          </div>
+        )}
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="flex justify-center gap-3 sm:gap-4">
             {otp.map((digit, index) => (
@@ -94,16 +126,31 @@ const OtpModal = ({ isOpen, onClose }) => {
             ))}
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-[#FFC107] hover:bg-[#FFB300] text-slate-900 rounded-lg py-3.5 
+          {isLoading ? (
+            <button
+              className="flex items-center justify-center w-32 h-10 bg-ticket-yellow hover:bg-ticket-yellow/90
+                         text-slate-900 rounded-lg font-bold transition-all shadow-[0_0_15px_rgba(255,193,7,0.2)] 
+                         hover:shadow-[0_0_20px_rgba(255,193,7,0.4)]"
+            >
+              <DotLottieReact
+                className="w-32 h-32 brightness-0"
+                src="https://lottie.host/07edc8d8-86af-40f2-ba5b-fbc869fbfded/YTDgtXR0cO.lottie"
+                loop
+                autoplay
+              />
+            </button>
+          ) : (
+            <button
+              onClick={handleSubmit}
+              type="submit"
+              className="w-full bg-[#FFC107] hover:bg-[#FFB300] text-slate-900 rounded-lg py-3.5 
                        font-bold transition-colors shadow-sm mt-4 flex items-center justify-center gap-2"
-          >
-            Verify & Continue <span aria-hidden="true">&rarr;</span>
-          </button>
+            >
+              Verify & Continue <span aria-hidden="true">&rarr;</span>
+            </button>
+          )}
         </form>
 
-        {/* Resend Logic */}
         <div className="mt-8 text-center text-sm">
           <span className="text-slate-500">Didn't receive the code? </span>
           <button

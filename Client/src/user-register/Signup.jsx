@@ -13,11 +13,13 @@ export default function Signup() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [isModal, setIsModal] = useState(false)
+  const [isModal, setIsModal] = useState(false);
+  const [data, setData] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+
     try {
       const response = await AXIOS_API.post("/api/v1/register/signUp", {
         userName,
@@ -26,17 +28,24 @@ export default function Signup() {
         password,
       });
       console.log("data", response);
+      if (response.status === 200) {
+        setData(response?.data?.user)
+        setEmail("")
+        setPassword("")
+        setUserName("")
+        setNumber("")
+        setIsModal(true);
+      }
 
       setIsLoading(false);
     } catch (error) {
       console.log("error", error);
       setError(error.response?.data?.message || "Registration failed");
-      console.log("error..", error);
+
       setIsLoading(false);
     }
   };
 
-  
   
 
   return (
@@ -44,7 +53,8 @@ export default function Signup() {
       <AuthLayout
         imageSrc="https://images.unsplash.com/photo-1510798831971-661eb04b3739?q=80&w=1200&auto=format&fit=crop"
         title="Reduce friction, prevent bad seats and protect customer joy"
-        subtitle="Use Book My Venue to discover unique event spaces, compare venue options, manage reservations, and create memorable experiences—all in one place."
+        subtitle="Use Book My Venue to discover unique event spaces, compare venue options, manage reservations, and 
+        create memorable experiences—all in one place."
       >
         <h1 className="text-3xl font-bold text-slate-900 mb-2">
           See Book My Venue In Action
@@ -54,6 +64,14 @@ export default function Signup() {
         </p>
 
         <form className="space-y-5" onSubmit={() => handleSubmit()}>
+          {error && (
+            <div
+              className="p-3 mb-4 text-base text-center bg-rose-600 text-white  rounded-lg animate-fade-in"
+              style={{ animationDuration: "0.3s" }}
+            >
+              {error}
+            </div>
+          )}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-2">
@@ -142,7 +160,7 @@ export default function Signup() {
           </Link>
         </p>
       </AuthLayout>
-      <OtpModal />
+      {isModal && <OtpModal data={data} onClose={()=> setIsModal(false)}/>}
     </>
   );
 }
