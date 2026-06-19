@@ -189,7 +189,9 @@ const handleSignIn = async (req, res) => {
       accessToken,
     });
   } catch (error) {
-    console.log("Something wrong", error);
+    return res.status(400).json({
+      message: error.message,
+    });
   }
 };
 
