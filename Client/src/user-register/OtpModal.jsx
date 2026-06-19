@@ -53,7 +53,7 @@ const OtpModal = ({ onClose, data }) => {
       if (otpResponse.status === 200) {
         console.log("verified..");
 
-        navigate("/login");
+        navigate("/login", { replace: true });
 
         onClose();
       }
