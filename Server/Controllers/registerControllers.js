@@ -22,6 +22,13 @@ const handleSignUp = async (req, res) => {
       return res.status(409).json({ message: "Email already exists" });
     }
 
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        message: "Please enter a valid email..",
+      });
+    }
+
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -44,7 +51,6 @@ const handleSignUp = async (req, res) => {
     });
 
     await sendMail(email, "OTP Verification", `Your OTP code is${otp}`, html);
-    // console.log("mail details..", sendMail);
 
     res.status(200).json({
       message: "User registered successfully",
@@ -55,8 +61,10 @@ const handleSignUp = async (req, res) => {
       },
     });
   } catch (error) {
+    console.log(error);
+
     return res.status(400).json({
-      message: error,
+      message: error.message,
     });
   }
 };
@@ -97,7 +105,9 @@ const verifyEmail = async (req, res) => {
       },
     });
   } catch (error) {
-    console.log("something went wrong", error);
+    return res.status(400).json({
+      message: error.message,
+    });
   }
 };
 
