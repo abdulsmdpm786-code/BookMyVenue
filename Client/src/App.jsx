@@ -48,16 +48,29 @@ function App() {
             </span>
           </div>
 
-          <div className="hidden lg:flex items-center gap-8 text-white/90 text-xl font-bold">
-            <a href="#" className="transition-opacity hover:opacity-75">
+          <div className="hidden lg:flex items-center gap-8 text-white/90 text-base font-medium">
+            <Link
+              to={"/"}
+              href="#"
+              className="transition-opacity hover:opacity-75"
+            >
               Home
-            </a>
-            <a href="#" className="transition-opacity hover:opacity-75">
+            </Link>
+            <Link
+              to={"/venues"}
+              className="transition-opacity hover:opacity-75"
+            >
               Venues
-            </a>
-            <a href="#" className="transition-opacity hover:opacity-75">
+            </Link>
+            <Link
+              to={"/dashboard"}
+              className="transition-opacity hover:opacity-75"
+            >
+              Dashboard
+            </Link>
+            <Link href="#" className="transition-opacity hover:opacity-75">
               Contact
-            </a>
+            </Link>
           </div>
 
           <div className="flex items-center gap-4">
