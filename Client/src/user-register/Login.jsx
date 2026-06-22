@@ -23,10 +23,12 @@ export default function Login() {
       await login(email, password);
       setEmail("");
       setPassword("");
+      console.log("All set....");
+      
 
       navigate("/", { replace: true });
     } catch (error) {
-      setError(err.message || "Invalid credentials");
+      setError(error.message || "Invalid credentials");
     } finally {
       setIsLoading(false);
     }

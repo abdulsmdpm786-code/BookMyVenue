@@ -2,19 +2,19 @@ import React from "react";
 import useAuth from "../Auth/useAuth";
 import { Navigate, Outlet } from "react-router-dom";
 
-function ProtectedLayout() {
+function ProtectedLayout({role}) {
   const { isAuthenticated, isLoading, hasRole } = useAuth();
   if (isLoading) {
     return (
-      <div style={styles.loader}>
-        <div style={styles.spinner} />
-        <p style={styles.loaderText}>Checking session...</p>
+      <div style={style.loader}>
+        <div style={style.spinner} />
+        <p style={style.loaderText}>Checking session...</p>
       </div>
     );
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/signup" replace />;
   }
 
   if (role && !hasRole(role)) {

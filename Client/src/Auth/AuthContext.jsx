@@ -23,8 +23,8 @@ export const AuthProvider = ({ children }) => {
   const silentRefresh = useCallback(async () => {
     try {
       const data = await authApi.refresh();
-      setAccessToken(data.accessToken);
-      setUser(data.user);
+      setAccessToken(data?.accessToken);
+      setUser(data);
       scheduleRefresh();
     } catch (error) {
       setAccessToken(null);
@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const scheduleRefresh = useCallback(() => {
+    
     clearTimeout(refreshTimer.current);
     refreshTimer.current = setTimeout(() => {
       silentRefresh();
@@ -60,12 +61,13 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const data = await authApi.login(email, password);
+    console.log("data from auth..", data);
     setAccessToken(data.accessToken);
     setUser(data.user);
     scheduleRefresh();
   };
 
-  const logout = async () => {
+  const  logout = async () => {
     try {
       await authApi.logout();
     } finally {

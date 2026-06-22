@@ -131,18 +131,20 @@ export default function Dashboard() {
         `}</style>
         
         {/* Sidebar Navigation */}
-        <Sidebar 
-          activeTab={activeTab} 
-          setActiveTab={setActiveTab} 
-          sidebarOpen={sidebarOpen}
-          setSidebarOpen={setSidebarOpen}
-        />
+        <div className="hidden lg:flex flex-shrink-0 h-full">
+          <Sidebar 
+            activeTab={activeTab} 
+            setActiveTab={setActiveTab} 
+            sidebarOpen={sidebarOpen}
+            setSidebarOpen={setSidebarOpen}
+          />
+        </div>
 
         {/* Mobile Drawer Sidebar */}
         {mobileSidebarOpen && (
           <div className="fixed inset-0 z-50 flex lg:hidden">
             <div className="fixed inset-0 bg-slate-950/50 backdrop-blur-sm" onClick={() => setMobileSidebarOpen(false)} />
-            <div className="relative flex flex-col bg-white w-64 h-full animate-slide-in-left">
+            <div className="relative flex flex-col bg-[#F7F5EE] w-64 h-full animate-slide-in-left z-50">
               <Sidebar 
                 activeTab={activeTab} 
                 setActiveTab={(tab) => {
