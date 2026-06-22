@@ -7,43 +7,34 @@ export const authApi = {
         email,
         password,
       });
-      if (!res.ok) {
-        return res.status(400).json({
-          message: "Login failed",
-        });
-      }
+      console.log("Success:", res.data);
+      return res.data;
     } catch (error) {
-      return res.status(400).json({
-        message: error.message || "Login failed",
-      });
+      const errorMessage = error.response?.data?.message || "Login failed";
+      console.error("Login Error:", errorMessage);
+      throw new Error(errorMessage);
     }
   },
 
   logout: async () => {
     try {
-      await AXIOS_API.post("/api/v1/register/logout");
-      return res.status(200).json({
-        message: "Logout successful",
-      });
+      await AXIOS_API.get("/api/v1/register/logout");
     } catch (error) {
-      return res.status(400).json({
-        message: error.message,
-      });
+      const errorMessage = error.response?.data?.message || "Login failed";
+      console.error("Login Error:", errorMessage);
+      throw new Error(errorMessage);
     }
   },
 
   refresh: async () => {
     try {
-      const res = await AXIOS_API.post("/api/v1/register/refresh");
-      if (!res.ok) {
-        return res.status(400).json({
-          message: "Login failed",
-        });
-      }
+      const res = await AXIOS_API.get("/api/v1/register/refresh");
+      console.log("...",res);
+      return res.data;
     } catch (error) {
-      return res.status(400).json({
-        message: error.message || "Login failed",
-      });
+      const errorMessage = error.response?.data?.message || "Refresh failed";
+      console.error("Login Error:", errorMessage);
+      throw new Error(errorMessage);
     }
   },
 };

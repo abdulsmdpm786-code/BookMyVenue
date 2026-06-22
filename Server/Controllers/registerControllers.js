@@ -185,6 +185,7 @@ const handleSignIn = async (req, res) => {
       user: {
         userName: user.userName,
         email: user.email,
+        role: user.role,
       },
       accessToken,
     });
@@ -213,6 +214,11 @@ const refreshToken = async (req, res) => {
       user: decoded.id,
       revoked: false,
     });
+    console.log("session", session);
+    const user = await userModel.findOne({
+      _id: decoded.id,
+    });
+    console.log("user...in refresh", user);
 
     if (!session) {
       return res.status(401).json({
@@ -256,6 +262,11 @@ const refreshToken = async (req, res) => {
     res.status(200).json({
       message: "Access token refreshed successfully",
       accessToken,
+      user: {
+        userName: user.userName,
+        email: user.email,
+        role: user.role,
+      },
     });
   } catch (error) {
     console.log(error);

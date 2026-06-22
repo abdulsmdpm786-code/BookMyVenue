@@ -4,8 +4,10 @@ import AuthLayout from "./AuthLayout";
 import AXIOS_API from "../Api/api";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../Auth/useAuth";
 
 export default function Login() {
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -15,25 +17,39 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
     setIsLoading(true);
     try {
-      const loginResponse = await AXIOS_API.post("/api/v1/register/signIn", {
-        email,
-        password,
-      });
+      await login(email, password);
+      setEmail("");
+      setPassword("");
+      console.log("All set....");
+      
 
-      if (loginResponse.status === 200) {
-        console.log("Logged..");
-
-        setEmail("");
-        setPassword("");
-        setIsLoading(false);
-        navigate("/", { replace: true });
-      }
+      navigate("/", { replace: true });
     } catch (error) {
-      setError(error.response?.data?.message || "Registration failed");
+      setError(error.message || "Invalid credentials");
+    } finally {
       setIsLoading(false);
     }
+    // try {
+    //   const loginResponse = await AXIOS_API.post("/api/v1/register/signIn", {
+    //     email,
+    //     password,
+    //   });
+
+    //   if (loginResponse.status === 200) {
+    //     console.log("Logged..");
+
+    //     setEmail("");
+    //     setPassword("");
+    //     setIsLoading(false);
+    //     navigate("/", { replace: true });
+    //   }
+    // } catch (error) {
+    //   setError(error.response?.data?.message || "Registration failed");
+    //   setIsLoading(false);
+    // }
   };
 
   return (

@@ -32,9 +32,9 @@ export default function Sidebar({
 
   return (
     <aside
-      className={`fixed inset-y-0 left-0 z-40 flex flex-col bg-[#F7F5EE] border-r border-slate-200 transition-all duration-300 ${
+      className={`flex flex-col bg-[#F7F5EE] border-r border-slate-200 transition-all duration-300 h-full ${
         sidebarOpen ? "w-64" : "w-20"
-      } lg:static`}
+      }`}
     >
       {/* Sidebar Header */}
       <div className="h-20 flex items-center justify-between px-6 border-b border-slate-200/50 flex-shrink-0">
