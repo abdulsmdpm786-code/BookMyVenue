@@ -32,6 +32,10 @@ const venueSchema = mongoose.Schema(
       type: String,
       require: true,
     },
+    price: {
+      type: String,
+      require: true,
+    },
     capacity: {
       type: String,
       require: true,

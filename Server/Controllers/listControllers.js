@@ -33,6 +33,7 @@ const handleRegister = async (req, res) => {
       spec,
       rating,
       type,
+      price
     } = req.body;
     if (
       (!organiZerId,
@@ -42,6 +43,7 @@ const handleRegister = async (req, res) => {
       !description,
       !spec,
       !rating,
+      !price,
       !type)
     ) {
       return res.status(400).json({
@@ -66,6 +68,7 @@ const handleRegister = async (req, res) => {
       spec,
       rating,
       type,
+      price,
       image: imageURL,
     });
 
