@@ -15,25 +15,26 @@ import AXIOS_API from "../Api/api";
 export function VenueDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const [data, setData] = useState("");
   const [modalType, setModalType] = useState(null); // 'contact', 'tour', or null
 
   const venueDetails = async () => {
     try {
       const response = await AXIOS_API.get(`/api/v2/list/getOne/${id}`);
       console.log("venue..", response);
+      setData(response.data.venue);
     } catch (error) {
       console.log(error);
     }
   };
-
+  
   // Find the requested venue
   const venue = venues.find((v) => v.id === parseInt(id));
 
   // Scroll to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
-    venueDetails()
+    venueDetails();
   }, [id]);
 
   if (!venue) {
@@ -52,7 +53,8 @@ export function VenueDetail() {
           </p>
           <Link
             to="/venues"
-            className="inline-flex items-center gap-1 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs py-3 px-6 rounded-xl shadow-sm transition-colors active:scale-95"
+            className="inline-flex items-center gap-1 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs
+             py-3 px-6 rounded-xl shadow-sm transition-colors active:scale-95"
           >
             <ChevronLeft className="w-4 h-4" /> Back to Listings
           </Link>
@@ -66,16 +68,16 @@ export function VenueDetail() {
       className="min-h-screen w-full font-sans bg-gradient-to-b from-[#D4CEB8] via-[#F4F1E6] to-[#FAF9F6]
      text-slate-800 selection:bg-ticket-yellow selection:text-slate-900 pb-20 relative overflow-x-hidden venue-detail-page"
     >
-      {/* Decorative Glow Elements */}
+      
       <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-ticket-orange/5 rounded-full blur-[160px] pointer-events-none"></div>
       <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] bg-ticket-yellow/10 rounded-full blur-[140px] pointer-events-none"></div>
 
-      {/* Header Navigation */}
+   
       <VenueNavbar />
 
-      {/* Main Content Container */}
+      
       <main className="max-w-6xl mx-auto px-6 md:px-12 mt-6 relative z-10">
-        {/* Breadcrumb / Back Button Link */}
+       
         <div className="mb-6 flex items-center justify-between animate-fade-in-up-stagger delay-75">
           <Link
             to="/venues"
@@ -85,45 +87,38 @@ export function VenueDetail() {
             <span>Back to Listings</span>
           </Link>
 
-          <div className="text-[10px] text-slate-400 font-semibold tracking-wider uppercase">
-            Product Code: TS-00{venue.id}
-          </div>
         </div>
 
-        {/* Gallery Section */}
+        
         <section className="mb-8 animate-fade-in-up-stagger delay-150">
-          <ImageGallery images={venue.images} />
+          <ImageGallery image={data.image}/>
         </section>
 
-        {/* Two Column details layout */}
+      
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column: Info, Features, Description, Amenities */}
+       
           <div className="lg:col-span-2 flex flex-col gap-8">
-            {/* Title Header area */}
+          
             <section className="bg-white/50 border border-slate-200/50 rounded-[2rem] p-6 shadow-[0_4px_24px_rgba(0,0,0,0.02)] animate-fade-in-up-stagger delay-225">
-              <VenueHeader venue={venue} />
+              <VenueHeader  data={data}/>
             </section>
 
-            {/* Features Info grid */}
-            <section className="bg-white/50 border border-slate-200/50 rounded-[2rem] p-6 shadow-[0_4px_24px_rgba(0,0,0,0.02)] animate-fade-in-up-stagger delay-300">
-              <VenueFeatures venue={venue} />
-            </section>
 
-            {/* About / Description text */}
+         
             <section className="bg-white/50 border border-slate-200/50 rounded-[2rem] p-6 shadow-[0_4px_24px_rgba(0,0,0,0.02)] animate-fade-in-up-stagger delay-375">
-              <VenueAbout venue={venue} />
+              <VenueAbout  data={data} />
             </section>
 
-            {/* Grid of Amenities */}
+            
             <section className="animate-fade-in-up-stagger delay-450">
-              <VenueAmenities venue={venue} />
+              <VenueAmenities  data={data.spec}/>
             </section>
           </div>
 
           {/* Right Column: Pricing & Booking Sidebar */}
           <div className="lg:col-span-1 animate-fade-in-up-stagger delay-300">
             <BookingCard
-              venue={venue}
+              venue={venue} data={data}
               onContactAgent={() => setModalType("contact")}
               onScheduleTour={() => setModalType("tour")}
             />
