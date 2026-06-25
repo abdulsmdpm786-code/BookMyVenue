@@ -5,13 +5,16 @@ import logo from "../assets/logo.png";
 export function VenueNavbar() {
   return (
     <div className="w-full relative z-30 px-6 md:px-12 pt-6 animate-fade-in">
-      <nav className="flex items-center justify-between px-6 py-4 bg-[#F7F5EE]/90 backdrop-blur-md border border-slate-200 rounded-full shadow-sm max-w-5xl mx-auto">
+      <nav
+        className="flex items-center justify-between px-6 py-4 bg-[#F7F5EE]/90 backdrop-blur-md border border-slate-200 rounded-full shadow-sm max-w-5xl mx-auto transition-all duration-500 animate-fade-in-up"
+        
+      >
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 cursor-pointer">
           <div className="w-10 h-10 bg-[#F7F5EE] rounded-xl flex items-center justify-center border border-slate-200 shadow-sm p-1">
             <img
               src={logo}
-              alt=""
+              alt="Logo"
               className="w-full h-full object-contain"
               onError={(e) => {
                 e.target.style.display = "none";
@@ -25,7 +28,7 @@ export function VenueNavbar() {
           </span>
         </Link>
 
-    
+        {/* Links */}
         <div className="hidden lg:flex items-center gap-8 text-slate-650 text-sm font-medium">
           <Link to="/" className="transition-colors hover:text-slate-900">
             Home

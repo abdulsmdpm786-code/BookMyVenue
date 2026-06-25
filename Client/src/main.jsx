@@ -9,6 +9,7 @@ import VenueList from "./venue-list/VenueList.jsx";
 import Dashboard from "./dashboard/Dashboard.jsx";
 import { AuthProvider } from "./Auth/AuthContext.jsx";
 import ProtectedLayout from "./Layout/ProtectedLayout.jsx";
+import VenueDetail from "./venue-detail/VenueDetail.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -19,6 +20,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/venues" element={<VenueList />} />
+          <Route path="/venues/:id" element={<VenueDetail />} />
           <Route element={<ProtectedLayout role="admin" />}>
             <Route path="/Dashboard" element={<Dashboard />} />
           </Route>
