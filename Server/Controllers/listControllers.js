@@ -22,6 +22,27 @@ const getAll = async (req, res) => {
   }
 };
 
+const getOne = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const response = await venueModel.findOne({ _id: id });
+    if (!response) {
+      return res.status(400).json({
+        message: "venue not found",
+      });
+    }
+    return res.status(200).json({
+      message: "got the venue",
+      venue: response,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: error
+    })
+  }
+};
+
 const handleRegister = async (req, res) => {
   try {
     const {
@@ -33,7 +54,7 @@ const handleRegister = async (req, res) => {
       spec,
       rating,
       type,
-      price
+      price,
     } = req.body;
     if (
       (!organiZerId,
@@ -114,7 +135,6 @@ const handleEdit = async (req, res) => {
   try {
     const { venueId } = req.params;
 
-  
     const updateData = { ...req.body };
 
     if (req.file) {
@@ -141,4 +161,4 @@ const handleEdit = async (req, res) => {
   }
 };
 
-export { getAll, handleRegister, handleDelete, handleEdit };
+export { getAll, handleRegister, handleDelete, handleEdit, getOne };
