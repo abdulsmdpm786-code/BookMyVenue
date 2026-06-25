@@ -8,14 +8,23 @@ import {
   Users,
   ArrowUpRight,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export function VenueCard({ venue, index }) {
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
+  
+
+  const navigate = useNavigate();
 
   // const nextImage = (e) => {
   //   e.stopPropagation();
   //   setCurrentImgIndex((prev) => (prev + 1) % venue.images.length);
   // };
+
+  const handleNavigate = (id) => {
+    navigate(`/venues/${id}`);
+    
+  };
 
   const prevImage = (e) => {
     e.stopPropagation();
@@ -122,8 +131,9 @@ export function VenueCard({ venue, index }) {
         </div>
 
         <button
-          onClick={(e) => {
-            e.stopPropagation();
+          onClick={() => {
+            // e.stopPropagation();
+            handleNavigate(venue._id);
           }}
           className="w-full mt-4 bg-slate-50 hover:bg-ticket-orange text-slate-700 hover:text-white
            py-2.5 rounded-xl font-bold text-xs transition-colors duration-300 flex items-center

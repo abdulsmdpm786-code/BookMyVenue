@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Search, Heart } from "lucide-react";
-import { venues } from "./venuesData";
 import VenueNavbar from "./VenueNavbar";
 import VenueHero from "./VenueHero";
 import VenueFilters from "./VenueFilters";
@@ -60,7 +59,6 @@ export function VenueList() {
 
   console.log("serach...", filteredVenues);
 
-  const sortedVenues = venues;
 
   return (
     <div
@@ -106,7 +104,7 @@ export function VenueList() {
             <p className="text-slate-500 text-sm font-medium">
               Showing{" "}
               <span className="text-slate-900 font-bold">
-                {sortedVenues.length}
+                {filteredVenues.length}
               </span>{" "}
               venues
             </p>
