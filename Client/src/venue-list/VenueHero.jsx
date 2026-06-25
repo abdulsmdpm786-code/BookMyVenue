@@ -7,7 +7,8 @@ export function VenueHero() {
      
       <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none"></div>
 
-      <div className="relative z-10 max-w-5xl mx-auto w-full">
+      <div className="relative z-10 max-w-5xl mx-auto w-full transition-all duration-500 animate-fade-in-up "
+        >
         <span className="inline-flex items-center gap-1.5 bg-white border border-slate-200 rounded-full px-4 py-1.5 text-xs font-semibold text-ticket-orange mb-6 shadow-sm animate-fade-in-up-stagger delay-0">
           <Sparkles className="w-3.5 h-3.5 text-ticket-yellow" /> Over 1,200 curated workspaces and events venues
         </span>
@@ -21,7 +22,10 @@ export function VenueHero() {
       </div>
 
       
-      <div className="mt-8 flex flex-wrap gap-4 items-center justify-center z-10 text-sm">
+      <div className="mt-8 flex flex-wrap gap-4 items-center justify-center z-10 text-sm transition-all duration-500 animate-fade-in-up "
+        style={{
+          animationDelay: "0.4s",
+        }}>
         <span className="bg-[#F7F5EE] border border-slate-250/80 text-slate-700 px-4 py-2 rounded-full font-medium shadow-sm hover:scale-105 transition-all cursor-default animate-fade-in-up-stagger delay-225">
           ✨ Premium Event Spaces
         </span>

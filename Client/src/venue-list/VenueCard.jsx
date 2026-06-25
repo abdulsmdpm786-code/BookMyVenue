@@ -9,13 +9,13 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 
-export function VenueCard({ venue,  index = 0 }) {
+export function VenueCard({ venue, index }) {
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
 
-  const nextImage = (e) => {
-    e.stopPropagation();
-    setCurrentImgIndex((prev) => (prev + 1) % venue.images.length);
-  };
+  // const nextImage = (e) => {
+  //   e.stopPropagation();
+  //   setCurrentImgIndex((prev) => (prev + 1) % venue.images.length);
+  // };
 
   const prevImage = (e) => {
     e.stopPropagation();
@@ -24,28 +24,32 @@ export function VenueCard({ venue,  index = 0 }) {
     );
   };
 
-  const delayClass = `delay-${(index % 6) * 150}`;
-
   return (
     <div
-      className={`group relative bg-[#F7F5EE] rounded-3xl overflow-hidden border
+      className="group relative bg-[#F7F5EE] rounded-3xl overflow-hidden border
          border-slate-200/80 hover:border-slate-350 shadow-md hover:shadow-xl transition-all duration-500 
-         hover:-translate-y-1.5 flex flex-col h-full cursor-pointer fadeInUp ${delayClass}`}
+         hover:-translate-y-1.5 flex flex-col h-full cursor-pointer   animate-fade-in-up "
+      style={{
+        animationDelay: `0.${index++}s`,
+      }}
     >
       {/* Image Gallery Area */}
-      <div className="relative h-60 w-full overflow-hidden">
+      <div className="relative h-60 w-full overflow-hidden bg-slate-200">
         <img
           src={venue.image}
           alt={`${venue.name} - View ${currentImgIndex + 1}`}
+          loading="lazy"
           className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
 
         {/* Carousel Arrow Buttons */}
-        <div className="absolute inset-x-2 top-1/2 -translate-y-1/2 flex justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        {/* <div className="absolute inset-x-2 top-1/2 -translate-y-1/2 flex justify-between opacity-0 group-hover:opacity-100
+         transition-opacity duration-300">
           <button
             onClick={prevImage}
-            className="w-7 h-7 rounded-full bg-white/90 hover:bg-white text-slate-800 flex items-center justify-center border border-slate-200 shadow-sm"
+            className="w-7 h-7 rounded-full bg-white/90 hover:bg-white text-slate-800 flex items-center 
+            justify-center border border-slate-200 shadow-sm"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
@@ -55,7 +59,7 @@ export function VenueCard({ venue,  index = 0 }) {
           >
             <ChevronRight className="w-4 h-4" />
           </button>
-        </div>
+        </div> */}
 
         {/* Image Indicators */}
         <div className="absolute bottom-4 left-4 flex gap-1 z-10">
@@ -69,7 +73,6 @@ export function VenueCard({ venue,  index = 0 }) {
           ))} */}
         </div>
 
-        {/* Category Label */}
         <span
           className="absolute bottom-4 right-4 bg-ticket-yellow text-slate-900 text-[10px] 
         font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm"
@@ -78,7 +81,6 @@ export function VenueCard({ venue,  index = 0 }) {
         </span>
       </div>
 
-      {/* Content Details */}
       <div className="p-5 flex flex-col flex-1">
         <div className="flex items-end justify-end gap-2">
           <div className="flex items-center gap-1 text-xs font-semibold text-slate-800">
@@ -87,7 +89,10 @@ export function VenueCard({ venue,  index = 0 }) {
           </div>
         </div>
 
-        <h3 className="mt-2 text-lg font-bold text-slate-900 leading-snug group-hover:text-ticket-orange transition-colors duration-300">
+        <h3
+          className="mt-2 text-lg font-bold text-slate-900 leading-snug group-hover:text-ticket-orange transition-colors
+         duration-300"
+        >
           {venue.name}
         </h3>
 
@@ -110,18 +115,19 @@ export function VenueCard({ venue,  index = 0 }) {
           </div>
           <div className="text-right">
             <span className="text-xl font-black text-slate-900">
-              ${venue.price}
+              ₹{venue.price}
             </span>
             <span className="text-[10px] text-slate-400 block">/ hour</span>
           </div>
         </div>
 
-        {/* View Details Button */}
         <button
           onClick={(e) => {
             e.stopPropagation();
           }}
-          className="w-full mt-4 bg-slate-50 hover:bg-ticket-orange text-slate-700 hover:text-white py-2.5 rounded-xl font-bold text-xs transition-all duration-300 flex items-center justify-center gap-1 group/btn border border-slate-250/60 active:scale-95 animate-fade-in"
+          className="w-full mt-4 bg-slate-50 hover:bg-ticket-orange text-slate-700 hover:text-white
+           py-2.5 rounded-xl font-bold text-xs transition-colors duration-300 flex items-center
+            justify-center gap-1 group/btn border border-slate-250/60 active:scale-95 animate-fade-in"
         >
           <span>View Details</span>
           <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />

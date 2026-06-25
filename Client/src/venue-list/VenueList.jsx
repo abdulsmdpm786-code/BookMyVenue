@@ -38,7 +38,8 @@ export function VenueList() {
           .includes(searchQuery.toLowerCase());
         const matchCapacity = Number(item.capacity) >= Number(selectedCapacity);
         const matchCategory =
-          selectedCategory === "All" || item.type.toLowerCase().includes(selectedCategory.toLowerCase()) 
+          selectedCategory === "All" ||
+          item.type.toLowerCase().includes(selectedCategory.toLowerCase());
 
         return matchSearch && matchCapacity && matchCategory;
       })
@@ -59,38 +60,16 @@ export function VenueList() {
 
   console.log("serach...", filteredVenues);
 
-
   const sortedVenues = venues;
 
   return (
     <div
       className="min-h-screen w-full font-sans bg-gradient-to-b from-[#D4CEB8] via-[#F4F1E6] to-[#FAF9F6]
-     text-slate-800 selection:bg-ticket-yellow selection:text-slate-900 pb-20 relative overflow-x-hidden"
+     text-slate-800 selection:bg-ticket-yellow selection:text-slate-900 pb-20 relative overflow-x-hidden transition-all duration-500 animate-fadeInUp "
+      style={{
+        animationDelay: "0.2s",
+      }}
     >
-      <style>{`
-        @keyframes fadeIn {
-          0% {
-            opacity: 0;
-            transform: translateY(15px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fade-in-stagger {
-          opacity: 0;
-          animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        .delay-0 { animation-delay: 0ms; }
-        .delay-150 { animation-delay: 150ms; }
-        .delay-300 { animation-delay: 300ms; }
-        .delay-450 { animation-delay: 450ms; }
-        .delay-600 { animation-delay: 600ms; }
-        .delay-750 { animation-delay: 750ms; }
-      `}</style>
-
-      {/* Decorative Light Glows */}
       <div
         className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-ticket-orange/5 rounded-full blur-[160px] 
       pointer-events-none"
@@ -123,7 +102,7 @@ export function VenueList() {
           />
 
           {/* Listing Results Summary */}
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-8 transition-all duration-500 animate-fadeInUp ">
             <p className="text-slate-500 text-sm font-medium">
               Showing{" "}
               <span className="text-slate-900 font-bold">
@@ -134,7 +113,7 @@ export function VenueList() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {venueData.map((venue, index) => (
+            {filteredVenues.map((venue, index) => (
               <VenueCard key={venue._id} venue={venue} index={index} />
             ))}
           </div>
