@@ -21,9 +21,10 @@ export default function CampaignTypesChart() {
   let accumulatedPercent = 0;
 
   return (
-    <div className="bg-white border border-slate-200 rounded-3xl p-5 md:p-6 shadow-sm hover:shadow-md hover:border-slate-350 hover:-translate-y-1.5 transition-all duration-300 select-none h-full flex flex-col justify-between">
+    <div className="bg-white border border-slate-200 rounded-3xl p-5 md:p-6 shadow-sm hover:shadow-md
+     hover:border-slate-350 hover:-translate-y-1.5 transition-all duration-300 select-none h-full flex
+      flex-col justify-between animate-fade-in-up">
       
-      {/* Chart Header */}
       <div className="flex items-start justify-between gap-4 mb-4">
         <div>
           <h3 className="text-lg font-extrabold text-slate-900 tracking-tight flex items-center gap-1.5">
@@ -37,10 +38,10 @@ export default function CampaignTypesChart() {
         </button>
       </div>
 
-      {/* Donut and Legends Layout */}
+    
       <div className="flex flex-col sm:flex-row items-center justify-center gap-6 md:gap-8 flex-1">
         
-        {/* SVG Donut Container */}
+       
         <div className="relative w-44 h-44 flex items-center justify-center">
           <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90">
             {SECTIONS.map((section, idx) => {

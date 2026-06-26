@@ -18,7 +18,6 @@ export function VenueList() {
   const handleFetch = async () => {
     try {
       const venueRes = await AXIOS_API.get("/api/v2/list/getAll");
-      console.log(venueRes.data.venue);
       setVenueData(venueRes.data.venue);
     } catch (error) {
       console.log(error);

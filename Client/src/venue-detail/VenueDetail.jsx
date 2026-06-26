@@ -139,7 +139,6 @@ export function VenueDetail() {
         />
       )}
 
-      {/* Booking Form Modals */}
       {modalType && (
         <ActionModals
           type={modalType}

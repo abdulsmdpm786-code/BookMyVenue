@@ -75,9 +75,10 @@ export default function RecentCampaigns({
   return (
     <div
       className="bg-white border border-slate-200 rounded-3xl p-5 md:p-6 shadow-sm hover:shadow-md 
-    hover:border-slate-350 hover:-translate-y-1.5 transition-all duration-300 select-none max-h-96 flex flex-col justify-between"
-    >
-      {/* Table Toolbar */}
+    hover:border-slate-350 hover:-translate-y-1.5 transition-all duration-300 select-none 
+    max-h-96 flex flex-col justify-between animate-fade-in-up"
+     >
+      
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <h3 className="text-lg font-extrabold text-slate-900 tracking-tight">
@@ -88,9 +89,9 @@ export default function RecentCampaigns({
           </p>
         </div>
 
-        {/* Filters */}
+      
         <div className="flex items-center gap-3 self-end sm:self-auto">
-          {/* Quick search inside table */}
+          
           <input
             type="text"
             placeholder="Search campaigns..."

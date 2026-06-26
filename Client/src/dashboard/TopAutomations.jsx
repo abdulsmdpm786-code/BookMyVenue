@@ -7,9 +7,11 @@ export default function TopAutomations({ automations }) {
   const activeAutomation = automations.find(a => a.id === selectedId);
 
   return (
-    <div className="bg-white border border-slate-200 rounded-3xl p-5 md:p-6 shadow-sm hover:shadow-md hover:border-slate-350 hover:-translate-y-1.5 transition-all duration-300 select-none h-full flex flex-col justify-between">
+    <div className="bg-white border border-slate-200 rounded-3xl p-5 md:p-6 shadow-sm hover:shadow-md hover:border-slate-350
+     hover:-translate-y-1.5 transition-all
+      duration-400 select-none h-full flex flex-col justify-between animate-fade-in-up">
       
-      {/* Header */}
+     
       <div className="flex items-center justify-between gap-4 mb-4">
         <div>
           <h3 className="text-lg font-extrabold text-slate-900 tracking-tight flex items-center gap-1.5">
@@ -23,7 +25,7 @@ export default function TopAutomations({ automations }) {
         </button>
       </div>
 
-      {/* Automations List */}
+   
       <div className="space-y-4 flex-1">
         {automations.map((item, index) => {
           const isSelected = selectedId === item.id;
@@ -53,7 +55,7 @@ export default function TopAutomations({ automations }) {
                 </div>
               </div>
 
-              {/* Progress Bar Container */}
+            
               <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden relative">
                 <div 
                   className="h-full bg-gradient-to-r from-ticket-yellow to-ticket-orange rounded-full transition-all duration-500"
@@ -61,7 +63,7 @@ export default function TopAutomations({ automations }) {
                 />
               </div>
 
-              {/* Expanded details */}
+             
               {isSelected && (
                 <div className="mt-4 pt-3 border-t border-slate-200 text-xs text-slate-600 space-y-2.5 animate-fade-in">
                   <div className="flex items-center justify-between font-semibold">
@@ -73,7 +75,7 @@ export default function TopAutomations({ automations }) {
                     <span className="text-slate-800">New Workspaces Leads</span>
                   </div>
 
-                  {/* Visual flowchart step list */}
+                 
                   <div className="space-y-1.5 pt-1.5">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Flow Steps</span>
                     <div className="flex items-center gap-1.5 font-semibold text-[10px] text-slate-500">

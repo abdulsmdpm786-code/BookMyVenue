@@ -72,7 +72,7 @@ export default function Sidebar({
       </div>
 
       {/* Navigation Items */}
-      <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-1.5 custom-scrollbar">
+      <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-1.5 custom-scrollbar " >
         {menuItems.map((item, idx) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -92,12 +92,15 @@ export default function Sidebar({
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-200 relative group font-medium animate-fade-in-up-stagger ${delayClass} ${
+              className={`w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-200 relative group
+                 font-medium animate-fade-in-up ${delayClass} ${
                 isActive
                   ? "bg-ticket-yellow/20 text-slate-900 shadow-sm border-l-4 border-ticket-yellow"
                   : "text-slate-500 hover:bg-white/50 hover:text-slate-800 border-l-4 border-transparent"
               }`}
-            >
+             style={{
+                animationDelay: `0.${(idx || 0) + 1}s`,
+              }}>
               <Icon
                 className={`w-5 h-5 flex-shrink-0 transition-transform group-hover:scale-105 ${isActive ? "text-ticket-orange" : "text-slate-400"}`}
               />

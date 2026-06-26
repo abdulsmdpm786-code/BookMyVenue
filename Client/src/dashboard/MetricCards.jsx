@@ -75,44 +75,29 @@ const Card = ({ title, value, icon: Icon, change, isPositive, sparklinePoints, d
 export default function MetricCards({ 
   stats, 
   onOpenNewCampaign, 
-  onOpenCreateAutomation 
+  onOpenCreateAutomation ,
+  user
 }) {
   
   return (
     <div className="space-y-6">
       
-      {/* Greetings area with action buttons */}
+      
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 select-none bg-gradient-to-r from-[#FFFDF5] to-[#FFF9E6] border border-amber-100 p-6 rounded-3xl animate-fade-in-up-stagger delay-0">
         <div>
           <h1 className="text-3xl font-black text-slate-900 tracking-tight leading-none">
-            Welcome back, <span className="bg-gradient-to-r from-ticket-orange to-amber-500 bg-clip-text text-transparent">Be!</span>
+            Welcome back, <span className="bg-gradient-to-r from-ticket-orange to-amber-500 bg-clip-text
+             text-transparent">{user.userName}</span>
           </h1>
           <p className="text-slate-500 text-xs font-semibold mt-2.5">
             Welcome back! Here's what's happening today in your space booking & marketing.
           </p>
         </div>
 
-        {/* Creation Buttons */}
-        <div className="flex items-center gap-3">
-          <button 
-            onClick={onOpenNewCampaign}
-            className="bg-white hover:bg-slate-50 text-slate-800 border border-slate-250 shadow-sm font-bold text-xs px-4 py-3 rounded-2xl flex items-center gap-1.5 transition-all duration-200 hover:scale-[1.02] active:scale-95"
-          >
-            <Plus className="w-4 h-4 text-ticket-orange" />
-            New Campaign
-          </button>
-          <button 
-            onClick={onOpenCreateAutomation}
-            className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs px-4 py-3 rounded-2xl flex items-center gap-1.5 transition-all duration-200 hover:scale-[1.02] active:scale-95 shadow-lg shadow-slate-950/20"
-          >
-            <Play className="w-4 h-4 text-ticket-yellow fill-current" />
-            Create Automation
-          </button>
-        </div>
       </div>
 
-      {/* Metric Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+     
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in-up" >
         <Card 
           title="Total Campaigns"
           value={stats.totalCampaigns.value}

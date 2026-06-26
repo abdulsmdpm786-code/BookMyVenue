@@ -14,7 +14,8 @@ export default function Header({
   const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
-    <header className="h-20 bg-[#F7F5EE] border-b border-slate-200 flex items-center justify-between px-6 md:px-8 relative z-30 flex-shrink-0">
+    <header className="h-20 bg-[#F7F5EE] border-b border-slate-200 flex items-center justify-between px-6 md:px-8 
+    relative z-30 flex-shrink-0">
       
       {/* Search Input and Mobile Menu toggle */}
       <div className="flex items-center gap-4 flex-1 max-w-lg">
@@ -25,16 +26,7 @@ export default function Header({
           <Menu className="w-5 h-5" />
         </button>
  
-        <div className="relative w-full max-w-sm hidden sm:block">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
-          <input 
-            type="text" 
-            placeholder="Search here..." 
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-slate-50 border border-slate-200 focus:border-ticket-orange focus:ring-1 focus:ring-ticket-orange rounded-full py-2.5 pl-10 pr-4 text-slate-700 placeholder:text-slate-400 text-sm font-medium outline-none transition-all"
-          />
-        </div>
+
       </div>
  
       {/* Action Items */}
@@ -92,14 +84,7 @@ export default function Header({
           )}
         </div>
 
-        {/* AI Insight CTA */}
-        <button 
-          onClick={onToggleAiDrawer}
-          className="bg-gradient-to-r from-ticket-yellow to-ticket-orange hover:shadow-[0_0_15px_rgba(255,193,7,0.4)] text-slate-900 px-5 py-2.5 rounded-full font-bold text-xs flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-95 whitespace-nowrap"
-        >
-          <Sparkles className="w-3.5 h-3.5 fill-current text-slate-950 animate-pulse" />
-          Get AI Insight
-        </button>
+
 
       </div>
     </header>
