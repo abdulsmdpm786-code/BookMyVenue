@@ -11,24 +11,30 @@ import VenueAmenities from "./VenueAmenities";
 import BookingCard from "./BookingCard";
 import ActionModals from "./ActionModals";
 import AXIOS_API from "../Api/api";
+import RegisterModal from "./RegisterModal";
 
 export function VenueDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState("");
   const [modalType, setModalType] = useState(null); // 'contact', 'tour', or null
+  const [registerModal, setRegisterModal] = useState(false);
+
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDays, setSelectedDays] = useState(1);
+  const [finalPrice, setFinalPrice] = useState(0);
 
   const venueDetails = async () => {
     try {
       const response = await AXIOS_API.get(`/api/v2/list/getOne/${id}`);
       console.log("venue..", response);
       setData(response.data.venue);
+      setFinalPrice(response.data.venue.price);
     } catch (error) {
       console.log(error);
     }
   };
-  
-  // Find the requested venue
+
   const venue = venues.find((v) => v.id === parseInt(id));
 
   // Scroll to top on mount
@@ -36,6 +42,8 @@ export function VenueDetail() {
     window.scrollTo(0, 0);
     venueDetails();
   }, [id]);
+
+
 
   if (!venue) {
     return (
@@ -68,16 +76,12 @@ export function VenueDetail() {
       className="min-h-screen w-full font-sans bg-gradient-to-b from-[#D4CEB8] via-[#F4F1E6] to-[#FAF9F6]
      text-slate-800 selection:bg-ticket-yellow selection:text-slate-900 pb-20 relative overflow-x-hidden venue-detail-page"
     >
-      
       <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-ticket-orange/5 rounded-full blur-[160px] pointer-events-none"></div>
       <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] bg-ticket-yellow/10 rounded-full blur-[140px] pointer-events-none"></div>
 
-   
       <VenueNavbar />
 
-      
       <main className="max-w-6xl mx-auto px-6 md:px-12 mt-6 relative z-10">
-       
         <div className="mb-6 flex items-center justify-between animate-fade-in-up-stagger delay-75">
           <Link
             to="/venues"
@@ -86,45 +90,54 @@ export function VenueDetail() {
             <ChevronLeft className="w-4 h-4" />
             <span>Back to Listings</span>
           </Link>
-
         </div>
 
-        
         <section className="mb-8 animate-fade-in-up-stagger delay-150">
-          <ImageGallery image={data.image}/>
+          <ImageGallery image={data.image} />
         </section>
 
-      
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-       
           <div className="lg:col-span-2 flex flex-col gap-8">
-          
             <section className="bg-white/50 border border-slate-200/50 rounded-[2rem] p-6 shadow-[0_4px_24px_rgba(0,0,0,0.02)] animate-fade-in-up-stagger delay-225">
-              <VenueHeader  data={data}/>
+              <VenueHeader data={data} />
             </section>
 
-
-         
             <section className="bg-white/50 border border-slate-200/50 rounded-[2rem] p-6 shadow-[0_4px_24px_rgba(0,0,0,0.02)] animate-fade-in-up-stagger delay-375">
-              <VenueAbout  data={data} />
+              <VenueAbout data={data} />
             </section>
 
-            
             <section className="animate-fade-in-up-stagger delay-450">
-              <VenueAmenities  data={data.spec}/>
+              <VenueAmenities data={data.spec} />
             </section>
           </div>
 
-          {/* Right Column: Pricing & Booking Sidebar */}
           <div className="lg:col-span-1 animate-fade-in-up-stagger delay-300">
             <BookingCard
-              venue={venue} data={data}
-              onContactAgent={() => setModalType("contact")}
-              onScheduleTour={() => setModalType("tour")}
+              venue={venue}
+              data={data}
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+              selectedDays={selectedDays}
+              setSelectedDays={setSelectedDays}
+              finalPrice={finalPrice}
+              setFinalPrice={setFinalPrice}
+              onOpenRegister={() => setRegisterModal(true)}
             />
           </div>
         </div>
       </main>
+
+      {registerModal && (
+        <RegisterModal
+          onClose={() => setRegisterModal(false)}
+          bookingData={{
+            date: selectedDate,
+            days: selectedDays,
+            totalPrice: finalPrice,
+            venueName: data?.name,
+          }}
+        />
+      )}
 
       {/* Booking Form Modals */}
       {modalType && (

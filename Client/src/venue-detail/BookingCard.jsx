@@ -6,7 +6,6 @@ import {
   Minus,
 } from "lucide-react";
 
-// --- DARK THEMED CALENDAR COMPONENT ---
 const DarkCalendarPopup = ({ selectedDate, onSelectDate }) => {
   const [viewDate, setViewDate] = useState(selectedDate || new Date());
 
@@ -98,7 +97,7 @@ const DarkCalendarPopup = ({ selectedDate, onSelectDate }) => {
           return (
             <button
               key={day}
-              disabled={isPastDate} // Disable native button interaction
+              disabled={isPastDate}
               onClick={(e) => {
                 e.preventDefault();
                 if (!isPastDate) {
@@ -109,7 +108,7 @@ const DarkCalendarPopup = ({ selectedDate, onSelectDate }) => {
                 h-8 w-full flex items-center justify-center rounded-lg text-xs font-medium transition-all
                 ${
                   isPastDate
-                    ? "opacity-30 cursor-not-allowed text-slate-500" // Blurred/Disabled styling
+                    ? "opacity-30 cursor-not-allowed text-slate-500"
                     : isSelected
                       ? "bg-indigo-500 text-white shadow-md shadow-indigo-500/30"
                       : "text-slate-200 hover:bg-slate-700"
@@ -125,25 +124,26 @@ const DarkCalendarPopup = ({ selectedDate, onSelectDate }) => {
   );
 };
 
-export function BookingCard({ venue, onContactAgent, onScheduleTour, data }) {
-  const [selectedDate, setSelectedDate] = useState(new Date(2025, 8, 17));
+export function BookingCard({
+  venue,
+  onOpenRegister,
+  data,
+  // Accept the lifted states as props
+  selectedDate,
+  setSelectedDate,
+  selectedDays,
+  setSelectedDays,
+  finalPrice,
+  setFinalPrice,
+}) {
+  // Only UI states remain here
   const [showCalendar, setShowCalendar] = useState(false);
   const calendarRef = useRef(null);
-  const [selectedDays, setSelectedDays] = useState(1);
-  const [extended, setExtended] = useState("");
-  console.log(extended);
 
   const price = data?.price;
 
-  const [finalPrice, setFinalPrice] = useState(price);
-  console.log("sel", finalPrice);
-
-  const [leaseDuration, setLeaseDuration] = useState("1 Year");
-  const [tenantsCount, setTenantsCount] = useState("02");
-
   // Close calendar dropdown when clicking outside
   useEffect(() => {
-    setFinalPrice(price);
     function handleClickOutside(event) {
       if (calendarRef.current && !calendarRef.current.contains(event.target)) {
         setShowCalendar(false);
@@ -151,21 +151,15 @@ export function BookingCard({ venue, onContactAgent, onScheduleTour, data }) {
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Update final price if the API data updates externally
+  // and we are still on day 1
+  useEffect(() => {
+    if (price && selectedDays === 1) {
+      setFinalPrice(price);
+    }
   }, [price]);
-
-  // Base monthly rent is derived from venue.price
-  const baseMonthlyRent = (venue?.price || 350) * 8;
-  const utilitiesEst = 150; // $150/mo
-
-  const getMonthsCount = () => {
-    if (leaseDuration === "1 Year") return 12;
-    if (leaseDuration === "6 Months") return 6;
-    if (leaseDuration === "3 Months") return 3;
-    if (leaseDuration === "1 Month") return 1;
-    return 1; // Default to 1 month if anything else
-  };
-
-  const monthsCount = getMonthsCount();
 
   const handleDateSelect = (date) => {
     setSelectedDate(date);
@@ -180,30 +174,18 @@ export function BookingCard({ venue, onContactAgent, onScheduleTour, data }) {
     return `${d}/${m}/${y}`;
   };
 
-  const monthlyTotal = baseMonthlyRent + utilitiesEst;
-  const annualTotal = monthlyTotal * monthsCount;
-
   const handleForward = () => {
     const newDays = selectedDays + 1;
     setSelectedDays(newDays);
-
     setFinalPrice(price * newDays);
-
-    const newExtendedDate = new Date(selectedDate);
-
-    newExtendedDate.setDate(selectedDate.getDate() + newDays);
-
-    setExtended(newExtendedDate);
   };
 
   const handleBackward = () => {
-    if (selectedDays <= 1) {
-      setSelectedDays(1);
-    } else {
-      setSelectedDays(selectedDays - 1);
-    }
+    if (selectedDays <= 1) return;
+    const newDays = selectedDays - 1;
+    setSelectedDays(newDays);
+    setFinalPrice(price * newDays);
   };
-
   return (
     <div
       className="bg-white rounded-3xl border border-slate-200/80 shadow-[0_10px_35px_rgba(0,0,0,0.05)] p-6 flex flex-col 
@@ -276,26 +258,17 @@ export function BookingCard({ venue, onContactAgent, onScheduleTour, data }) {
 
       <div className="border border-red-200 bg-red-50/20 rounded-2xl p-4 flex flex-col gap-3.5 mt-2 transition-all">
         <div className="text-red-800 text-xs font-bold uppercase tracking-wider">
-          Price Breakdown
+          Booking Breakdown
         </div>
 
         <div className="flex justify-between items-center text-xs text-slate-500">
           <span>Daily Rent</span>
-          <span className="font-bold text-slate-800">
-            ${baseMonthlyRent.toLocaleString()}
-          </span>
+          <span className="font-bold text-slate-800">₹{data?.price}</span>
         </div>
 
         <div className="flex justify-between items-center text-xs text-slate-500">
           <span>Lease Duration</span>
-          <span className="font-bold text-slate-800">
-            × {monthsCount} month{monthsCount !== 1 ? "s" : ""}
-          </span>
-        </div>
-
-        <div className="flex justify-between items-center text-xs text-slate-500">
-          <span>Utilities (Est.)</span>
-          <span className="font-bold text-slate-800">${utilitiesEst}/days</span>
+          <span className="font-bold text-slate-800">× {selectedDays}</span>
         </div>
 
         <div className="h-px bg-red-100 my-1"></div>
@@ -305,20 +278,20 @@ export function BookingCard({ venue, onContactAgent, onScheduleTour, data }) {
             Total Estimate:
           </span>
           <span className="text-xl font-black text-slate-900">
-            ${annualTotal.toLocaleString()}
+            ₹{finalPrice}
           </span>
         </div>
       </div>
 
       <div className="flex flex-col gap-2 mt-2">
         <button
-          onClick={onScheduleTour}
+          onClick={onOpenRegister}
           className="w-full bg-slate-900 hover:bg-slate-800 text-white py-3.5 rounded-2xl font-bold text-xs transition-all shadow-md active:scale-[0.98]"
         >
           Schedule a Tour
         </button>
         <button
-          onClick={onContactAgent}
+          // onClick={onContactAgent}
           className="w-full bg-transparent border border-slate-200 hover:bg-slate-50 text-slate-700 py-3.5 rounded-2xl font-bold text-xs transition-all active:scale-[0.98]"
         >
           Contact Agent
