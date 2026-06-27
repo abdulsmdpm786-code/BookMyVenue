@@ -368,6 +368,25 @@ const handleLogoutAll = async (req, res) => {
     console.log(error);
   }
 };
+
+const getAllUsers = async (req, res) => {
+  try {
+    const user = await userModel.find();
+    if (!user) {
+      return res.status(400).json({
+        message: "No user found..",
+      });
+    }
+    return res.status(200).json({
+      message: "Got the users",
+      users: user,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: error,
+    });
+  }
+};
 export {
   handleSignUp,
   verifyEmail,
@@ -376,4 +395,5 @@ export {
   handleGetMe,
   handleLogoutAll,
   handleLogout,
+  getAllUsers,
 };

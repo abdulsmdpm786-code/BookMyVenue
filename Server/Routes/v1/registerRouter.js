@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  getAllUsers,
   handleGetMe,
   handleLogout,
   handleLogoutAll,
@@ -18,5 +19,7 @@ registerRouter.get("/refresh", refreshToken);
 registerRouter.get("/getMe", handleGetMe);
 registerRouter.get("/logoutAll", handleLogoutAll);
 registerRouter.get("/logout", handleLogout);
+
+registerRouter.get("/getAll", getAllUsers)
 
 export default registerRouter;
