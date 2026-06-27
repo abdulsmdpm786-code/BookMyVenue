@@ -3,33 +3,28 @@ import {
   LayoutDashboard,
   Mail,
   Users,
-  BarChart3,
   ChevronLast,
   ChevronFirst,
   LogOut,
-  Sparkles,
   University,
   UserPen,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import useAuth from "../Auth/useAuth";
-import AXIOS_API from "../Api/api";
-import { useNavigate } from "react-router-dom";
 
 export default function Sidebar({
-  activeTab,
-  setActiveTab,
   sidebarOpen,
   setSidebarOpen,
+  onCloseMobile,
 }) {
   const [profileOpen, setProfileOpen] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  
+  const location = useLocation();
 
   const handleLogout = async (e) => {
-    e.preventDefault()
+    if (e) e.preventDefault();
     try {
       await logout();
       navigate("/", { replace: true });
@@ -39,12 +34,19 @@ export default function Sidebar({
   };
 
   const menuItems = [
-    { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { id: "NewVenues", label: "New venues", icon: Mail, badge: 3 },
-    { id: "Venues", label: "Venues", icon: University },
-    { id: "Users", label: "Users", icon: Users },
-    { id: "Organizers", label: "Organizers", icon: UserPen },
+    { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
+    { id: "NewVenues", label: "New venues", icon: Mail, badge: 3, path: "/dashboard/new-venues" },
+    { id: "Venues", label: "Venues", icon: University, path: "/dashboard/venues" },
+    { id: "Users", label: "Users", icon: Users, path: "/dashboard/users" },
+    { id: "Organizers", label: "Organizers", icon: UserPen, path: "/dashboard/organizers" },
   ];
+
+  const handleItemClick = (path) => {
+    navigate(path);
+    if (onCloseMobile) {
+      onCloseMobile();
+    }
+  };
 
   return (
     <aside
@@ -52,10 +54,11 @@ export default function Sidebar({
         sidebarOpen ? "w-64" : "w-20"
       }`}
     >
-      {/* Sidebar Header */}
+     
       <div className="h-20 flex items-center justify-between px-6 border-b border-slate-200/50 flex-shrink-0">
         <Link to="/" className="flex items-center gap-3 overflow-hidden">
-          <div className="w-10 h-10 bg-[#FAF9F6] rounded-xl flex items-center justify-center border border-slate-200 shadow-sm p-1 flex-shrink-0">
+          <div className="w-10 h-10 bg-[#FAF9F6] rounded-xl flex items-center justify-center border border-slate-200 
+          shadow-sm p-1 flex-shrink-0">
             <img
               src={logo}
               alt=""
@@ -74,10 +77,11 @@ export default function Sidebar({
           )}
         </Link>
 
-        {/* Collapsible toggle button */}
+        
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="hidden lg:flex items-center justify-center w-8 h-8 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-500 hover:text-slate-800 border border-slate-200 transition-all"
+          className="hidden xl:flex items-center justify-center w-8 h-8 rounded-full bg-slate-50 hover:bg-slate-100
+           text-slate-500 hover:text-slate-800 border border-slate-200 transition-all"
         >
           {sidebarOpen ? (
             <ChevronFirst className="w-4 h-4" />
@@ -87,11 +91,15 @@ export default function Sidebar({
         </button>
       </div>
 
-      {/* Navigation Items */}
+     
       <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-1.5 custom-scrollbar ">
         {menuItems.map((item, idx) => {
           const Icon = item.icon;
-          const isActive = activeTab === item.id;
+          const isActive =
+            item.path === "/dashboard"
+              ? location.pathname === "/dashboard" || location.pathname === "/dashboard/"
+              : location.pathname.startsWith(item.path);
+
           const delays = [
             "delay-0",
             "delay-75",
@@ -107,7 +115,7 @@ export default function Sidebar({
           return (
             <button
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
+              onClick={() => handleItemClick(item.path)}
               className={`w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-200 relative group
                  font-medium animate-fade-in-up ${delayClass} ${
                    isActive
@@ -129,7 +137,8 @@ export default function Sidebar({
               )}
 
               {!sidebarOpen && (
-                <span className="absolute left-20 scale-0 group-hover:scale-100 bg-slate-900 text-white text-xs font-bold px-3 py-2 rounded-xl transition-all duration-200 z-50 shadow-md whitespace-nowrap">
+                <span className="absolute left-20 scale-0 group-hover:scale-100 bg-slate-900 text-white text-xs 
+                font-bold px-3 py-2 rounded-xl transition-all duration-200 z-50 shadow-md whitespace-nowrap">
                   {item.label}
                   {item.badge && (
                     <span className="ml-1.5 bg-ticket-yellow text-slate-900 font-extrabold px-1 rounded-md text-[10px]">
@@ -140,7 +149,8 @@ export default function Sidebar({
               )}
 
               {sidebarOpen && item.badge && (
-                <span className="bg-ticket-yellow text-slate-900 font-extrabold text-[10px] px-2 py-0.5 rounded-full shadow-sm animate-pulse">
+                <span className="bg-ticket-yellow text-slate-900 font-extrabold text-[10px] px-2 py-0.5 rounded-full 
+                shadow-sm animate-pulse">
                   {item.badge}
                 </span>
               )}
@@ -149,33 +159,36 @@ export default function Sidebar({
         })}
       </nav>
 
+    
       <div className="p-4 border-t border-slate-200/50 relative flex-shrink-0">
         {profileOpen && sidebarOpen && (
           <div
-            className="absolute bottom-20 left-4 right-4 bg-[#F7F5EE] border border-slate-200 p-3 rounded-2xl shadow-xl space-y-1 z-50 animate-fade-in-up"
+            className="absolute bottom-20 left-4 right-4 bg-[#F7F5EE] border border-slate-200 p-3 rounded-2xl 
+            shadow-xl space-y-1 z-50 animate-fade-in-up"
             style={{ animationDuration: "0.2s" }}
           >
             <div className="px-2 py-1.5 text-xs text-slate-400 font-bold uppercase tracking-wider">
               Account
             </div>
-            <Link
-              to="/"
-              className="w-full text-left px-2 py-2 text-sm text-red-600 hover:bg-red-50 rounded-xl flex items-center gap-2"
+            <button
+              onClick={handleLogout}
+              className="w-full text-left px-2 py-2 text-sm text-red-600 hover:bg-red-50 rounded-xl flex
+               items-center gap-2"
             >
-              <LogOut onClick={() => handleLogout()} className="w-4 h-4" /> Log
-              Out
-            </Link>
+              <LogOut className="w-4 h-4" /> Log Out
+            </button>
           </div>
         )}
 
         <button
           onClick={() => setProfileOpen(!profileOpen)}
-          className={`w-full flex items-center gap-3 p-2 rounded-2xl hover:bg-white/50 transition-colors text-left border ${profileOpen ? "border-ticket-yellow bg-white/30" : "border-transparent"}`}
+          className={`w-full flex items-center gap-3 p-2 rounded-2xl hover:bg-white/50 transition-colors
+             text-left border ${profileOpen ? "border-ticket-yellow bg-white/30" : "border-transparent"}`}
         >
           <div className="w-10 h-10 rounded-xl overflow-hidden bg-slate-200 border border-slate-300/60 shadow-sm flex-shrink-0">
             <img
               src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop"
-              alt="John Doe"
+              alt="Avatar"
               className="w-full h-full object-cover"
             />
           </div>
@@ -183,11 +196,11 @@ export default function Sidebar({
           {sidebarOpen && (
             <div className="flex-1 min-w-0">
               <div className="text-sm font-bold text-slate-900 truncate">
-                {user?.userName}
+                {user?.userName || "Admin User"}
               </div>
               <div className="text-xs text-slate-400 flex items-center gap-1 font-semibold">
                 <span className="w-1.5 h-1.5 rounded-full bg-ticket-orange"></span>{" "}
-                {user?.role}
+                {user?.role || "Admin"}
               </div>
             </div>
           )}

@@ -13,9 +13,6 @@ import {
 } from "lucide-react";
 
 export default function RecentCampaigns({
-  campaigns,
-  onUpdateCampaign,
-  onDeleteCampaign,
   venue,
 }) {
 

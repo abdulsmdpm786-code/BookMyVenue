@@ -1,0 +1,60 @@
+import React from "react";
+import { useOutletContext } from "react-router-dom";
+import MetricCards from "../MetricCards";
+import CampaignTypesChart from "../CampaignTypesChart";
+import TopAutomations from "../TopAutomations";
+import RecentCampaigns from "../RecentCampaigns";
+
+export default function Overview() {
+  const {
+    user,
+    users,
+    venues,
+    organizers,
+    campaigns,
+    automations,
+    handleUpdateCampaign,
+    handleDeleteCampaign,
+  } = useOutletContext();
+
+  // console.log("f...",users);
+  
+
+  return (
+    <div className="max-w-7xl mx-auto space-y-8 animate-fade-in-up">
+      
+      <MetricCards
+        user={user}
+        status={{
+          users: users,
+          venues: venues,
+          organizers: organizers,
+        }}
+      />
+
+      
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+        <div className="lg:col-span-6 min-h-[340px] animate-fade-in-up-stagger delay-375">
+          <RecentCampaigns
+            venue={venues}
+            campaigns={campaigns}
+            onUpdateCampaign={handleUpdateCampaign}
+            onDeleteCampaign={handleDeleteCampaign}
+          />
+        </div>
+
+        <div className="lg:col-span-3  animate-fade-in-up-stagger delay-450">
+          <CampaignTypesChart 
+          users={users}
+          />
+        </div>
+
+        <div className="lg:col-span-3  animate-fade-in-up-stagger delay-525">
+          <TopAutomations 
+          organizers={organizers}
+          automations={automations} />
+        </div>
+      </div>
+    </div>
+  );
+}

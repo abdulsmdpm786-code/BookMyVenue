@@ -1,28 +1,17 @@
 import React from "react";
 import {
-  Mail,
+
   Users,
-  Percent,
-  DollarSign,
-  ArrowUpRight,
-  ArrowDownRight,
-  Plus,
-  Play,
   University,
   UserPen,
   CalendarCog,
 } from "lucide-react";
 
-// Reusable card sub-component defined outside the main component to prevent remounts/re-render animation replays
 const Card = ({ title, value, icon: Icon }) => {
-  const cardId = title
-    .replace(/\s+/g, "-")
-    .replace(/[^a-zA-Z0-9-]/g, "")
-    .toLowerCase();
 
   return (
     <div
-      className={`bg-gradient-to-br from-[#bfb9a3] via-[#F4F1E6] to-[#ffffff] border border-slate-200 rounded-3xl p-5
+      className={`bg-white border border-slate-200 rounded-3xl p-5
          md:p-6 shadow-sm hover:shadow-md hover:border-slate-350
      hover:-translate-y-1.5 transition-all duration-300 group select-none flex flex-col justify-between h-40 
      animate-fade-in-stagger `}
