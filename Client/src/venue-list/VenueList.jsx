@@ -76,16 +76,16 @@ export function VenueList() {
       pointer-events-none"
       ></div>
 
-      {/* Header / Navbar */}
+      
       <VenueNavbar />
 
-      {/* Hero Section */}
+    
       <VenueHero />
 
-      {/* Interactive Filter & List Section */}
+     
       <main className="w-full px-6 md:px-12 relative z-10 mt-6">
         <div className="max-w-7xl mx-auto">
-          {/* Controls / Filters */}
+         
           <VenueFilters
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
@@ -98,7 +98,7 @@ export function VenueList() {
             categories={categories}
           />
 
-          {/* Listing Results Summary */}
+        
           <div className="flex items-center justify-between mb-8 transition-all duration-500 animate-fadeInUp ">
             <p className="text-slate-500 text-sm font-medium">
               Showing{" "}
