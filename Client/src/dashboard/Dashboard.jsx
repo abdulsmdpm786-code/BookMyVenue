@@ -190,34 +190,12 @@ export default function Dashboard() {
   const calculatedOpenRate =
     totalSent > 0 ? ((totalOpens / totalSent) * 100).toFixed(1) : "0.0";
 
-  const stats = {
-    totalCampaigns: {
-      value: totalCampaignsVal.toString(),
-      change: "+12%",
-      icon: "mail",
-    },
-    activeContacts: {
-      value: (8000 + totalSent).toLocaleString(),
-      change: "+23%",
-      icon: "users",
-    },
-    avgOpenRate: {
-      value: `${calculatedOpenRate}%`,
-      change: "+5.2%",
-      icon: "percent",
-    },
-    revenue: {
-      value: `$${(12450 + totalCampaignsVal * 250).toLocaleString()}`,
-      change: "-2.4%",
-      icon: "dollar",
-    },
-  };
-
   return (
     <>
-      <div className="h-screen w-full flex bg-gradient-to-b from-[#D4CEB8] via-[#F4F1E6] to-[#FAF9F6]
-       text-slate-800 font-sans overflow-hidden animate-fade-in-up">
-        {/* Sidebar Navigation */}
+      <div
+        className="h-screen w-full flex bg-gradient-to-b from-[#D4CEB8] via-[#F4F1E6] to-[#FAF9F6]
+       text-slate-800 font-sans overflow-hidden animate-fade-in-up"
+      >
         <div className="hidden lg:flex flex-shrink-0 h-full">
           <Sidebar
             activeTab={activeTab}
@@ -227,7 +205,6 @@ export default function Dashboard() {
           />
         </div>
 
-        {/* Mobile Drawer Sidebar */}
         {mobileSidebarOpen && (
           <div className="fixed inset-0 z-50 flex lg:hidden">
             <div
@@ -248,7 +225,6 @@ export default function Dashboard() {
           </div>
         )}
 
-     
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
           <Header
             onToggleMobileSidebar={() => setMobileSidebarOpen(true)}
@@ -259,25 +235,30 @@ export default function Dashboard() {
           <main className="flex-1 overflow-y-auto px-6 py-8 md:px-8 space-y-8 custom-scrollbar">
             {activeTab === "dashboard" ? (
               <div className="max-w-7xl mx-auto space-y-8">
-                <MetricCards user={user} stats={stats} />
+                <MetricCards
+                  user={user}
+                  status={{
+                    users: users,
+                    venues: venues,
+                    organizers: organizers,
+                  }}
+                
+                />
 
-               
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-                 
                   <div className="lg:col-span-6 min-h-[340px] animate-fade-in-up-stagger delay-375">
                     <RecentCampaigns
+                    venue={venues}
                       campaigns={campaigns}
                       onUpdateCampaign={handleUpdateCampaign}
                       onDeleteCampaign={handleDeleteCampaign}
                     />
                   </div>
 
-                 
                   <div className="lg:col-span-3 min-h-[340px] animate-fade-in-up-stagger delay-450">
                     <CampaignTypesChart />
                   </div>
 
-              
                   <div className="lg:col-span-3 min-h-[340px] animate-fade-in-up-stagger delay-525">
                     <TopAutomations automations={automations} />
                   </div>

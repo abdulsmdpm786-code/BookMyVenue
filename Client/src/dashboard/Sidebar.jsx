@@ -8,11 +8,14 @@ import {
   ChevronFirst,
   LogOut,
   Sparkles,
-  University ,
-  UserPen 
+  University,
+  UserPen,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
+import useAuth from "../Auth/useAuth";
+import AXIOS_API from "../Api/api";
+import { useNavigate } from "react-router-dom";
 
 export default function Sidebar({
   activeTab,
@@ -21,13 +24,26 @@ export default function Sidebar({
   setSidebarOpen,
 }) {
   const [profileOpen, setProfileOpen] = useState(false);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  
+
+  const handleLogout = async (e) => {
+    e.preventDefault()
+    try {
+      await logout();
+      navigate("/", { replace: true });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     { id: "NewVenues", label: "New venues", icon: Mail, badge: 3 },
-    { id: "Venues", label: "Venues", icon: University  },
+    { id: "Venues", label: "Venues", icon: University },
     { id: "Users", label: "Users", icon: Users },
-    { id: "Organizers", label: "Organizers", icon: UserPen  },
+    { id: "Organizers", label: "Organizers", icon: UserPen },
   ];
 
   return (
@@ -72,7 +88,7 @@ export default function Sidebar({
       </div>
 
       {/* Navigation Items */}
-      <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-1.5 custom-scrollbar " >
+      <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-1.5 custom-scrollbar ">
         {menuItems.map((item, idx) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -94,13 +110,14 @@ export default function Sidebar({
               onClick={() => setActiveTab(item.id)}
               className={`w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-200 relative group
                  font-medium animate-fade-in-up ${delayClass} ${
-                isActive
-                  ? "bg-ticket-yellow/20 text-slate-900 shadow-sm border-l-4 border-ticket-yellow"
-                  : "text-slate-500 hover:bg-white/50 hover:text-slate-800 border-l-4 border-transparent"
-              }`}
-             style={{
+                   isActive
+                     ? "bg-ticket-yellow/20 text-slate-900 shadow-sm border-l-4 border-ticket-yellow"
+                     : "text-slate-500 hover:bg-white/50 hover:text-slate-800 border-l-4 border-transparent"
+                 }`}
+              style={{
                 animationDelay: `0.${(idx || 0) + 1}s`,
-              }}>
+              }}
+            >
               <Icon
                 className={`w-5 h-5 flex-shrink-0 transition-transform group-hover:scale-105 ${isActive ? "text-ticket-orange" : "text-slate-400"}`}
               />
@@ -111,7 +128,6 @@ export default function Sidebar({
                 </span>
               )}
 
-              
               {!sidebarOpen && (
                 <span className="absolute left-20 scale-0 group-hover:scale-100 bg-slate-900 text-white text-xs font-bold px-3 py-2 rounded-xl transition-all duration-200 z-50 shadow-md whitespace-nowrap">
                   {item.label}
@@ -123,7 +139,6 @@ export default function Sidebar({
                 </span>
               )}
 
-             
               {sidebarOpen && item.badge && (
                 <span className="bg-ticket-yellow text-slate-900 font-extrabold text-[10px] px-2 py-0.5 rounded-full shadow-sm animate-pulse">
                   {item.badge}
@@ -134,7 +149,6 @@ export default function Sidebar({
         })}
       </nav>
 
-      
       <div className="p-4 border-t border-slate-200/50 relative flex-shrink-0">
         {profileOpen && sidebarOpen && (
           <div
@@ -148,7 +162,8 @@ export default function Sidebar({
               to="/"
               className="w-full text-left px-2 py-2 text-sm text-red-600 hover:bg-red-50 rounded-xl flex items-center gap-2"
             >
-              <LogOut className="w-4 h-4" /> Log Out
+              <LogOut onClick={() => handleLogout()} className="w-4 h-4" /> Log
+              Out
             </Link>
           </div>
         )}
@@ -168,11 +183,11 @@ export default function Sidebar({
           {sidebarOpen && (
             <div className="flex-1 min-w-0">
               <div className="text-sm font-bold text-slate-900 truncate">
-                John Doe
+                {user?.userName}
               </div>
               <div className="text-xs text-slate-400 flex items-center gap-1 font-semibold">
                 <span className="w-1.5 h-1.5 rounded-full bg-ticket-orange"></span>{" "}
-                Pro Plan
+                {user?.role}
               </div>
             </div>
           )}
