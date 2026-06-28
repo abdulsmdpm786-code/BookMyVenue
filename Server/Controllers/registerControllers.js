@@ -387,6 +387,29 @@ const getAllUsers = async (req, res) => {
     });
   }
 };
+
+const getOrganizer = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const organizer = await userModel.findOne({ _id: id });
+
+    if (!organizer) {
+      return res.status(400).json({
+        message: "No organizer found...",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Got the Organizer",
+      organizer: organizer,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: error,
+    });
+  }
+};
 export {
   handleSignUp,
   verifyEmail,
@@ -396,4 +419,5 @@ export {
   handleLogoutAll,
   handleLogout,
   getAllUsers,
+  getOrganizer,
 };

@@ -1,6 +1,7 @@
 import express from "express";
 import {
   getAllUsers,
+  getOrganizer,
   handleGetMe,
   handleLogout,
   handleLogoutAll,
@@ -20,6 +21,7 @@ registerRouter.get("/getMe", handleGetMe);
 registerRouter.get("/logoutAll", handleLogoutAll);
 registerRouter.get("/logout", handleLogout);
 
-registerRouter.get("/getAll", getAllUsers)
+registerRouter.get("/getAll", getAllUsers) 
+registerRouter.get("/getOrg/:id", getOrganizer)
 
 export default registerRouter;
