@@ -410,6 +410,7 @@ const getOrganizer = async (req, res) => {
     });
   }
 };
+
 export {
   handleSignUp,
   verifyEmail,

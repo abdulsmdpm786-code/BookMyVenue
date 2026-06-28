@@ -38,8 +38,8 @@ const getOne = async (req, res) => {
     });
   } catch (error) {
     return res.status(400).json({
-      message: error
-    })
+      message: error,
+    });
   }
 };
 
@@ -161,4 +161,30 @@ const handleEdit = async (req, res) => {
   }
 };
 
-export { getAll, handleRegister, handleDelete, handleEdit, getOne };
+const verifyVenue = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const verify = await venueModel.findByIdAndUpdate(
+      id,
+      { $set: { isApproved: "yes" } },
+      { new: true },
+    );
+
+    if (!verify) {
+      return res.status(400).json({
+        message: "Venue not found",
+      });
+    }
+
+    return res.status(200).json({
+       message: "Venue verified..",
+    })
+  } catch (error) {
+    return res.status(200).json({
+      message: error,
+    });
+  }
+};
+
+export { getAll, handleRegister, handleDelete, handleEdit, getOne, verifyVenue };
