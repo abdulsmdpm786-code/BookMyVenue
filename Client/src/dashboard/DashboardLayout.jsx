@@ -8,6 +8,12 @@ import DetailModal from "./NewVenues/DetailModal";
 
 export default function DashboardLayout() {
   const { user, logout } = useAuth();
+  
+  
+  const isAdmin = user.role === "admin"
+  const isOrganizer = user.role === "organizer"
+  console.log("ooo",user);
+  
 
   const [users, setUsers] = useState([]);
   const [organizers, setOrganizers] = useState([]);

@@ -21,7 +21,7 @@ export default function Organizers() {
         </p>
       </div>
 
-      {/* Search Header */}
+   
       <div className="flex bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -37,7 +37,7 @@ export default function Organizers() {
 
       {filteredOrganizers.length > 0 ? (
         <>
-          {/* Desktop Table View */}
+         
           <div className="hidden md:block bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -74,7 +74,7 @@ export default function Organizers() {
             </table>
           </div>
 
-          {/* Mobile Card Grid View */}
+         
           <div className="grid grid-cols-1 gap-4 md:hidden">
             {filteredOrganizers.map((o) => (
               <div
