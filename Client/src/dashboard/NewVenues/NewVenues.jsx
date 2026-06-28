@@ -14,8 +14,14 @@ import {
 import DetailModal from "./DetailModal";
 
 export default function NewVenues() {
-  const { venues, setVenues, handleAddNotification, handleApprove, isLoading } =
-    useOutletContext();
+  const {
+    venues,
+    setVenues,
+    handleAddNotification,
+    handleApprove,
+    isLoading,
+    handleVerify,
+  } = useOutletContext();
 
   // console.log("ve...", handleApprove);
 
@@ -170,6 +176,7 @@ export default function NewVenues() {
                     <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
                   </button>
                   <button
+                    onClick={() => handleVerify(venue._id)}
                     className="w-full mt-4 bg-slate-50 hover:bg-ticket-orange text-slate-700 hover:text-white
            py-2.5 rounded-xl font-bold text-xs transition-colors duration-300 flex items-center
             justify-center gap-1 group/btn border border-slate-250/60 active:scale-95 animate-fade-in"

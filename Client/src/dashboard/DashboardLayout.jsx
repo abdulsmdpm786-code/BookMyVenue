@@ -49,6 +49,19 @@ export default function DashboardLayout() {
     }
   };
 
+  const handleVerify = async (id) => {
+    try {
+      const response = await AXIOS_API.put(`/api/v2/list/verify/${id}`);
+      handleVenueFetch();
+
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setDetailModal(false);
+    }
+  };
+
   // console.log("se...",selectedVenue.organiZerId);
 
   const org = organizers.filter(
@@ -90,6 +103,8 @@ export default function DashboardLayout() {
           venue={selectedVenue}
           organizer={org}
           onClose={() => setDetailModal(false)}
+          fetchVenue={handleVenueFetch}
+          verify={handleVerify}
         />
       )}
 
@@ -107,7 +122,8 @@ export default function DashboardLayout() {
               venues,
               setVenues,
               handleApprove,
-              isLoading
+              isLoading,
+              handleVerify
             }}
           />
         </main>

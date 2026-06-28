@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import AXIOS_API from "../../Api/api";
 
-function DetailModal({ venue, onClose }) {
+function DetailModal({ venue, onClose, fetchVenue, verify }) {
   const orgId = venue.organiZerId;
   const [organizer, setOrganizer] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -27,6 +27,7 @@ function DetailModal({ venue, onClose }) {
       console.log("error", error);
     }
   };
+
 
   useEffect(() => {
     fetchOrg();
@@ -77,7 +78,6 @@ function DetailModal({ venue, onClose }) {
             </div>
 
             <div className="mt-8 grid grid-cols-1 gap-10 lg:grid-cols-3">
-          
               <div className="lg:col-span-2 space-y-8">
                 <section>
                   <h3 className="text-xl font-bold mb-3">About the Venue</h3>
@@ -120,9 +120,7 @@ function DetailModal({ venue, onClose }) {
                 </section>
               </div>
 
-          
               <div className="space-y-6">
-           
                 <div className="rounded-2xl border border-gray-100 bg-gray-50 p-6">
                   <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">
                     Key Specifications
@@ -242,7 +240,10 @@ function DetailModal({ venue, onClose }) {
               <XCircle className="h-4 w-4" />
               Reject
             </button>
-            <button className="flex items-center justify-center gap-2 rounded-xl bg-[#1a1f2c] px-8 py-2.5 text-sm font-bold text-white transition-all hover:bg-black focus:ring-2 focus:ring-gray-800 focus:ring-offset-2 focus:outline-none">
+            <button
+              onClick={() => verify(venue._id)}
+              className="flex items-center justify-center gap-2 rounded-xl bg-[#1a1f2c] px-8 py-2.5 text-sm font-bold text-white transition-all hover:bg-black focus:ring-2 focus:ring-gray-800 focus:ring-offset-2 focus:outline-none"
+            >
               <Check className="h-4 w-4" />
               Approve Venue
             </button>
