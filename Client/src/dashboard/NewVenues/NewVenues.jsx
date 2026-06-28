@@ -9,25 +9,19 @@ import {
   Calendar,
   Star,
   CheckCheck,
-  ArrowUpRight
+  ArrowUpRight,
 } from "lucide-react";
 import DetailModal from "./DetailModal";
 
 export default function NewVenues() {
-  const { venues, setVenues, handleAddNotification, setDetailModal } = useOutletContext();
+  const { venues, setVenues, handleAddNotification, handleApprove, isLoading } =
+    useOutletContext();
 
-  console.log("ve...", venues);
+  // console.log("ve...", handleApprove);
 
-  const pendingVenues = venues.filter(
-    (v) => v.isApproved === "no" || v.status === "pending",
-  );
-
-  // const handleApprove = (id, name) => {
-  //   setVenues((prev) =>
-  //     prev.map((v) => (v.id === id ? { ...v, status: "Approved" } : v)),
-  //   );
-  //   handleAddNotification(`Venue '${name}' has been approved and published.`);
-  // };
+  const pendingVenues =
+    venues?.filter((v) => v.isApproved === "no" || v.status === "pending") ||
+    [];
 
   const handleReject = (id, name) => {
     setVenues((prev) => prev.filter((v) => v.id !== id));
@@ -45,20 +39,59 @@ export default function NewVenues() {
             Review and approve pending venue submissions from organizers.
           </p>
         </div>
-        <div className="bg-white px-4 py-2.5 rounded-2xl border border-slate-200 shadow-sm flex items-center
-         gap-2 self-start md:self-auto">
+        <div
+          className="bg-white px-4 py-2.5 rounded-2xl border border-slate-200 shadow-sm flex items-center
+         gap-2 self-start md:self-auto"
+        >
           <span className="w-2.5 h-2.5 rounded-full bg-ticket-orange animate-pulse"></span>
           <span className="text-xs font-bold text-slate-700">
-            {pendingVenues.length} Pending Submission
+            {isLoading ? "..." : pendingVenues.length} Pending Submission
             {pendingVenues.length !== 1 && "s"}
           </span>
         </div>
       </div>
 
-      {pendingVenues.length > 0 ? (
+      {isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <div
+              key={index}
+              className="group relative bg-[#F7F5EE] rounded-3xl overflow-hidden border
+         border-slate-200/80 shadow-md flex flex-col h-full"
+            >
+              <div className="relative h-60 w-full bg-slate-200 animate-pulse"></div>
+
+              <div className="p-5 flex flex-col flex-1">
+                <div className="flex items-end justify-end gap-2">
+                  <div className="h-4 w-10 bg-slate-200 rounded animate-pulse"></div>
+                </div>
+
+                <div className="mt-2 h-6 w-3/4 bg-slate-200 rounded-lg animate-pulse"></div>
+                <div className="mt-2 h-4 w-1/2 bg-slate-200 rounded animate-pulse"></div>
+
+                <div className="mt-4 space-y-2">
+                  <div className="h-3 w-full bg-slate-200 rounded animate-pulse"></div>
+                  <div className="h-3 w-5/6 bg-slate-200 rounded animate-pulse"></div>
+                </div>
+
+                <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
+                  <div className="h-4 w-24 bg-slate-200 rounded animate-pulse"></div>
+                  <div className="h-8 w-16 bg-slate-200 rounded animate-pulse"></div>
+                </div>
+
+                <div className="flex gap-2 mt-4">
+                  <div className="h-10 w-full bg-slate-200 rounded-xl animate-pulse"></div>
+                  <div className="h-10 w-full bg-slate-200 rounded-xl animate-pulse"></div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : pendingVenues.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {pendingVenues.map((venue, index) => (
             <div
+              key={venue.id || index}
               className="group relative bg-[#F7F5EE] rounded-3xl overflow-hidden border
          border-slate-200/80 hover:border-slate-350 shadow-md hover:shadow-xl transition-all duration-500 
          hover:-translate-y-1.5 flex flex-col h-full cursor-pointer   animate-fade-in-up "
@@ -95,7 +128,7 @@ export default function NewVenues() {
 
                 <h3
                   className="mt-2 text-lg font-bold text-slate-900 leading-snug group-hover:text-ticket-orange
-                   transition-colors
+                    transition-colors
          duration-300"
                 >
                   {venue.name}
@@ -128,11 +161,8 @@ export default function NewVenues() {
                 </div>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => {
-                      // e.stopPropagation();
-                      handleNavigate(venue._id);
-                    }}
-                    className="w-full mt-4 bg-slate-50 hover:bg-ticket-orange text-slate-700 hover:text-white
+                    onClick={() => handleApprove(venue)}
+                    className="w-full mt-4 bg-slate-50 hover:bg-black text-slate-700 hover:text-white
            py-2.5 rounded-xl font-bold text-xs transition-colors duration-300 flex items-center
             justify-center gap-1 group/btn border border-slate-250/60 active:scale-95 animate-fade-in"
                   >
@@ -140,16 +170,15 @@ export default function NewVenues() {
                     <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
                   </button>
                   <button
-                    onClick={() => {
-                      // e.stopPropagation();
-                      setDetailModal(true);
-                    }}
                     className="w-full mt-4 bg-slate-50 hover:bg-ticket-orange text-slate-700 hover:text-white
            py-2.5 rounded-xl font-bold text-xs transition-colors duration-300 flex items-center
             justify-center gap-1 group/btn border border-slate-250/60 active:scale-95 animate-fade-in"
                   >
                     <span>Approve</span>
-                    <CheckCheck className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                    <CheckCheck
+                      className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-0.5
+                     group-hover/btn:-translate-y-0.5"
+                    />
                   </button>
                 </div>
               </div>

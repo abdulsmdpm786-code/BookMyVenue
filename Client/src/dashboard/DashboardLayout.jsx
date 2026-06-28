@@ -18,6 +18,7 @@ export default function DashboardLayout() {
 
   const [detailModal, setDetailModal] = useState(false);
   const [selectedVenue, setSelectedVenue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleUserFetch = async () => {
     try {
@@ -31,18 +32,28 @@ export default function DashboardLayout() {
     }
   };
 
-  const handleApprove = ()=>{
-    setDetailModal(true)
-  }
+  const handleApprove = (data) => {
+    setSelectedVenue("");
+    setSelectedVenue(data);
+    setDetailModal(true);
+  };
 
   const handleVenueFetch = async () => {
+    setIsLoading(true);
     try {
       const venueRes = await AXIOS_API.get("/api/v2/list/getAll");
       setVenues(venueRes.data.venue);
+      setIsLoading(false);
     } catch (error) {
       console.error("Failed to fetch venues", error);
     }
   };
+
+  // console.log("se...",selectedVenue.organiZerId);
+
+  const org = organizers.filter(
+    (i) => i.organiZerId === selectedVenue?.organiZerId,
+  );
 
   useEffect(() => {
     handleUserFetch();
@@ -74,7 +85,13 @@ export default function DashboardLayout() {
         </div>
       )}
 
-      {detailModal && <DetailModal selected={selectedVenue} />}
+      {detailModal && (
+        <DetailModal
+          venue={selectedVenue}
+          organizer={org}
+          onClose={() => setDetailModal(false)}
+        />
+      )}
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <Header onToggleMobileSidebar={() => setMobileSidebarOpen(true)} />
@@ -89,7 +106,8 @@ export default function DashboardLayout() {
               setOrganizers,
               venues,
               setVenues,
-              setDetailModal
+              handleApprove,
+              isLoading
             }}
           />
         </main>
