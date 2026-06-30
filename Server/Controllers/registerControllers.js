@@ -183,6 +183,7 @@ const handleSignIn = async (req, res) => {
     res.status(200).json({
       message: "Logged successfully",
       user: {
+        userId: user._id,
         userName: user.userName,
         email: user.email,
         role: user.role,
@@ -263,6 +264,7 @@ const refreshToken = async (req, res) => {
       message: "Access token refreshed successfully",
       accessToken,
       user: {
+        userId: decoded.id,
         userName: user.userName,
         email: user.email,
         role: user.role,

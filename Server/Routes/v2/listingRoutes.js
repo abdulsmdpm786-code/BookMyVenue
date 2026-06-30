@@ -2,6 +2,7 @@ import express from "express";
 import {
   getAll,
   getOne,
+  getVenueOrg,
   handleDelete,
   handleEdit,
   handleRegister,
@@ -18,4 +19,6 @@ listingRoutes.delete("/delete/:venueId", handleDelete);
 listingRoutes.put("/edit/:venueId", upload.single("image"), handleEdit);
 listingRoutes.put("/verify/:id", verifyVenue)
 
+
+listingRoutes.get('/venueOrg/:id', getVenueOrg)
 export default listingRoutes;

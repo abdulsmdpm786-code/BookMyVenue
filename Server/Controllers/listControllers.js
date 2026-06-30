@@ -178,8 +178,8 @@ const verifyVenue = async (req, res) => {
     }
 
     return res.status(200).json({
-       message: "Venue verified..",
-    })
+      message: "Venue verified..",
+    });
   } catch (error) {
     return res.status(200).json({
       message: error,
@@ -187,4 +187,35 @@ const verifyVenue = async (req, res) => {
   }
 };
 
-export { getAll, handleRegister, handleDelete, handleEdit, getOne, verifyVenue };
+const getVenueOrg = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const response = await venueModel.find({ organiZerId: id });
+    if (!response) {
+      return res.status(400).json({
+        message: "Listed venue not found",
+      });
+    }
+
+    return res.status(200).json({
+      venue: response,
+    });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(400).json({
+      message: error,
+    });
+  }
+};
+
+export {
+  getAll,
+  handleRegister,
+  handleDelete,
+  handleEdit,
+  getOne,
+  verifyVenue,
+  getVenueOrg,
+};
