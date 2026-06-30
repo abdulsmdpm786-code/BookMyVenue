@@ -8,12 +8,11 @@ import DetailModal from "./NewVenues/DetailModal";
 
 export default function DashboardLayout() {
   const { user, logout } = useAuth();
-  
-  
-  const isAdmin = user.role === "admin"
-  const isOrganizer = user.role === "organizer"
-  console.log("ooo",user);
-  
+
+  const isAdmin = user.role === "admin";
+  const isOrganizer = user.role === "organizer";
+  const userId = user.userId;
+  // console.log("ooo", user);
 
   const [users, setUsers] = useState([]);
   const [organizers, setOrganizers] = useState([]);
@@ -28,11 +27,19 @@ export default function DashboardLayout() {
 
   const handleUserFetch = async () => {
     try {
-      const userResponse = await AXIOS_API.get("/api/v1/register/getAll");
-      setUsers(userResponse.data.users.filter((item) => item.role === "user"));
-      setOrganizers(
-        userResponse.data.users.filter((item) => item.role === "organizer"),
-      );
+      if (isAdmin) {
+        const userResponse = await AXIOS_API.get("/api/v1/register/getAll");
+        setUsers(
+          userResponse.data.users.filter((item) => item.role === "user"),
+        );
+        setOrganizers(
+          userResponse.data.users.filter((item) => item.role === "organizer"),
+        );
+      }
+
+      // if(isOrganizer){
+
+      // }
     } catch (error) {
       console.error("Failed to fetch users", error);
     }
@@ -47,11 +54,19 @@ export default function DashboardLayout() {
   const handleVenueFetch = async () => {
     setIsLoading(true);
     try {
-      const venueRes = await AXIOS_API.get("/api/v2/list/getAll");
-      setVenues(venueRes.data.venue);
-      setIsLoading(false);
+      if (isAdmin) {
+        const venueRes = await AXIOS_API.get("/api/v2/list/getAll");
+        setVenues(venueRes.data.venue);
+      }
+
+      if (isOrganizer) {
+        const venueRes = await AXIOS_API.get(`/api/v2/list/venueOrg/${userId}`);
+        setVenues(venueRes.data.venue);
+      }
     } catch (error) {
       console.error("Failed to fetch venues", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -129,7 +144,7 @@ export default function DashboardLayout() {
               setVenues,
               handleApprove,
               isLoading,
-              handleVerify
+              handleVerify,
             }}
           />
         </main>

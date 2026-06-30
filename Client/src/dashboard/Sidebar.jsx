@@ -33,13 +33,51 @@ export default function Sidebar({
     }
   };
 
-  const menuItems = [
-    { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
-    { id: "NewVenues", label: "New venues", icon: Mail, badge: 3, path: "/dashboard/new-venues" },
-    { id: "Venues", label: "Venues", icon: University, path: "/dashboard/venues" },
-    { id: "Users", label: "Users", icon: Users, path: "/dashboard/users" },
-    { id: "Organizers", label: "Organizers", icon: UserPen, path: "/dashboard/organizers" },
-  ];
+  const [menuItem, setMenuItem] = useState([]);
+  const isAdmin = user.role === "admin";
+  const isOrganizer = user.role === "organizer";
+
+  // if (isAdmin) {
+  //   setMenuItem([
+  //     {
+  //       id: "dashboard",
+  //       label: "Dashboard",
+  //       icon: LayoutDashboard,
+  //       path: "/dashboard",
+  //     },
+  //     {
+  //       id: "NewVenues",
+  //       label: "New venues",
+  //       icon: Mail,
+  //       badge: 3,
+  //       path: "/dashboard/new-venues",
+  //     },
+  //     {
+  //       id: "Venues",
+  //       label: "Venues",
+  //       icon: University,
+  //       path: "/dashboard/venues",
+  //     },
+  //     { id: "Users", label: "Users", icon: Users, path: "/dashboard/users" },
+  //     {
+  //       id: "Organizers",
+  //       label: "Organizers",
+  //       icon: UserPen,
+  //       path: "/dashboard/organizers",
+  //     },
+  //   ]);
+  // }
+
+  // if (isOrganizer) {
+  //   setMenuItem([
+  //     {
+  //       id: "dashboard",
+  //       label: "Dashboard",
+  //       icon: LayoutDashboard,
+  //       path: "/dashboard",
+  //     },
+  //   ]);
+  // }
 
   const handleItemClick = (path) => {
     navigate(path);
@@ -54,11 +92,12 @@ export default function Sidebar({
         sidebarOpen ? "w-64" : "w-20"
       }`}
     >
-     
       <div className="h-20 flex items-center justify-between px-6 border-b border-slate-200/50 flex-shrink-0">
         <Link to="/" className="flex items-center gap-3 overflow-hidden">
-          <div className="w-10 h-10 bg-[#FAF9F6] rounded-xl flex items-center justify-center border border-slate-200 
-          shadow-sm p-1 flex-shrink-0">
+          <div
+            className="w-10 h-10 bg-[#FAF9F6] rounded-xl flex items-center justify-center border border-slate-200 
+          shadow-sm p-1 flex-shrink-0"
+          >
             <img
               src={logo}
               alt=""
@@ -77,7 +116,6 @@ export default function Sidebar({
           )}
         </Link>
 
-        
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="hidden xl:flex items-center justify-center w-8 h-8 rounded-full bg-slate-50 hover:bg-slate-100
@@ -91,13 +129,13 @@ export default function Sidebar({
         </button>
       </div>
 
-     
       <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-1.5 custom-scrollbar ">
-        {menuItems.map((item, idx) => {
+        {menuItem?.map((item, idx) => {
           const Icon = item.icon;
           const isActive =
             item.path === "/dashboard"
-              ? location.pathname === "/dashboard" || location.pathname === "/dashboard/"
+              ? location.pathname === "/dashboard" ||
+                location.pathname === "/dashboard/"
               : location.pathname.startsWith(item.path);
 
           const delays = [
@@ -127,7 +165,8 @@ export default function Sidebar({
               }}
             >
               <Icon
-                className={`w-5 h-5 flex-shrink-0 transition-transform group-hover:scale-105 ${isActive ? "text-ticket-orange" : "text-slate-400"}`}
+                className={`w-5 h-5 flex-shrink-0 transition-transform 
+                  group-hover:scale-105 ${isActive ? "text-ticket-orange" : "text-slate-400"}`}
               />
 
               {sidebarOpen && (
@@ -137,8 +176,10 @@ export default function Sidebar({
               )}
 
               {!sidebarOpen && (
-                <span className="absolute left-20 scale-0 group-hover:scale-100 bg-slate-900 text-white text-xs 
-                font-bold px-3 py-2 rounded-xl transition-all duration-200 z-50 shadow-md whitespace-nowrap">
+                <span
+                  className="absolute left-20 scale-0 group-hover:scale-100 bg-slate-900 text-white text-xs 
+                font-bold px-3 py-2 rounded-xl transition-all duration-200 z-50 shadow-md whitespace-nowrap"
+                >
                   {item.label}
                   {item.badge && (
                     <span className="ml-1.5 bg-ticket-yellow text-slate-900 font-extrabold px-1 rounded-md text-[10px]">
@@ -149,8 +190,10 @@ export default function Sidebar({
               )}
 
               {sidebarOpen && item.badge && (
-                <span className="bg-ticket-yellow text-slate-900 font-extrabold text-[10px] px-2 py-0.5 rounded-full 
-                shadow-sm animate-pulse">
+                <span
+                  className="bg-ticket-yellow text-slate-900 font-extrabold text-[10px] px-2 py-0.5 rounded-full 
+                shadow-sm animate-pulse"
+                >
                   {item.badge}
                 </span>
               )}
@@ -159,7 +202,6 @@ export default function Sidebar({
         })}
       </nav>
 
-    
       <div className="p-4 border-t border-slate-200/50 relative flex-shrink-0">
         {profileOpen && sidebarOpen && (
           <div
