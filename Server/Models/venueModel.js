@@ -14,43 +14,43 @@ const venueSchema = mongoose.Schema(
   {
     organiZerId: {
       type: String,
-      require: true,
+      required: true,
     },
     name: {
       type: String,
-      require: true,
+      required: true,
     },
     place: {
       type: String,
-      require: true,
+      required: true,
     },
     type: {
       type: String,
-      require: true,
+      required: true,
     },
     rating: {
       type: String,
-      require: true,
+      required: true,
     },
     price: {
       type: String,
-      require: true,
+      required: true,
     },
     capacity: {
       type: String,
-      require: true,
+      required: true,
     },
     description: {
       type: String,
-      require: true,
+      required: true,
     },
     image: {
       type: String,
-      require: true,
+      required: true,
     },
     spec: {
       type: [specSchema],
-      require: true,
+      required: true,
     },
     isApproved: {
       type: String,
@@ -58,7 +58,7 @@ const venueSchema = mongoose.Schema(
       default: "no",
     },
   },
-  { timestamp: true },
+  { timestamps: true },
 );
 
 export const venueModel = mongoose.model("venues", venueSchema);
