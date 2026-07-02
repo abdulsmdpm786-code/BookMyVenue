@@ -10,8 +10,9 @@ import {
   Star,
   Calendar,
 } from "lucide-react";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
-function VenueAddModal({ onClose, onSubmit, orgId, error }) {
+function VenueAddModal({ onClose, onSubmit, orgId, error, isLoading }) {
   const [formData, setFormData] = useState({
     organiZerId: orgId,
     name: "",
@@ -27,6 +28,7 @@ function VenueAddModal({ onClose, onSubmit, orgId, error }) {
     // Added date to initial state
     slots: [{ date: "", startTime: "", endTime: "" }],
   });
+  const [image, setImage] = useState("");
 
   const fileInputRef = useRef(null);
 
@@ -39,7 +41,8 @@ function VenueAddModal({ onClose, onSubmit, orgId, error }) {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFormData({ ...formData, image: URL.createObjectURL(file) });
+      setImage({ ...formData, image: URL.createObjectURL(file) });
+      setFormData({ ...formData, image: file });
     }
   };
 
@@ -108,19 +111,21 @@ function VenueAddModal({ onClose, onSubmit, orgId, error }) {
             </div>
           </div>
 
-          {formData.image && (
+          {image.image && (
             <div className="mb-8 w-full h-48 rounded-lg overflow-hidden border border-gray-100 bg-gray-50">
               <img
-                src={formData.image}
+                src={image.image}
                 alt="Preview"
                 className="w-full h-full object-cover"
               />
             </div>
           )}
 
-         {error &&  <div className="w-full p-3 bg-red-500 rounded-md mb-2 text-center text-white font-medium">
-            <h1>{error}</h1>
-          </div>}
+          {error && (
+            <div className="w-full p-3 bg-red-500 rounded-md mb-2 text-center text-white font-medium">
+              <h1>{error}</h1>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-10">
             <div>
@@ -293,13 +298,28 @@ function VenueAddModal({ onClose, onSubmit, orgId, error }) {
 
         <div className="w-full md:w-72 space-y-4 flex flex-col h-full shrink-0">
           <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 space-y-4">
-            <button
-              onClick={() => onSubmit(formData)}
-              className="w-full bg-ticket-orange  text-white font-bold py-3 rounded-lg flex items-center justify-center
+            {isLoading ? (
+              <button
+                className="flex items-center justify-center w-32 h-10 bg-ticket-yellow hover:bg-ticket-yellow/90
+                                     text-slate-900 rounded-lg font-bold transition-all shadow-[0_0_15px_rgba(255,193,7,0.2)] 
+                                     hover:shadow-[0_0_20px_rgba(255,193,7,0.4)]"
+              >
+                <DotLottieReact
+                  className="w-32 h-32 brightness-0"
+                  src="https://lottie.host/07edc8d8-86af-40f2-ba5b-fbc869fbfded/YTDgtXR0cO.lottie"
+                  loop
+                  autoplay
+                />
+              </button>
+            ) : (
+              <button
+                onClick={() => onSubmit(formData)}
+                className="w-full bg-ticket-orange  text-white font-bold py-3 rounded-lg flex items-center justify-center
                gap-2 shadow-lg shadow-blue-200 transition-all"
-            >
-              <Send size={18} /> Send to Registry
-            </button>
+              >
+                <Send size={18} /> Send to Registry
+              </button>
+            )}
 
             <div className="flex gap-2">
               <button

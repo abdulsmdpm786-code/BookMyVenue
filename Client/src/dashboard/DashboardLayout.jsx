@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Await, Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import useAuth from "../Auth/useAuth";
 import AXIOS_API from "../Api/api";
 import DetailModal from "./NewVenues/DetailModal";
 import VenueAddModal from "./Venues/VenueAddModal";
+import EditModal from "./Venues/EditModal";
 
 export default function DashboardLayout() {
   const { user, logout } = useAuth();
@@ -29,6 +30,9 @@ export default function DashboardLayout() {
   const [addModal, setAddModal] = useState(false);
   const [orgId, setOrgId] = useState("");
   const [error, setError] = useState("");
+
+  const [editData, setEditData] = useState("");
+  const [editModal, setEditModal] = useState(false);
 
   const handleUserFetch = async () => {
     try {
@@ -95,16 +99,87 @@ export default function DashboardLayout() {
     setOrgId(id);
   };
 
-  const addVenue = async (form) => {
-    console.log(form);
-    
+  const addVenue = async (formData) => {
+    console.log(formData.image);
+
+    const submitData = new FormData();
+
+    submitData.append("organiZerId", formData.organiZerId);
+    submitData.append("name", formData.name);
+    submitData.append("place", formData.place);
+    submitData.append("type", formData.type);
+    submitData.append("rating", formData.rating);
+    submitData.append("price", formData.price);
+    submitData.append("capacity", formData.capacity);
+    submitData.append("description", formData.description);
+    submitData.append("isApproved", formData.isApproved);
+    submitData.append("image", formData.image);
+    submitData.append("spec", JSON.stringify(formData.spec));
+
     setError("");
+    setIsLoading(true);
     try {
-      const response = await AXIOS_API.post("/api/v2/list/register", form);
+      const response = await AXIOS_API.post(
+        "/api/v2/list/register",
+        submitData,
+      );
       handleVenueFetch();
-      addModal(false)
+      setAddModal(false);
+    } catch (error) {
+      setError(error?.response?.data?.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleVenueDelete = async (id) => {
+    try {
+      await AXIOS_API.delete(`/api/v2/list/delete/${id}`);
+      handleVenueFetch();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleEdit = (data) => {
+    setDetailModal(false);
+    setEditData(data);
+    setEditModal(true);
+  };
+
+  const editVenue = async (formData) => {
+    setIsLoading(true);
+    setError("");
+
+    const submitData = new FormData();
+
+    submitData.append("_id", formData.venueId);
+    submitData.append("organiZerId", formData.organiZerId);
+    submitData.append("name", formData.name);
+    submitData.append("place", formData.place);
+    submitData.append("type", formData.type);
+    submitData.append("rating", formData.rating);
+    submitData.append("price", formData.price);
+    submitData.append("capacity", formData.capacity);
+    submitData.append("description", formData.description);
+    submitData.append("isApproved", formData.isApproved);
+    submitData.append("image", formData.image);
+    submitData.append("spec", JSON.stringify(formData.spec));
+
+    console.log("top", formData.venueId);
+
+    try {
+      const response = await AXIOS_API.put(
+        `/api/v2/list/edit/${formData.venueId}`,
+        submitData,
+      );
+      console.log(response);
+      handleVenueFetch();
+      setEditModal(false);
     } catch (error) {
       setError(error.response.data.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -144,6 +219,7 @@ export default function DashboardLayout() {
           onClose={() => setAddModal(false)}
           onSubmit={addVenue}
           error={error}
+          isLoading={isLoading}
         />
       )}
 
@@ -154,6 +230,19 @@ export default function DashboardLayout() {
           onClose={() => setDetailModal(false)}
           fetchVenue={handleVenueFetch}
           verify={handleVerify}
+          user={users}
+          edit={handleEdit}
+          deleteVenue={handleVenueDelete}
+        />
+      )}
+
+      {editModal && (
+        <EditModal
+          venue={editData}
+          onClose={() => setEditModal(false)}
+          isLoading={isLoading}
+          error={error}
+          onSubmit={editVenue}
         />
       )}
 
@@ -174,6 +263,8 @@ export default function DashboardLayout() {
               isLoading,
               handleVerify,
               handleAdd,
+              handleVenueDelete,
+              handleEdit,
             }}
           />
         </main>

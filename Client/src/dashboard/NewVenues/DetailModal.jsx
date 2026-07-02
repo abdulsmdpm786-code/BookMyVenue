@@ -9,13 +9,30 @@ import {
   Check,
   Mail,
   Phone,
+  Trash2,
+  Edit,
 } from "lucide-react";
 import AXIOS_API from "../../Api/api";
+import useAuth from "../../Auth/useAuth";
 
-function DetailModal({ venue, onClose, fetchVenue, verify }) {
+function DetailModal({
+  venue,
+  onClose,
+  fetchVenue,
+  verify,
+  edit,
+  deleteVenue,
+}) {
   const orgId = venue.organiZerId;
   const [organizer, setOrganizer] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const { user } = useAuth();
+
+  console.log("this", user);
+
+  const isAdmin = user.role === "admin";
+  const isOrganizer = user.role === "organizer";
 
   const fetchOrg = async () => {
     setIsLoading(true);
@@ -27,7 +44,6 @@ function DetailModal({ venue, onClose, fetchVenue, verify }) {
       console.log("error", error);
     }
   };
-
 
   useEffect(() => {
     fetchOrg();
@@ -151,103 +167,117 @@ function DetailModal({ venue, onClose, fetchVenue, verify }) {
                   </div>
                 </div>
 
-                <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:shadow-md">
-                  <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">
-                    Organizer Details
-                  </h4>
+                {isAdmin && (
+                  <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:shadow-md">
+                    <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">
+                      Organizer Details
+                    </h4>
 
-                  <div className="flex items-center gap-4 mb-5">
-                    {isLoading ? (
-                      <>
-                        <div className="h-12 w-12 rounded-full bg-gray-200 animate-pulse shrink-0" />
-                        <div className="space-y-2 w-full">
-                          <div className="h-4 w-3/4 bg-gray-200 rounded animate-pulse" />
-                          <div className="h-3 w-1/2 bg-gray-100 rounded animate-pulse" />
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-indigo-50 border border-indigo-100 text-lg font-bold text-indigo-600">
-                          {venue?.organizer?.name?.charAt(0) || "O"}
-                        </div>
-                        <div>
-                          <h5 className="font-bold text-[#1a1f2c] leading-tight">
-                            {organizer?.userName || "Organizer Name"}
-                          </h5>
-                          <p className="text-xs font-medium text-green-500 mt-0.5">
-                            Verified Host
-                          </p>
-                        </div>
-                      </>
-                    )}
-                  </div>
-
-                  <div className="space-y-4 pt-4 border-t border-gray-100">
-                    {isLoading ? (
-                      <>
-                        <div className="flex items-center gap-3">
-                          <div className="h-8 w-8 rounded-full bg-gray-100 animate-pulse shrink-0" />
-                          <div className="h-4 w-28 bg-gray-100 rounded animate-pulse" />
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <div className="h-8 w-8 rounded-full bg-gray-100 animate-pulse shrink-0" />
-                          <div className="h-4 w-36 bg-gray-100 rounded animate-pulse" />
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="flex items-center gap-3 text-sm text-[#596274]">
-                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-50">
-                            <Phone className="h-4 w-4 text-gray-500" />
+                    <div className="flex items-center gap-4 mb-5">
+                      {isLoading ? (
+                        <>
+                          <div className="h-12 w-12 rounded-full bg-gray-200 animate-pulse shrink-0" />
+                          <div className="space-y-2 w-full">
+                            <div className="h-4 w-3/4 bg-gray-200 rounded animate-pulse" />
+                            <div className="h-3 w-1/2 bg-gray-100 rounded animate-pulse" />
                           </div>
-                          <span className="font-medium">
-                            {organizer?.number || "+91 98765 43210"}
-                          </span>
-                        </div>
-
-                        <div className="flex items-center gap-3 text-sm text-[#596274]">
-                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-50">
-                            <Mail className="h-4 w-4 text-gray-500" />
+                        </>
+                      ) : (
+                        <>
+                          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-indigo-50 border border-indigo-100 text-lg font-bold text-indigo-600">
+                            {venue?.organizer?.name?.charAt(0) || "O"}
                           </div>
-                          <span className="font-medium truncate">
-                            {organizer?.email || "host@example.com"}
-                          </span>
-                        </div>
-                      </>
-                    )}
-                  </div>
+                          <div>
+                            <h5 className="font-bold text-[#1a1f2c] leading-tight">
+                              {organizer?.userName || "Organizer Name"}
+                            </h5>
+                            <p className="text-xs font-medium text-green-500 mt-0.5">
+                              Verified Host
+                            </p>
+                          </div>
+                        </>
+                      )}
+                    </div>
 
-                  {isLoading ? (
-                    <div className="mt-5 w-full h-10 rounded-xl bg-gray-100 animate-pulse" />
-                  ) : (
-                    <button className="mt-5 w-full rounded-xl bg-[#f8f9fa] py-2.5 text-sm font-semibold text-[#1a1f2c] border border-gray-200 hover:bg-gray-100 hover:border-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-200">
-                      View Full Profile
-                    </button>
-                  )}
-                </div>
+                    <div className="space-y-4 pt-4 border-t border-gray-100">
+                      {isLoading ? (
+                        <>
+                          <div className="flex items-center gap-3">
+                            <div className="h-8 w-8 rounded-full bg-gray-100 animate-pulse shrink-0" />
+                            <div className="h-4 w-28 bg-gray-100 rounded animate-pulse" />
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <div className="h-8 w-8 rounded-full bg-gray-100 animate-pulse shrink-0" />
+                            <div className="h-4 w-36 bg-gray-100 rounded animate-pulse" />
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="flex items-center gap-3 text-sm text-[#596274]">
+                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-50">
+                              <Phone className="h-4 w-4 text-gray-500" />
+                            </div>
+                            <span className="font-medium">
+                              {organizer?.number || "+91 98765 43210"}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-3 text-sm text-[#596274]">
+                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-50">
+                              <Mail className="h-4 w-4 text-gray-500" />
+                            </div>
+                            <span className="font-medium truncate">
+                              {organizer?.email || "host@example.com"}
+                            </span>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
 
         <div className="border-t border-gray-100 bg-white p-4 sm:px-8 sm:py-5 shrink-0 flex items-center justify-between">
-          <button className="text-sm font-semibold text-gray-500 hover:text-gray-800 transition-colors">
-            Request Changes
-          </button>
+          {isAdmin && (
+            <div>
+              <button className="text-sm font-semibold text-gray-500 hover:text-gray-800 transition-colors">
+                Request Changes
+              </button>
+            </div>
+          )}
 
-          <div className="flex gap-3">
-            <button className="flex items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 px-6 py-2.5 text-sm font-bold text-red-700 transition-all hover:bg-red-100 focus:ring-2 focus:ring-red-200 focus:outline-none">
-              <XCircle className="h-4 w-4" />
-              Reject
-            </button>
-            <button
-              onClick={() => verify(venue._id)}
-              className="flex items-center justify-center gap-2 rounded-xl bg-[#1a1f2c] px-8 py-2.5 text-sm font-bold text-white transition-all hover:bg-black focus:ring-2 focus:ring-gray-800 focus:ring-offset-2 focus:outline-none"
-            >
-              <Check className="h-4 w-4" />
-              Approve Venue
-            </button>
-          </div>
+          {isAdmin ? (
+            <div className="flex gap-3">
+              <button className="flex items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 px-6 py-2.5 text-sm font-bold text-red-700 transition-all hover:bg-red-100 focus:ring-2 focus:ring-red-200 focus:outline-none">
+                <XCircle className="h-4 w-4" />
+                Reject
+              </button>
+              <button
+                onClick={() => deleteVenue(venue._id)}
+                className="flex items-center justify-center gap-2 rounded-xl bg-[#1a1f2c] px-8 py-2.5 text-sm font-bold text-white transition-all hover:bg-black focus:ring-2 focus:ring-gray-800 focus:ring-offset-2 focus:outline-none"
+              >
+                <Check className="h-4 w-4" />
+                Approve Venue
+              </button>
+            </div>
+          ) : (
+            <div className="flex gap-3">
+              <button className="flex items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 px-6 py-2.5 text-sm font-bold text-red-700 transition-all hover:bg-red-100 focus:ring-2 focus:ring-red-200 focus:outline-none">
+                <Trash2 className="h-4 w-4" />
+                Delete
+              </button>
+              <button
+                onClick={() => edit(venue)}
+                className="flex items-center justify-center gap-2 rounded-xl bg-[#1a1f2c] px-8 py-2.5 text-sm font-bold text-white transition-all hover:bg-black focus:ring-2 focus:ring-gray-800 focus:ring-offset-2 focus:outline-none"
+              >
+                <Edit className="h-4 w-4" />
+                Edit Venue
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

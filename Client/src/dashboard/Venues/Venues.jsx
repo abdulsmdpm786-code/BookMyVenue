@@ -14,11 +14,22 @@ import {
   CheckCircle2,
   XCircle,
   Plus,
+  Edit,
+  Trash2,
 } from "lucide-react";
 
 export default function Venues() {
-  const { venues, setVenues, handleAddNotification, isLoading, user, handleAdd } =
-    useOutletContext();
+  const {
+    venues,
+    setVenues,
+    handleAddNotification,
+    isLoading,
+    user,
+    handleAdd,
+    handleApprove,
+    handleVenueDelete,
+    handleEdit,
+  } = useOutletContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [approved, setApproved] = useState([]);
 
@@ -29,8 +40,6 @@ export default function Venues() {
 
   const isAdmin = user.role === "admin";
   const isOrganizer = user.role === "organizer";
-  
-
 
   const approvedVenues = venues.filter((i) => i.isApproved === "yes");
   const mapVenues = useMemo(() => {
@@ -77,7 +86,7 @@ export default function Venues() {
       <div className="flex ">
         <button
           type="button"
-          onClick={()=> handleAdd(user.userId)}
+          onClick={() => handleAdd(user.userId)}
           className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-all
            bg-ticket-orange rounded-lg shadow-sm  hover:shadow active:scale-95 focus:outline-none
             focus:ring-2 focus:ring-offset-2 hover:scale-105 focus:ring-ticket-orange "
@@ -129,7 +138,7 @@ export default function Venues() {
               key={venue.id || index}
               className="group relative bg-[#F7F5EE] rounded-3xl overflow-hidden border
          border-slate-200/80 hover:border-slate-350 shadow-md hover:shadow-xl transition-all duration-500 
-         hover:-translate-y-1.5 flex flex-col h-full cursor-pointer   animate-fade-in-up "
+         hover:-translate-y-1.5 flex flex-col h-full cursor-pointer animate-fade-in-up"
               style={{
                 animationDelay: `0.${index++}s`,
               }}
@@ -163,8 +172,7 @@ export default function Venues() {
 
                 <h3
                   className="mt-2 text-lg font-bold text-slate-900 leading-snug group-hover:text-ticket-orange
-                    transition-colors
-         duration-300"
+                  transition-colors duration-300"
                 >
                   {venue.name}
                 </h3>
@@ -185,8 +193,10 @@ export default function Venues() {
                       Up to {venue.capacity} guests
                     </span>
                     {venue.isApproved === "yes" ? (
-                      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium
-                       bg-emerald-100 text-emerald-800 border border-emerald-200">
+                      <span
+                        className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium
+                       bg-emerald-100 text-emerald-800 border border-emerald-200"
+                      >
                         <CheckCircle2 size={14} />
                         Verified
                       </span>
@@ -209,16 +219,47 @@ export default function Venues() {
                     </span>
                   </div>
                 </div>
-                <div className="flex gap-2">
+
+                <div className="flex gap-2 mt-4">
                   <button
                     onClick={() => handleApprove(venue)}
-                    className="w-full mt-4 bg-slate-50 hover:bg-ticket-orange text-slate-700 hover:text-white
+                    className="flex-1 bg-slate-50 hover:bg-ticket-orange text-slate-700 hover:text-white
            py-2.5 rounded-xl font-bold text-xs transition-colors duration-300 flex items-center
-            justify-center gap-1 group/btn border border-slate-250/60 active:scale-95 animate-fade-in"
+           justify-center gap-1 group/btn border border-slate-200 active:scale-95 animate-fade-in"
                   >
                     <span>View Details</span>
                     <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
                   </button>
+
+                  {isOrganizer && (
+                    <div className="flex gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEdit(venue);
+                        }}
+                        className="px-3 bg-slate-50 hover:bg-blue-500 text-slate-700 hover:text-white
+           rounded-xl transition-colors duration-300 flex items-center justify-center 
+           border border-slate-200 active:scale-95 group/edit"
+                        aria-label="Edit venue"
+                      >
+                        <Edit className="w-4 h-4 transition-transform group-hover/edit:scale-110" />
+                      </button>
+
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleVenueDelete(venue._id);
+                        }}
+                        className="px-3 bg-slate-50 hover:bg-rose-500 text-slate-700 hover:text-white
+           rounded-xl transition-colors duration-300 flex items-center justify-center 
+           border border-slate-200 active:scale-95 group/delete"
+                        aria-label="Delete venue"
+                      >
+                        <Trash2 className="w-4 h-4 transition-transform group-hover/delete:scale-110" />
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
