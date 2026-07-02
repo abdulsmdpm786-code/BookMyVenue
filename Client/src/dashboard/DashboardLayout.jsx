@@ -5,8 +5,7 @@ import Header from "./Header";
 import useAuth from "../Auth/useAuth";
 import AXIOS_API from "../Api/api";
 import DetailModal from "./NewVenues/DetailModal";
-import VenueAddModal from "./Venues/VenueAddModal"
-
+import VenueAddModal from "./Venues/VenueAddModal";
 
 export default function DashboardLayout() {
   const { user, logout } = useAuth();
@@ -26,6 +25,10 @@ export default function DashboardLayout() {
   const [detailModal, setDetailModal] = useState(false);
   const [selectedVenue, setSelectedVenue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const [addModal, setAddModal] = useState(false);
+  const [orgId, setOrgId] = useState("");
+  const [error, setError] = useState("");
 
   const handleUserFetch = async () => {
     try {
@@ -87,6 +90,24 @@ export default function DashboardLayout() {
     (i) => i.organiZerId === selectedVenue?.organiZerId,
   );
 
+  const handleAdd = (id) => {
+    setAddModal(true);
+    setOrgId(id);
+  };
+
+  const addVenue = async (form) => {
+    console.log(form);
+    
+    setError("");
+    try {
+      const response = await AXIOS_API.post("/api/v2/list/register", form);
+      handleVenueFetch();
+      addModal(false)
+    } catch (error) {
+      setError(error.response.data.message);
+    }
+  };
+
   useEffect(() => {
     handleUserFetch();
     handleVenueFetch();
@@ -117,7 +138,14 @@ export default function DashboardLayout() {
         </div>
       )}
 
-            <VenueAddModal />
+      {addModal && (
+        <VenueAddModal
+          orgId={orgId}
+          onClose={() => setAddModal(false)}
+          onSubmit={addVenue}
+          error={error}
+        />
+      )}
 
       {detailModal && (
         <DetailModal
@@ -128,8 +156,6 @@ export default function DashboardLayout() {
           verify={handleVerify}
         />
       )}
-
-
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <Header onToggleMobileSidebar={() => setMobileSidebarOpen(true)} />
@@ -147,6 +173,7 @@ export default function DashboardLayout() {
               handleApprove,
               isLoading,
               handleVerify,
+              handleAdd,
             }}
           />
         </main>

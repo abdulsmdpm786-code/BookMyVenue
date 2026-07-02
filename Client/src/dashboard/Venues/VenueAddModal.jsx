@@ -3,7 +3,7 @@ import {
   X,
   Plus,
   Trash2,
-  FileImage ,
+  FileImage,
   Clock,
   Send,
   Eye,
@@ -11,9 +11,9 @@ import {
   Calendar,
 } from "lucide-react";
 
-function VenueAddModal({ isOpen, onClose, onSubmit }) {
+function VenueAddModal({ onClose, onSubmit, orgId, error }) {
   const [formData, setFormData] = useState({
-    organiZerId: "V-001",
+    organiZerId: orgId,
     name: "",
     place: "",
     type: "",
@@ -29,8 +29,6 @@ function VenueAddModal({ isOpen, onClose, onSubmit }) {
   });
 
   const fileInputRef = useRef(null);
-
-  if (!isOpen) return null;
 
   // Handlers
   const handleChange = (e) => {
@@ -65,21 +63,26 @@ function VenueAddModal({ isOpen, onClose, onSubmit }) {
   };
 
   return (
-
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 md:p-8 animate-fade-in-up">
-     
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 md:p-8 
+    animate-fade-in-up"
+    >
       <div className="relative flex flex-col md:flex-row gap-8 w-full max-w-6xl max-h-[90vh]">
-     
-        <div className="flex-1 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-y-auto relative
-         p-8 md:p-12 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent animate-fade-in-up">
-       
-          <div className="absolute top-6 right-8">
+        <div
+          className="flex-1 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-y-auto relative
+         p-8 md:p-12 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent animate-fade-in-up"
+        >
+          <div className="absolute top-6 right-8 flex  items-center gap-3">
+            <h1 className="text-ticket-orange text-xs">
+              + Add image <span className="text-red-700 text-lg">*</span>
+            </h1>
+
             <button
               onClick={() => fileInputRef.current.click()}
               className="w-12 h-12 bg-white rounded-full shadow-md border border-gray-100 flex items-center justify-center
                text-ticket-orange transition-all hover:scale-105"
             >
-              <FileImage  size={24} />
+              <FileImage size={24} />
             </button>
             <input
               type="file"
@@ -90,10 +93,9 @@ function VenueAddModal({ isOpen, onClose, onSubmit }) {
             />
           </div>
 
-          
           <div className="flex justify-between items-start mt-4 mb-10 pr-16">
-            <div className="text-sm font-medium text-gray-500 uppercase tracking-wider">
-              ID: <span className="text-gray-800">{formData.organiZerId}</span>
+            <div className="text-xs font-medium text-gray-400">
+              ID: <span className="text-gray-300">{orgId}</span>
             </div>
             <div className="text-right flex-1 ml-4">
               <input
@@ -106,7 +108,6 @@ function VenueAddModal({ isOpen, onClose, onSubmit }) {
             </div>
           </div>
 
-         
           {formData.image && (
             <div className="mb-8 w-full h-48 rounded-lg overflow-hidden border border-gray-100 bg-gray-50">
               <img
@@ -117,37 +118,43 @@ function VenueAddModal({ isOpen, onClose, onSubmit }) {
             </div>
           )}
 
-        
+         {error &&  <div className="w-full p-3 bg-red-500 rounded-md mb-2 text-center text-white font-medium">
+            <h1>{error}</h1>
+          </div>}
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-10">
             <div>
               <label className="block text-xs font-bold text-gray-400 uppercase mb-2">
-                Location Detail
+                Location Detail <span className="text-red-700 text-lg">*</span>
               </label>
               <input
                 name="place"
                 value={formData.place}
                 onChange={handleChange}
                 placeholder="Address or Area"
-                className="w-full bg-gray-50 border-none rounded-md p-3 text-sm focus:ring-1 focus:ring-blue-400 outline-none transition-all"
+                className="w-full bg-gray-50 border-none rounded-md p-3 text-sm focus:ring-1 focus:ring-ticket-orange 
+                outline-none transition-all"
               />
               <textarea
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
                 placeholder="Brief venue description..."
-                className="w-full bg-gray-50 border-none rounded-md p-3 mt-2 text-sm h-24 resize-none outline-none focus:ring-1 focus:ring-blue-400 transition-all"
+                className="w-full bg-gray-50 border-none rounded-md p-3 mt-2 text-sm h-24 resize-none outline-none 
+                focus:ring-1 focus:ring-ticket-orange  transition-all"
               />
             </div>
             <div>
               <label className="block text-xs font-bold text-gray-400 uppercase mb-2">
-                Venue Category
+                Venue Category <span className="text-red-700 text-lg">*</span>
               </label>
               <input
                 name="type"
                 value={formData.type}
                 onChange={handleChange}
                 placeholder="Banquet, Garden, etc."
-                className="w-full bg-gray-50 border-none rounded-md p-3 text-sm outline-none focus:ring-1 focus:ring-blue-400 transition-all"
+                className="w-full bg-gray-50 border-none rounded-md p-3 text-sm outline-none focus:ring-1
+                 focus:ring-ticket-orange  transition-all"
               />
               <div className="grid grid-cols-2 gap-2 mt-2">
                 <input
@@ -155,22 +162,29 @@ function VenueAddModal({ isOpen, onClose, onSubmit }) {
                   value={formData.capacity}
                   onChange={handleChange}
                   placeholder="Capacity"
-                  className="bg-gray-50 border-none rounded-md p-3 text-sm outline-none focus:ring-1 focus:ring-blue-400 transition-all"
+                  className="bg-gray-50 border-none rounded-md p-3 text-sm outline-none focus:ring-1
+                   focus:ring-ticket-orange  transition-all"
                 />
                 <input
                   name="price"
                   value={formData.price}
                   onChange={handleChange}
                   placeholder="Price"
-                  className="bg-gray-50 border-none rounded-md p-3 text-sm outline-none focus:ring-1 focus:ring-blue-400 transition-all"
+                  className="bg-gray-50 border-none rounded-md p-3 text-sm outline-none focus:ring-1 focus:ring-ticket-orange 
+                   transition-all"
                 />
               </div>
             </div>
           </div>
 
-        
-          <div className="border-b border-gray-100 pb-2 mb-4 grid grid-cols-12 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-            <div className="col-span-11">Specifications & Features</div>
+          <div
+            className="border-b border-gray-100 pb-2 mb-4 grid grid-cols-12 text-[10px] font-bold text-gray-400 uppercase 
+          tracking-widest"
+          >
+            <div className="col-span-11">
+              Specifications & Features{" "}
+              <span className="text-red-700 text-lg">*</span>
+            </div>
           </div>
 
           <div className="space-y-3 mb-10">
@@ -183,7 +197,8 @@ function VenueAddModal({ isOpen, onClose, onSubmit }) {
                       updateList("spec", idx, null, e.target.value)
                     }
                     placeholder="Feature name (e.g. Free WiFi)"
-                    className="w-full p-2 bg-transparent border-b border-transparent hover:border-gray-200 focus:border-blue-400 outline-none text-sm transition-all"
+                    className="w-full p-2 bg-transparent border-b border-transparent hover:border-gray-200
+                     focus:ring-ticket-orange  outline-none text-sm transition-all"
                   />
                 </div>
                 <button
@@ -202,8 +217,10 @@ function VenueAddModal({ isOpen, onClose, onSubmit }) {
             </button>
           </div>
 
-         
-          <div className="border-b border-gray-100 pb-2 mb-4 mt-10 grid grid-cols-12 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+          <div
+            className="border-b border-gray-100 pb-2 mb-4 mt-10 grid grid-cols-12 text-[10px] font-bold
+           text-gray-400 uppercase tracking-widest"
+          >
             <div className="col-span-11">Available Dates & Time Slots</div>
           </div>
 
@@ -211,11 +228,11 @@ function VenueAddModal({ isOpen, onClose, onSubmit }) {
             {formData.slots.map((slot, idx) => (
               <div
                 key={idx}
-                className="flex flex-col xl:flex-row xl:items-center gap-2 xl:gap-4 bg-gray-50/50 p-3 rounded-lg border border-gray-100"
+                className="flex flex-col xl:flex-row xl:items-center gap-2 xl:gap-4 bg-gray-50/50 p-3 rounded-lg border
+                 border-gray-100"
               >
-             
                 <div className="flex-1 flex items-center gap-2 bg-white p-2 rounded border border-gray-100">
-                  <Calendar size={14} className="text-blue-500" />
+                  <Calendar size={14} className="text-ticket-orange" />
                   <input
                     type="date"
                     value={slot.date}
@@ -227,7 +244,6 @@ function VenueAddModal({ isOpen, onClose, onSubmit }) {
                 </div>
 
                 <div className="flex items-center gap-2 flex-1">
-             
                   <div className="flex-1 flex items-center gap-2 bg-white p-2 rounded border border-gray-100">
                     <Clock size={14} className="text-gray-400" />
                     <input
@@ -244,7 +260,6 @@ function VenueAddModal({ isOpen, onClose, onSubmit }) {
                     To
                   </span>
 
-            
                   <div className="flex-1 bg-white p-2 rounded border border-gray-100">
                     <input
                       type="time"
@@ -276,7 +291,6 @@ function VenueAddModal({ isOpen, onClose, onSubmit }) {
           </div>
         </div>
 
-     
         <div className="w-full md:w-72 space-y-4 flex flex-col h-full shrink-0">
           <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 space-y-4">
             <button
@@ -298,7 +312,6 @@ function VenueAddModal({ isOpen, onClose, onSubmit }) {
             </div>
           </div>
 
-        
           <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 space-y-6 flex-1">
             <div>
               <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">
@@ -320,7 +333,6 @@ function VenueAddModal({ isOpen, onClose, onSubmit }) {
             </div>
 
             <hr className="border-gray-100" />
-
           </div>
         </div>
       </div>

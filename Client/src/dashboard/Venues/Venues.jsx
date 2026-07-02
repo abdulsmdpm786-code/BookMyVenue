@@ -13,14 +13,14 @@ import {
   Search,
   CheckCircle2,
   XCircle,
+  Plus,
 } from "lucide-react";
 
 export default function Venues() {
-  const { venues, setVenues, handleAddNotification, isLoading, user } =
+  const { venues, setVenues, handleAddNotification, isLoading, user, handleAdd } =
     useOutletContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [approved, setApproved] = useState([]);
-  // const [mapVenues, setMapVenues] = useState([])
 
   const handleDelete = (id, name) => {
     setVenues((prev) => prev.filter((v) => v.id !== id));
@@ -29,6 +29,8 @@ export default function Venues() {
 
   const isAdmin = user.role === "admin";
   const isOrganizer = user.role === "organizer";
+  
+
 
   const approvedVenues = venues.filter((i) => i.isApproved === "yes");
   const mapVenues = useMemo(() => {
@@ -71,6 +73,18 @@ export default function Venues() {
             className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-ticket-orange focus:ring-1 focus:ring-ticket-orange/20 transition-all outline-none text-sm text-slate-700 font-medium"
           />
         </div>
+      </div>
+      <div className="flex ">
+        <button
+          type="button"
+          onClick={()=> handleAdd(user.userId)}
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-all
+           bg-ticket-orange rounded-lg shadow-sm  hover:shadow active:scale-95 focus:outline-none
+            focus:ring-2 focus:ring-offset-2 hover:scale-105 focus:ring-ticket-orange "
+        >
+          <Plus size={18} strokeWidth={2.5} />
+          <span>Add Venues</span>
+        </button>
       </div>
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -171,13 +185,16 @@ export default function Venues() {
                       Up to {venue.capacity} guests
                     </span>
                     {venue.isApproved === "yes" ? (
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 border border-emerald-200">
+                      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium
+                       bg-emerald-100 text-emerald-800 border border-emerald-200">
                         <CheckCircle2 size={14} />
                         Verified
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium
-                       bg-rose-100 text-rose-600 border border-slate-200">
+                      <span
+                        className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium
+                       bg-rose-100 text-rose-600 border border-slate-200"
+                      >
                         <XCircle size={14} />
                         Not Verified
                       </span>
