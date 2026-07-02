@@ -86,7 +86,7 @@ const handleRegister = async (req, res) => {
       place,
       capacity,
       description,
-      spec,
+      spec: JSON.parse(req.body.spec),
       rating,
       type,
       price,
@@ -136,6 +136,7 @@ const handleEdit = async (req, res) => {
     const { venueId } = req.params;
 
     const updateData = { ...req.body };
+    updateData.spec = JSON.parse(req.body.spec);
 
     if (req.file) {
       const courseUrl = await uploadCloudinary(req.file.path);
