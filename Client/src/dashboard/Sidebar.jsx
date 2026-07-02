@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   LayoutDashboard,
   Mail,
@@ -8,6 +8,7 @@ import {
   LogOut,
   University,
   UserPen,
+  NotepadText,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
@@ -33,51 +34,72 @@ export default function Sidebar({
     }
   };
 
-  const [menuItem, setMenuItem] = useState([]);
   const isAdmin = user.role === "admin";
   const isOrganizer = user.role === "organizer";
 
-  // if (isAdmin) {
-  //   setMenuItem([
-  //     {
-  //       id: "dashboard",
-  //       label: "Dashboard",
-  //       icon: LayoutDashboard,
-  //       path: "/dashboard",
-  //     },
-  //     {
-  //       id: "NewVenues",
-  //       label: "New venues",
-  //       icon: Mail,
-  //       badge: 3,
-  //       path: "/dashboard/new-venues",
-  //     },
-  //     {
-  //       id: "Venues",
-  //       label: "Venues",
-  //       icon: University,
-  //       path: "/dashboard/venues",
-  //     },
-  //     { id: "Users", label: "Users", icon: Users, path: "/dashboard/users" },
-  //     {
-  //       id: "Organizers",
-  //       label: "Organizers",
-  //       icon: UserPen,
-  //       path: "/dashboard/organizers",
-  //     },
-  //   ]);
-  // }
+  const menuItem = useMemo(() => {
+    if (isAdmin) {
+      return [
+        {
+          id: "dashboard",
+          label: "Dashboard",
+          icon: LayoutDashboard,
+          path: "/dashboard",
+        },
+        {
+          id: "NewVenues",
+          label: "New venues",
+          icon: Mail,
+          badge: 3,
+          path: "/dashboard/new-venues",
+        },
+        {
+          id: "Venues",
+          label: "Venues",
+          icon: University,
+          path: "/dashboard/venues",
+        },
+        { id: "Users", label: "Users", icon: Users, path: "/dashboard/users" },
+        {
+          id: "Organizers",
+          label: "Organizers",
+          icon: UserPen,
+          path: "/dashboard/organizers",
+        },
+      ];
+    }
 
-  // if (isOrganizer) {
-  //   setMenuItem([
-  //     {
-  //       id: "dashboard",
-  //       label: "Dashboard",
-  //       icon: LayoutDashboard,
-  //       path: "/dashboard",
-  //     },
-  //   ]);
-  // }
+    if (isOrganizer) {
+      return [
+        {
+          id: "dashboard",
+          label: "Dashboard",
+          icon: LayoutDashboard,
+          path: "/dashboard",
+        },
+        {
+          id: "venues",
+          label: "Venues",
+          icon: University,
+          path: "/dashboard/venues",
+        },
+        {
+          id: "bookings",
+          label: "Bookings",
+          icon: NotepadText,
+          // path: ""
+        },
+        {
+          id: "users",
+          label: "Users",
+          icon: Users,
+          path: "/dashboard/users",
+        },
+      ];
+    }
+
+    return [];
+  }, [isAdmin, isOrganizer]);
 
   const handleItemClick = (path) => {
     navigate(path);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import {
   Check,
@@ -10,27 +10,41 @@ import {
   Star,
   CheckCheck,
   ArrowUpRight,
-  Search
+  Search,
+  CheckCircle2,
+  XCircle,
 } from "lucide-react";
 
 export default function Venues() {
-  const { venues, setVenues, handleAddNotification, isLoading } =
+  const { venues, setVenues, handleAddNotification, isLoading, user } =
     useOutletContext();
   const [searchTerm, setSearchTerm] = useState("");
-  const [approved, setApproved] = useState([])
+  const [approved, setApproved] = useState([]);
+  // const [mapVenues, setMapVenues] = useState([])
 
   const handleDelete = (id, name) => {
     setVenues((prev) => prev.filter((v) => v.id !== id));
     handleAddNotification(`Venue '${name}' was deleted successfully.`);
   };
 
-const approvedVenues  = venues.filter((i)=> i.isApproved === "yes")
+  const isAdmin = user.role === "admin";
+  const isOrganizer = user.role === "organizer";
 
-  const filteredVenues = approvedVenues.filter((venue) => {
+  const approvedVenues = venues.filter((i) => i.isApproved === "yes");
+  const mapVenues = useMemo(() => {
+    if (isAdmin) {
+      return venues.filter((i) => i.isApproved === "yes");
+    }
+    if (isOrganizer) {
+      return venues;
+    }
+  });
+
+  const filteredVenues = mapVenues.filter((venue) => {
     const matchesSearch =
       venue.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       venue.place.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesSearch 
+    return matchesSearch;
   });
 
   return (
@@ -38,7 +52,7 @@ const approvedVenues  = venues.filter((i)=> i.isApproved === "yes")
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
-           Approved Venues 
+            Approved Venues
           </h1>
           <p className="text-slate-500 text-sm mt-1">
             Approved venues will listed here.
@@ -46,7 +60,6 @@ const approvedVenues  = venues.filter((i)=> i.isApproved === "yes")
         </div>
       </div>
 
-     
       <div className="flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -58,7 +71,6 @@ const approvedVenues  = venues.filter((i)=> i.isApproved === "yes")
             className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-ticket-orange focus:ring-1 focus:ring-ticket-orange/20 transition-all outline-none text-sm text-slate-700 font-medium"
           />
         </div>
-
       </div>
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -158,6 +170,18 @@ const approvedVenues  = venues.filter((i)=> i.isApproved === "yes")
                     <span className="text-xs font-medium text-slate-600">
                       Up to {venue.capacity} guests
                     </span>
+                    {venue.isApproved === "yes" ? (
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 border border-emerald-200">
+                        <CheckCircle2 size={14} />
+                        Verified
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium
+                       bg-rose-100 text-rose-600 border border-slate-200">
+                        <XCircle size={14} />
+                        Not Verified
+                      </span>
+                    )}
                   </div>
                   <div className="text-right">
                     <span className="text-xl font-black text-slate-900">
