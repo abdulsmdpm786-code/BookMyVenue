@@ -29,7 +29,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="/signup" element={<Signup />} />
           <Route path="/venues" element={<VenueList />} />
           <Route path="/venues/:id" element={<VenueDetail />} />
-          <Route element={<ProtectedLayout role={"admin", "organizer"} />}>
+          <Route element={<ProtectedLayout role={["admin", "organizer"]} />}>
             <Route path="/dashboard" element={<DashboardLayout />}>
               <Route index element={<Overview />} />
               <Route path="new-venues" element={

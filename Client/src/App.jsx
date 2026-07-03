@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 
 function App() {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user, logout, hasRole } = useAuth();
 
   const handleLogout = async () => {
     try {
@@ -75,12 +75,14 @@ function App() {
             >
               Venues
             </Link>
-            <Link
-              to={"/dashboard"}
-              className="transition-opacity hover:opacity-75"
-            >
-              Dashboard
-            </Link>
+            {hasRole(["admin", "organizer"]) && (
+              <Link
+                to={"/dashboard"}
+                className="transition-opacity hover:opacity-75"
+              >
+                Dashboard
+              </Link>
+            )}
             <Link href="#" className="transition-opacity hover:opacity-75">
               Contact
             </Link>
@@ -154,19 +156,21 @@ function App() {
         style={{ animationDelay: "0.6s", opacity: 0 }}
       >
         <div className="bg-white rounded-3xl md:rounded-full p-1  shadow-2xl w-full max-w-sm mx-auto border border-slate-100">
-          <button
-            className="group relative w-full  inline-flex items-center justify-center gap-3 px-10 py-4 
+          <Link to={"/venues"}>
+            <button
+              className="group relative w-full  inline-flex items-center justify-center gap-3 px-10 py-4 
           rounded-full font-bold text-2xl text-slate-900 bg-gradient-to-b from-[#FCECA1] to-[#E5B83B] border
            border-[#D4A32A] shadow-[0_4px_10px_rgba(229,184,59,0.3)] transition-all duration-300 ease-out 
            hover:from-[#FDF0B5] hover:to-[#EAC255] hover:shadow-[0_6px_15px_rgba(229,184,59,0.4)]
             hover:-translate-y-0.5 active:translate-y-0"
-          >
-            <Calendar
-              className="w-5 h-5 text-slate-800 transition-transform duration-300 group-hover:scale-110"
-              strokeWidth={2}
-            />
-            <span>Book Your Venue</span>
-          </button>
+            >
+              <Calendar
+                className="w-5 h-5 text-slate-800 transition-transform duration-300 group-hover:scale-110"
+                strokeWidth={2}
+              />
+              <span>Book Your Venue</span>
+            </button>
+          </Link>
         </div>
       </div>
     </div>
