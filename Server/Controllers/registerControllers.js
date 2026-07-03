@@ -183,6 +183,7 @@ const handleSignIn = async (req, res) => {
     res.status(200).json({
       message: "Logged successfully",
       user: {
+        userId: user._id,
         userName: user.userName,
         email: user.email,
         role: user.role,
@@ -263,6 +264,7 @@ const refreshToken = async (req, res) => {
       message: "Access token refreshed successfully",
       accessToken,
       user: {
+        userId: decoded.id,
         userName: user.userName,
         email: user.email,
         role: user.role,
@@ -368,6 +370,49 @@ const handleLogoutAll = async (req, res) => {
     console.log(error);
   }
 };
+
+const getAllUsers = async (req, res) => {
+  try {
+    const user = await userModel.find();
+    if (!user) {
+      return res.status(400).json({
+        message: "No user found..",
+      });
+    }
+    return res.status(200).json({
+      message: "Got the users",
+      users: user,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: error,
+    });
+  }
+};
+
+const getOrganizer = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const organizer = await userModel.findOne({ _id: id });
+
+    if (!organizer) {
+      return res.status(400).json({
+        message: "No organizer found...",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Got the Organizer",
+      organizer: organizer,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: error,
+    });
+  }
+};
+
 export {
   handleSignUp,
   verifyEmail,
@@ -376,4 +421,6 @@ export {
   handleGetMe,
   handleLogoutAll,
   handleLogout,
+  getAllUsers,
+  getOrganizer,
 };

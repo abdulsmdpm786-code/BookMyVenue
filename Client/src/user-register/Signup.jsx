@@ -19,6 +19,7 @@ export default function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setError("")
 
     try {
       const response = await AXIOS_API.post("/api/v1/register/signUp", {

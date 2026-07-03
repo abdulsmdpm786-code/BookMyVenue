@@ -20,7 +20,7 @@ export const authApi = {
     try {
       await AXIOS_API.get("/api/v1/register/logout");
     } catch (error) {
-      const errorMessage = error.response?.data?.message || "Login failed";
+      const errorMessage = error.response?.data?.message || "Logout failed";
       console.error("Login Error:", errorMessage);
       throw new Error(errorMessage);
     }

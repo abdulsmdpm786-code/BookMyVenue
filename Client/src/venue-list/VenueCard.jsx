@@ -16,11 +16,6 @@ export function VenueCard({ venue, index }) {
 
   const navigate = useNavigate();
 
-  // const nextImage = (e) => {
-  //   e.stopPropagation();
-  //   setCurrentImgIndex((prev) => (prev + 1) % venue.images.length);
-  // };
-
   const handleNavigate = (id) => {
     navigate(`/venues/${id}`);
     
@@ -42,7 +37,7 @@ export function VenueCard({ venue, index }) {
         animationDelay: `0.${index++}s`,
       }}
     >
-      {/* Image Gallery Area */}
+      
       <div className="relative h-60 w-full overflow-hidden bg-slate-200">
         <img
           src={venue.image}
@@ -52,34 +47,7 @@ export function VenueCard({ venue, index }) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
 
-        {/* Carousel Arrow Buttons */}
-        {/* <div className="absolute inset-x-2 top-1/2 -translate-y-1/2 flex justify-between opacity-0 group-hover:opacity-100
-         transition-opacity duration-300">
-          <button
-            onClick={prevImage}
-            className="w-7 h-7 rounded-full bg-white/90 hover:bg-white text-slate-800 flex items-center 
-            justify-center border border-slate-200 shadow-sm"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
-          <button
-            onClick={nextImage}
-            className="w-7 h-7 rounded-full bg-white/90 hover:bg-white text-slate-800 flex items-center justify-center border border-slate-200 shadow-sm"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </div> */}
-
-        {/* Image Indicators */}
         <div className="absolute bottom-4 left-4 flex gap-1 z-10">
-          {/* {venue.images.map((_, idx) => (
-            <span 
-              key={idx} 
-              className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                idx === currentImgIndex ? 'bg-ticket-yellow w-3.5' : 'bg-white/60'
-              }`}
-            />
-          ))} */}
         </div>
 
         <span
@@ -114,7 +82,7 @@ export function VenueCard({ venue, index }) {
           {venue.description}
         </p>
 
-        {/* Footer Area */}
+       
         <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
           <div className="flex items-center gap-1.5">
             <Users className="w-4 h-4 text-slate-400" />

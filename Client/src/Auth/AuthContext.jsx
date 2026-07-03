@@ -33,7 +33,6 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const scheduleRefresh = useCallback(() => {
-    
     clearTimeout(refreshTimer.current);
     refreshTimer.current = setTimeout(() => {
       silentRefresh();
@@ -67,7 +66,7 @@ export const AuthProvider = ({ children }) => {
     scheduleRefresh();
   };
 
-  const  logout = async () => {
+  const logout = async () => {
     try {
       await authApi.logout();
     } finally {
@@ -120,7 +119,16 @@ export const AuthProvider = ({ children }) => {
         logout,
         authFetch,
         isAdmin: user?.role === "admin",
-        hasRole: (role) => user?.role === role,
+        hasRole: (requiredRole) => {
+          if (!user?.role) return false;
+
+          const userRoles = Array.isArray(user.role) ? user.role : [user.role];
+          const required = Array.isArray(requiredRole)
+            ? requiredRole
+            : [requiredRole];
+
+          return required.some((r) => userRoles.includes(r));
+        },
       }}
     >
       {children}
