@@ -18,7 +18,7 @@ export default function CampaignTypesChart({ users }) {
         </div>
       </div>
 
-      {users.length > 0 ? (
+      {users ? (
         <div className="flex flex-col gap-4 overflow-hidden  overflow-y-scroll p-2">
           {users.map((item, index) => (
             <div

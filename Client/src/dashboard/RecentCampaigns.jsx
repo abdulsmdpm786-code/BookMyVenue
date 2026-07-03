@@ -33,7 +33,7 @@ export default function RecentCampaigns({
         <div className="flex items-center gap-3 self-end sm:self-auto"></div>
       </div>
 
-      {venue.legth > 0 ? <div className="overflow-x-auto custom-scrollbar flex-1">
+      {venue.length > 0 ? <div className="overflow-x-auto custom-scrollbar flex-1">
         <table className="w-full text-left text-sm border-collapse min-w-[500px]">
           <thead>
             <tr
