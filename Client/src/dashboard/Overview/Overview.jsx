@@ -4,6 +4,7 @@ import MetricCards from "../MetricCards";
 import CampaignTypesChart from "../CampaignTypesChart";
 import TopAutomations from "../TopAutomations";
 import RecentCampaigns from "../RecentCampaigns";
+import OrganizerMsg from "../OrganizerMsg";
 
 export default function Overview() {
   const {
@@ -18,11 +19,11 @@ export default function Overview() {
   } = useOutletContext();
 
   // console.log("f...",users);
-  
+
+  const isAdmin = user?.role === "admin";
 
   return (
     <div className="max-w-7xl mx-auto space-y-8 animate-fade-in-up">
-      
       <MetricCards
         user={user}
         status={{
@@ -32,27 +33,21 @@ export default function Overview() {
         }}
       />
 
-      
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
         <div className="lg:col-span-6 min-h-[340px] animate-fade-in-up-stagger delay-375">
-          <RecentCampaigns
-            venue={venues}
-            campaigns={campaigns}
-            onUpdateCampaign={handleUpdateCampaign}
-            onDeleteCampaign={handleDeleteCampaign}
-          />
+          <RecentCampaigns venue={venues} />
         </div>
 
         <div className="lg:col-span-3  animate-fade-in-up-stagger delay-450">
-          <CampaignTypesChart 
-          users={users}
-          />
+          <CampaignTypesChart users={users} />
         </div>
 
         <div className="lg:col-span-3  animate-fade-in-up-stagger delay-525">
-          <TopAutomations 
-          organizers={organizers}
-          automations={automations} />
+          {isAdmin ? (
+            <TopAutomations organizers={organizers} />
+          ) : (
+            <OrganizerMsg />
+          )}
         </div>
       </div>
     </div>

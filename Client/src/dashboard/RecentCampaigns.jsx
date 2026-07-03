@@ -10,6 +10,7 @@ import {
   Filter,
   ChevronLeft,
   ChevronRight,
+  TriangleAlert 
 } from "lucide-react";
 
 export default function RecentCampaigns({
@@ -32,7 +33,7 @@ export default function RecentCampaigns({
         <div className="flex items-center gap-3 self-end sm:self-auto"></div>
       </div>
 
-      <div className="overflow-x-auto custom-scrollbar flex-1">
+      {venue.legth > 0 ? <div className="overflow-x-auto custom-scrollbar flex-1">
         <table className="w-full text-left text-sm border-collapse min-w-[500px]">
           <thead>
             <tr
@@ -121,7 +122,20 @@ export default function RecentCampaigns({
             })}
           </tbody>
         </table>
+      </div> 
+      :
+      <div className="bg-slate-200 w-full rounded-md p-5 ">
+        <div className="flex gap-2 justify-center items-center">
+          <TriangleAlert 
+          className="text-rose-500"
+          />
+          <h1 className="text-sm">No venue is listed....</h1>
+        </div>
+        
       </div>
+      }
+
+
     </div>
   );
 }

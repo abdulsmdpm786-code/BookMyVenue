@@ -16,7 +16,6 @@ import Venues from "./dashboard/Venues/Venues.jsx";
 import Users from "./dashboard/Users/Users.jsx";
 import Organizers from "./dashboard/Organizers/Organizers.jsx";
 import RoleBasedRoute from "./Role-Route/RoleBasedRoute.jsx";
-import useAuth from "./Auth/useAuth";
 
 createRoot(document.getElementById("root")).render(
   

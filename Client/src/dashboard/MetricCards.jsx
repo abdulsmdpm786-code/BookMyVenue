@@ -1,14 +1,13 @@
 import React from "react";
 import {
-
   Users,
   University,
   UserPen,
   CalendarCog,
+  CircleDollarSign,
 } from "lucide-react";
 
 const Card = ({ title, value, icon: Icon }) => {
-
   return (
     <div
       className={`bg-white border border-slate-200 rounded-3xl p-5
@@ -38,6 +37,8 @@ const Card = ({ title, value, icon: Icon }) => {
 };
 
 export default function MetricCards({ user, status }) {
+  const isAdmin = user?.role === "admin";
+
   return (
     <div className="space-y-6">
       <div
@@ -69,11 +70,15 @@ export default function MetricCards({ user, status }) {
           icon={University}
         />
         <Card title="Users" value={status.users.length} icon={Users} />
-        <Card
-          title="Organizers"
-          value={status.organizers.length}
-          icon={UserPen}
-        />
+        {isAdmin ? (
+          <Card
+            title="Organizers"
+            value={status.organizers.length}
+            icon={UserPen}
+          />
+        ) : (
+          <Card title="Revenue" value={0} icon={CircleDollarSign} />
+        )}
         <Card title="Bookings" value={0} icon={CalendarCog} />
       </div>
     </div>

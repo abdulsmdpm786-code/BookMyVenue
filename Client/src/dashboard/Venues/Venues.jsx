@@ -267,16 +267,37 @@ export default function Venues() {
         </div>
       ) : (
         <div className="py-16 text-center bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
-          <div
-            className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 border
+          {isAdmin ? (
+            <div>
+              <div
+                className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 border
            border-slate-100"
-          >
-            <Check className="w-8 h-8 text-emerald-600" />
-          </div>
-          <h2 className="text-xl font-bold text-slate-800">All Caught Up!</h2>
-          <p className="text-slate-400 text-sm mt-2 max-w-sm mx-auto">
-            There are no pending venue approval requests at the moment.
-          </p>
+              >
+                <Check className="w-8 h-8 text-emerald-600" />
+              </div>
+              <h2 className="text-xl font-bold text-slate-800">
+                All Caught Up!
+              </h2>
+              <p className="text-slate-400 text-sm mt-2 max-w-sm mx-auto">
+                There are no pending venue approval requests at the moment.
+              </p>
+            </div>
+          ) : (
+            <div>
+              <div
+                className="w-16 h-16 bg-red-200 rounded-full flex items-center justify-center mx-auto mb-4 border
+           border-slate-100"
+              >
+                <X className="w-8 h-8 text-red-800" />
+              </div>
+              <h2 className="text-xl font-bold text-red-600">
+                No venues 
+              </h2>
+              <p className="text-slate-400 text-sm mt-2 max-w-sm mx-auto">
+                There are no venues listed by you.
+              </p>
+            </div>
+          )}
         </div>
       )}
     </div>
