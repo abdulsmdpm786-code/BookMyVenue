@@ -13,12 +13,11 @@ export function VenueList() {
   const [sortBy, setSortBy] = useState("default");
   const [venueData, setVenueData] = useState([]);
 
-  console.log("sort..", selectedCategory);
 
   const handleFetch = async () => {
     try {
       const venueRes = await AXIOS_API.get("/api/v2/list/getAll");
-      setVenueData(venueRes.data.venue);
+      setVenueData(venueRes.data.venue.filter((e) => e.isApproved === "yes"));
     } catch (error) {
       console.log(error);
     }
@@ -56,8 +55,6 @@ export function VenueList() {
 
   const categories = [...new Set(venueData.map((item) => item.type))];
 
-  console.log("serach...", filteredVenues);
-
 
   return (
     <div
@@ -76,16 +73,12 @@ export function VenueList() {
       pointer-events-none"
       ></div>
 
-      
       <VenueNavbar />
 
-    
       <VenueHero />
 
-     
       <main className="w-full px-6 md:px-12 relative z-10 mt-6">
         <div className="max-w-7xl mx-auto">
-         
           <VenueFilters
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
@@ -98,7 +91,6 @@ export function VenueList() {
             categories={categories}
           />
 
-        
           <div className="flex items-center justify-between mb-8 transition-all duration-500 animate-fadeInUp ">
             <p className="text-slate-500 text-sm font-medium">
               Showing{" "}
