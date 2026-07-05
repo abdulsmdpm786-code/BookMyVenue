@@ -4,6 +4,7 @@ import {
   ChevronDown,
   Plus,
   Minus,
+  Clock,
 } from "lucide-react";
 
 const DarkCalendarPopup = ({ selectedDate, onSelectDate }) => {
@@ -125,7 +126,6 @@ const DarkCalendarPopup = ({ selectedDate, onSelectDate }) => {
 };
 
 export function BookingCard({
-  venue,
   onOpenRegister,
   data,
   // Accept the lifted states as props
@@ -140,7 +140,11 @@ export function BookingCard({
   const [showCalendar, setShowCalendar] = useState(false);
   const calendarRef = useRef(null);
 
+  // console.log("v...", venue);
+
   const price = data?.price;
+  const slots = data?.slots;
+  console.log("sll", slots);
 
   // Close calendar dropdown when clicking outside
   useEffect(() => {
@@ -186,6 +190,7 @@ export function BookingCard({
     setSelectedDays(newDays);
     setFinalPrice(price * newDays);
   };
+
   return (
     <div
       className="bg-white rounded-3xl border border-slate-200/80 shadow-[0_10px_35px_rgba(0,0,0,0.05)] p-6 flex flex-col 
@@ -253,6 +258,15 @@ export function BookingCard({
               className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-full cursor-pointer"
             />
           </div>
+        </div>
+      </div>
+      <div className="w-full max-w-4xl p-4">
+        <h2 className="text-sm font-semibold text-slate-500 mb-4">
+          Available Slots
+        </h2>
+
+        <div className="grid grid-cols-2 gap-4">
+          
         </div>
       </div>
 

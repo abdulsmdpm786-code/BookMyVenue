@@ -30,7 +30,9 @@ function VenueAddModal({ onClose, onSubmit, orgId, error, isLoading }) {
   });
   const [image, setImage] = useState("");
 
-  console.log("time..",formData.slots);
+  // console.log("f..",formData);
+  
+
   
   const fileInputRef = useRef(null);
 

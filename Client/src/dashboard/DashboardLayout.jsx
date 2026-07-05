@@ -115,6 +115,7 @@ export default function DashboardLayout() {
     submitData.append("isApproved", formData.isApproved);
     submitData.append("image", formData.image);
     submitData.append("spec", JSON.stringify(formData.spec));
+    submitData.append("slots", JSON.stringify(formData.slots));
 
     setError("");
     setIsLoading(true);
@@ -165,8 +166,7 @@ export default function DashboardLayout() {
     submitData.append("isApproved", formData.isApproved);
     submitData.append("image", formData.image);
     submitData.append("spec", JSON.stringify(formData.spec));
-
-    console.log("top", formData.venueId);
+    submitData.append("slots", JSON.stringify(formData.slots));
 
     try {
       const response = await AXIOS_API.put(

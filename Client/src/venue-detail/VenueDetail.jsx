@@ -113,7 +113,6 @@ export function VenueDetail() {
 
           <div className="lg:col-span-1 animate-fade-in-up-stagger delay-300">
             <BookingCard
-              venue={venue}
               data={data}
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}

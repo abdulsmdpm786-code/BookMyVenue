@@ -102,12 +102,12 @@ function DetailModal({
                   </p>
                 </section>
 
-                <div className="bg-[#FAF9F6] border border-slate-200/60 rounded-[2rem] p-6">
+                <div className="bg-[#FAF9F6] border border-slate-200/60 rounded-[2rem] p-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2  gap-2">
                     {venue.spec?.map((item, idx) => (
                       <div
                         key={idx}
-                        className="bg-white border border-slate-150/70 hover:border-slate-300 hover:shadow-sm rounded-2xl
+                        className="bg-white border border-slate-150/70 hover:border-slate-300 hover:shadow-sm rounded-xl
                                 p-4 flex items-center gap-3 transition-all duration-300 group hover:-translate-y-0.5"
                       >
                         <div
