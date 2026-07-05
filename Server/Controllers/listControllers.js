@@ -55,6 +55,7 @@ const handleRegister = async (req, res) => {
       rating,
       type,
       price,
+      slots,
     } = req.body;
     if (
       (!organiZerId,
@@ -65,7 +66,8 @@ const handleRegister = async (req, res) => {
       !spec,
       !rating,
       !price,
-      !type)
+      !type,
+      !slots)
     ) {
       return res.status(400).json({
         message: "All fields are required..",
@@ -91,6 +93,7 @@ const handleRegister = async (req, res) => {
       type,
       price,
       image: imageURL,
+      slots: JSON.parse(req.body.slots),
     });
 
     return res.status(200).json({
@@ -137,6 +140,7 @@ const handleEdit = async (req, res) => {
 
     const updateData = { ...req.body };
     updateData.spec = JSON.parse(req.body.spec);
+    updateData.slots = JSON.parse(req.body.slots);
 
     if (req.file) {
       const courseUrl = await uploadCloudinary(req.file.path);

@@ -10,6 +10,19 @@ const specSchema = mongoose.Schema(
   { _id: false },
 );
 
+const slotSchema = mongoose.Schema(
+  {
+    date: {
+      type: String,
+      required: true,
+    },
+    startTime: { type: String, required: true },
+    endTime: { type: String, required: true },
+    isBooked: { type: Boolean, default: false },
+  },
+  { _id: true },
+);
+
 const venueSchema = mongoose.Schema(
   {
     organiZerId: {
@@ -50,6 +63,10 @@ const venueSchema = mongoose.Schema(
     },
     spec: {
       type: [specSchema],
+      required: true,
+    },
+    slots: {
+      type: [slotSchema],
       required: true,
     },
     isApproved: {
