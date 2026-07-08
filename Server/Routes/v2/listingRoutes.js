@@ -1,6 +1,8 @@
 import express from "express";
 import {
+  bookVenue,
   getAll,
+  getBookedDates,
   getOne,
   getVenueOrg,
   handleDelete,
@@ -21,4 +23,6 @@ listingRoutes.put("/verify/:id", verifyVenue)
 
 
 listingRoutes.get('/venueOrg/:id', getVenueOrg)
+listingRoutes.get('/:id/booked-dates', getBookedDates);
+listingRoutes.post('/:id/book', bookVenue);
 export default listingRoutes;

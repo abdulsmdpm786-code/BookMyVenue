@@ -1,3 +1,4 @@
+import { bookingModel } from "../Models/bookingModel.js";
 import { venueModel } from "../Models/venueModel.js";
 import { uploadCloudinary } from "../utilities/cloudinaryUtility.js";
 import fs from "fs";
@@ -215,6 +216,58 @@ const getVenueOrg = async (req, res) => {
   }
 };
 
+const getBookedDates = async (req, res) => {
+  try {
+    const bookings = await bookingModel
+      .findOne({ venueId: req.params.id })
+      .select("bookedRanges");
+    if (!bookings) return res.status(404).json({ error: "Venue not found" });
+
+    const bookedRanges = bookings.flatMap((booking) => booking.bookedRanges);
+
+    res.status(200).json(bookedRanges);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch dates" });
+  }
+};
+
+const bookVenue = async (req, res) => {
+  try {
+    const { startDate, endDate, userId } = req.body;
+    const reqStart = new Date(startDate);
+    const reqEnd = new Date(endDate);
+
+    const updatedVenue = await bookingModel.findOneAndUpdate(
+      {
+        _id: req.params.id,
+
+        bookedRanges: {
+          $not: {
+            $elemMatch: {
+              startDate: { $lt: reqEnd },
+              endDate: { $gt: reqStart },
+            },
+          },
+        },
+      },
+      {
+        $push: {
+          bookedRanges: { startDate: reqStart, endDate: reqEnd, user: userId },
+        },
+      },
+      { new: true },
+    );
+
+    if (!updatedVenue) {
+      return res.status(400).json({ error: "Dates are no longer available." });
+    }
+
+    res.status(200).json({ message: "Booking successful!" });
+  } catch (error) {
+    res.status(500).json({ error: "Server error during booking" });
+  }
+};
+
 export {
   getAll,
   handleRegister,
@@ -223,4 +276,6 @@ export {
   getOne,
   verifyVenue,
   getVenueOrg,
+  getBookedDates,
+  bookVenue,
 };
