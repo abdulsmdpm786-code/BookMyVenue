@@ -35,15 +35,23 @@ export function VenueDetail() {
     }
   };
 
+  const bookedDetails = async () => {
+    try {
+      const details = await AXIOS_API.get(`/api/v2/list/${id}/booked-dates`);
+      console.log("resss", details);
+    } catch (error) {
+      console.log(error?.data);
+    }
+  };
+
   const venue = venues.find((v) => v.id === parseInt(id));
 
   // Scroll to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
     venueDetails();
+    bookedDetails();
   }, [id]);
-
-
 
   if (!venue) {
     return (
