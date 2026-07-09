@@ -219,7 +219,7 @@ const getVenueOrg = async (req, res) => {
 const getBookedDates = async (req, res) => {
   try {
     const bookings = await bookingModel
-      .findOne({ venueId: req.params.id })
+      .find({ venueId: req.params.id })
       .select("bookedRanges");
     if (!bookings) return res.status(404).json({ error: "Venue not found" });
 
