@@ -233,36 +233,39 @@ const getBookedDates = async (req, res) => {
 
 const bookVenue = async (req, res) => {
   try {
-    const { startDate, endDate, userId } = req.body;
-    const reqStart = new Date(startDate);
-    const reqEnd = new Date(endDate);
+    const { bookedRanges, userId, venueId, name, email, number } = req.body;
+    const { id } = req.params;
 
-    const updatedVenue = await bookingModel.findOneAndUpdate(
-      {
-        _id: req.params.id,
+    const reqStart = new Date(bookedRanges[0].startDate);
+    const reqEnd = new Date(bookedRanges[0].endDate);
 
-        bookedRanges: {
-          $not: {
-            $elemMatch: {
-              startDate: { $lt: reqEnd },
-              endDate: { $gt: reqStart },
-            },
-          },
+
+    const isBooked = await bookingModel.findOne({
+      venueId: id,
+      bookedRanges: {
+        $elemMatch: {
+          startDate: { $lte: reqEnd },
+          endDate: { $gte: reqStart },
         },
       },
-      {
-        $push: {
-          bookedRanges: { startDate: reqStart, endDate: reqEnd, user: userId },
-        },
-      },
-      { new: true },
-    );
+    });
 
-    if (!updatedVenue) {
-      return res.status(400).json({ error: "Dates are no longer available." });
+    if (isBooked) {
+      return res.status(400).json({
+        message: "Dates are no longer available.",
+      });
     }
 
-    res.status(200).json({ message: "Booking successful!" });
+    const booking = await bookingModel.create({
+      userId,
+      venueId: id,
+      name,
+      email,
+      number,
+      bookedRanges,
+    });
+
+    res.status(200).json({ message: "Booking successful!", booking });
   } catch (error) {
     res.status(500).json({ error: "Server error during booking" });
   }
