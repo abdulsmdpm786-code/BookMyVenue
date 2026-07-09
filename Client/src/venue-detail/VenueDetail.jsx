@@ -12,6 +12,7 @@ import BookingCard from "./BookingCard";
 import ActionModals from "./ActionModals";
 import AXIOS_API from "../Api/api";
 import RegisterModal from "./RegisterModal";
+import useAuth from "../Auth/useAuth";
 
 export function VenueDetail() {
   const { id } = useParams();
@@ -23,6 +24,9 @@ export function VenueDetail() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedDays, setSelectedDays] = useState(1);
   const [finalPrice, setFinalPrice] = useState(0);
+  const [bookedDates, setBookedDates] = useState([]);
+
+    const { user } = useAuth();
 
   const venueDetails = async () => {
     try {
@@ -39,10 +43,18 @@ export function VenueDetail() {
     try {
       const details = await AXIOS_API.get(`/api/v2/list/${id}/booked-dates`);
       console.log("resss", details);
+      const formattedDates = details?.data?.map((range) => ({
+        from: new Date(range.startDate.substring(0, 10)),
+        to: new Date(range.endDate.substring(0, 10)),
+      }));
+
+      setBookedDates(formattedDates);
     } catch (error) {
       console.log(error?.data);
     }
   };
+
+  // console.log("for..",bookedDates);
 
   const venue = venues.find((v) => v.id === parseInt(id));
 
@@ -89,7 +101,7 @@ export function VenueDetail() {
 
       <VenueNavbar />
 
-      <main className="max-w-6xl mx-auto px-6 md:px-12 mt-6 relative z-10">
+      <main className="max-w-7xl mx-auto px-6 md:px-12 mt-6 relative z-10">
         <div className="mb-6 flex items-center justify-between animate-fade-in-up-stagger delay-75">
           <Link
             to="/venues"
@@ -129,6 +141,7 @@ export function VenueDetail() {
               finalPrice={finalPrice}
               setFinalPrice={setFinalPrice}
               onOpenRegister={() => setRegisterModal(true)}
+              bookedDates={bookedDates}
             />
           </div>
         </div>
@@ -143,6 +156,7 @@ export function VenueDetail() {
             totalPrice: finalPrice,
             venueName: data?.name,
           }}
+          user={user}
         />
       )}
 

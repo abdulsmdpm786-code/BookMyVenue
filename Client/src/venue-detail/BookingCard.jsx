@@ -6,137 +6,22 @@ import {
   Minus,
   Clock,
 } from "lucide-react";
+import VenueBookingWidget from "./VenueBookingWidget";
 
-const DarkCalendarPopup = ({ selectedDate, onSelectDate }) => {
-  const [viewDate, setViewDate] = useState(selectedDate || new Date());
 
-  const year = viewDate.getFullYear();
-  const month = viewDate.getMonth();
-
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const firstDay = new Date(year, month, 1).getDay(); // 0 = Sunday
-
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  const weekDays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
-
-  const prevMonth = () => setViewDate(new Date(year, month - 1, 1));
-  const nextMonth = () => setViewDate(new Date(year, month + 1, 1));
-
-  const blanks = Array(firstDay).fill(null);
-  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  return (
-    <div className="absolute top-full left-0 mt-2 z-50 bg-[#242731] p-5 rounded-xl w-72 shadow-2xl border border-slate-700">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-4 text-white">
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            prevMonth();
-          }}
-          className="p-1.5 hover:bg-slate-700 rounded-lg transition-colors text-slate-400 hover:text-white"
-        >
-          &lt;
-        </button>
-        <span className="font-semibold text-sm">
-          {monthNames[month]} {year}
-        </span>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            nextMonth();
-          }}
-          className="p-1.5 hover:bg-slate-700 rounded-lg transition-colors text-slate-400 hover:text-white"
-        >
-          &gt;
-        </button>
-      </div>
-
-      {/* Days of week */}
-      <div className="grid grid-cols-7 gap-1 mb-2">
-        {weekDays.map((day, index) => (
-          <div
-            key={index}
-            className="text-center text-slate-500 text-xs font-semibold"
-          >
-            {day}
-          </div>
-        ))}
-      </div>
-
-      {/* Dates Grid */}
-      <div className="grid grid-cols-7 gap-y-1 gap-x-1">
-        {blanks.map((_, i) => (
-          <div key={`blank-${i}`} className="h-8 w-full" />
-        ))}
-        {days.map((day) => {
-          // CHECK IF DATE IS IN THE PAST
-          const currentDate = new Date(year, month, day);
-          const isPastDate = currentDate < today;
-
-          const isSelected =
-            selectedDate?.getDate() === day &&
-            selectedDate?.getMonth() === month &&
-            selectedDate?.getFullYear() === year;
-
-          return (
-            <button
-              key={day}
-              disabled={isPastDate}
-              onClick={(e) => {
-                e.preventDefault();
-                if (!isPastDate) {
-                  onSelectDate(currentDate);
-                }
-              }}
-              className={`
-                h-8 w-full flex items-center justify-center rounded-lg text-xs font-medium transition-all
-                ${
-                  isPastDate
-                    ? "opacity-30 cursor-not-allowed text-slate-500"
-                    : isSelected
-                      ? "bg-indigo-500 text-white shadow-md shadow-indigo-500/30"
-                      : "text-slate-200 hover:bg-slate-700"
-                }
-              `}
-            >
-              {day}
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
-};
 
 export function BookingCard({
   onOpenRegister,
   data,
-  // Accept the lifted states as props
   selectedDate,
   setSelectedDate,
   selectedDays,
   setSelectedDays,
   finalPrice,
   setFinalPrice,
+  bookedDates
 }) {
-  // Only UI states remain here
+ 
   const [showCalendar, setShowCalendar] = useState(false);
   const calendarRef = useRef(null);
 
@@ -215,29 +100,18 @@ export function BookingCard({
         <span className="text-slate-500 text-sm font-semibold">/day</span>
       </div>
 
-      <div className="space-y-5">
-        <div className="relative" ref={calendarRef}>
-          <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 pl-1">
-            Select Your Slot
-          </label>
-          <button
-            type="button"
-            onClick={() => setShowCalendar(!showCalendar)}
-            className="w-full bg-[#F8F9FA] border border-slate-200 hover:border-slate-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-[20px] py-3.5 px-5 flex items-center justify-between text-slate-800 text-sm font-bold transition-all"
-          >
-            <span>{formatDate(selectedDate)}</span>
-            <CalendarIcon className="w-5 h-5 text-slate-400" />
-          </button>
 
-          {showCalendar && (
-            <DarkCalendarPopup
-              selectedDate={selectedDate}
-              onSelectDate={handleDateSelect}
-            />
-          )}
-        </div>
+      <div className="w-full ">
+        <h2 className="text-sm font-semibold text-slate-500 mb-4">
+          Available Slots
+        </h2>
 
-        <div>
+        <VenueBookingWidget 
+        fetchedBookings={bookedDates}
+        />
+      </div>
+
+              <div>
           <label className="block text-[10px] font-bold text-slate-500  uppercase tracking-wider mb-1.5 pl-1">
             Lease Duration
           </label>
@@ -259,16 +133,6 @@ export function BookingCard({
             />
           </div>
         </div>
-      </div>
-      <div className="w-full max-w-4xl p-4">
-        <h2 className="text-sm font-semibold text-slate-500 mb-4">
-          Available Slots
-        </h2>
-
-        <div className="grid grid-cols-2 gap-4">
-          
-        </div>
-      </div>
 
       <div className="border border-red-200 bg-red-50/20 rounded-2xl p-4 flex flex-col gap-3.5 mt-2 transition-all">
         <div className="text-red-800 text-xs font-bold uppercase tracking-wider">
@@ -302,7 +166,7 @@ export function BookingCard({
           onClick={onOpenRegister}
           className="w-full bg-slate-900 hover:bg-slate-800 text-white py-3.5 rounded-2xl font-bold text-xs transition-all shadow-md active:scale-[0.98]"
         >
-          Schedule a Tour
+          Book Venue
         </button>
         <button
           // onClick={onContactAgent}

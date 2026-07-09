@@ -10,8 +10,8 @@ export function VenueAmenities({ venue, data }) {
         Building Amenities
       </h3>
 
-      <div className="bg-[#FAF9F6] border border-slate-200/60 rounded-[2rem] p-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="bg-[#FAF9F6] border border-slate-200/60 rounded-[2rem] p-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
           {data?.map((item, idx) => (
             <div
               key={idx}

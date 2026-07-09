@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { X, Sparkles, User, Mail, Phone, Calendar, Clock } from "lucide-react";
 
-function RegisterModal({ onClose, bookingData }) {
+function RegisterModal({ onClose, bookingData, user }) {
   const [isEnd, setIsEnd] = useState(false);
+
+  console.log(user);
+  
 
   const startDate = new Date(bookingData.date);
   const endDate = new Date(startDate);
