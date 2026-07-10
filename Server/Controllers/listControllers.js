@@ -236,6 +236,12 @@ const bookVenue = async (req, res) => {
     const { bookedRanges, userId, venueId, name, email, number } = req.body;
     const { id } = req.params;
 
+    if(!name || !email ||  !number){
+      return res.status(400).json({
+        message: "All fields are required.."
+      })
+    }
+
     const reqStart = new Date(bookedRanges[0].startDate);
     const reqEnd = new Date(bookedRanges[0].endDate);
 
