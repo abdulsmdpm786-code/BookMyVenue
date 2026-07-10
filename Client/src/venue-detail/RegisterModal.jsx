@@ -9,6 +9,7 @@ function RegisterModal({ onClose, bookingData, user }) {
   const [email, setEmail] = useState(user?.email || "");
   const [number, setNumber] = useState(user?.number || "");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const startDate = new Date(bookingData.date);
   const endDate = new Date(startDate);
@@ -23,7 +24,7 @@ function RegisterModal({ onClose, bookingData, user }) {
 
   finalStart.setHours(0, 0, 0, 0);
   finalEnd.setHours(23, 59, 59, 999);
-  
+
   const bookedRanges = [
     {
       startDate: finalStart.toISOString(),
@@ -32,6 +33,7 @@ function RegisterModal({ onClose, bookingData, user }) {
   ];
 
   const handleBookSlot = async () => {
+    setError("")
     setIsLoading(true);
     try {
       const response = await AXIOS_API.post(
@@ -47,7 +49,7 @@ function RegisterModal({ onClose, bookingData, user }) {
       );
       onClose();
     } catch (error) {
-      console.log(error);
+      setError(error.response?.data?.message);
     } finally {
       setIsLoading(false);
     }
@@ -69,19 +71,24 @@ function RegisterModal({ onClose, bookingData, user }) {
             <X strokeWidth={2} className="w-5 h-5" />
           </button>
 
-          <div className="mb-6">
+          <div className="mb-4">
             <div className="flex items-center gap-2 text-amber-500 font-bold text-xs tracking-wider uppercase mb-3">
               <Sparkles strokeWidth={2} className="w-4 h-4" />
               Direct Request
             </div>
             <h2 className="text-[1.75rem] font-extrabold text-slate-800 leading-tight mb-2">
-              Schedule a Private Tour
+              Book Your Slot
             </h2>
             <p className="text-slate-500 text-sm leading-relaxed pr-8">
               Select a preferred day and time window for a private guide through
               Industrial Heights Loft.
             </p>
           </div>
+          {error && (
+            <div className="w-full bg-red-800 p-3 rounded-lg mb-2 text-white text-center  font-light">
+              <span>{error}</span>
+            </div>
+          )}
 
           <div className="space-y-2">
             <div>
