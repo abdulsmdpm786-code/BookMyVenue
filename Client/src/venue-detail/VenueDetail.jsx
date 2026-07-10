@@ -18,11 +18,11 @@ export function VenueDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState("");
-  const [modalType, setModalType] = useState(null); // 'contact', 'tour', or null
+  const [modalType, setModalType] = useState(null); 
   const [registerModal, setRegisterModal] = useState(false);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedDays, setSelectedDays] = useState(1);
+  const [selectedDays, setSelectedDays] = useState(0);
   const [finalPrice, setFinalPrice] = useState(0);
   const [bookedDates, setBookedDates] = useState([]);
 
@@ -42,7 +42,6 @@ export function VenueDetail() {
   const bookedDetails = async () => {
     try {
       const details = await AXIOS_API.get(`/api/v2/list/${id}/booked-dates`);
-      console.log("resss", details);
       const formattedDates = details?.data?.map((range) => ({
         from: new Date(range.startDate.substring(0, 10)),
         to: new Date(range.endDate.substring(0, 10)),
@@ -54,11 +53,11 @@ export function VenueDetail() {
     }
   };
 
-  // console.log("for..",bookedDates);
+
 
   const venue = venues.find((v) => v.id === parseInt(id));
 
-  // Scroll to top on mount
+ 
   useEffect(() => {
     window.scrollTo(0, 0);
     venueDetails();
@@ -155,6 +154,7 @@ export function VenueDetail() {
             days: selectedDays,
             totalPrice: finalPrice,
             venueName: data?.name,
+            venueId: data?._id
           }}
           user={user}
         />

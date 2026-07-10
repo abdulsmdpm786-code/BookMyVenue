@@ -1,20 +1,39 @@
 import React, { useState } from "react";
 import { X, Sparkles, User, Mail, Phone, Calendar, Clock } from "lucide-react";
+import AXIOS_API from "../Api/api";
 
 function RegisterModal({ onClose, bookingData, user }) {
   const [isEnd, setIsEnd] = useState(false);
 
-  console.log(user);
-  
+  const [name, setName] = useState(user?.userName || "");
+  const [email, setEmail] = useState(user?.email || "");
+  const [number, setNumber] = useState(user?.number || "");
 
   const startDate = new Date(bookingData.date);
   const endDate = new Date(startDate);
 
+  console.log(bookingData);
 
   const daysToAdd = parseInt(bookingData.days) || 0;
   endDate.setDate(startDate.getDate() + daysToAdd);
 
   const endDateString = endDate.toDateString();
+
+  const handleBookSlot = async () => {
+    try {
+      const response = await AXIOS_API.post(
+        `/api/v2/list/${bookingData.venueId}/book`,
+        {
+          userId: user._id,
+          venueId: bookingData.venueId,
+          name,
+          email,
+          number,
+          bookedRanges,
+        },
+      );
+    } catch (error) {}
+  };
   return (
     <div>
       <div
@@ -55,6 +74,8 @@ function RegisterModal({ onClose, bookingData, user }) {
                   <User strokeWidth={1.5} className="w-5 h-5" />
                 </div>
                 <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   type="text"
                   placeholder="John Doe"
                   className="w-full bg-white border border-gray-200 rounded-2xl py-3.5 pl-11 pr-4 text-sm text-slate-800 placeholder-slate-400 font-medium focus:outline-none focus:ring-2 focus:ring-slate-800 focus:border-transparent transition-all"
@@ -71,6 +92,8 @@ function RegisterModal({ onClose, bookingData, user }) {
                   <Mail strokeWidth={1.5} className="w-5 h-5" />
                 </div>
                 <input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   type="email"
                   placeholder="johndoe@example.com"
                   className="w-full bg-white border border-gray-200 rounded-2xl py-3.5 pl-11 pr-4 text-sm text-slate-800
@@ -89,6 +112,8 @@ function RegisterModal({ onClose, bookingData, user }) {
                   <Phone strokeWidth={1.5} className="w-5 h-5" />
                 </div>
                 <input
+                  value={number}
+                  onChange={(e) => setNumber(e.target.value)}
                   type="tel"
                   placeholder="+91 ....."
                   className="w-full bg-white border border-gray-200 rounded-2xl py-3.5 pl-11 pr-4 text-sm text-slate-800 placeholder-slate-400 font-medium focus:outline-none focus:ring-2 focus:ring-slate-800 focus:border-transparent transition-all"
@@ -151,11 +176,12 @@ function RegisterModal({ onClose, bookingData, user }) {
                 Cancel
               </button>
               <button
+                onClick={() => handleBookSlot()}
                 type="submit"
                 className="flex-1 bg-[#111827] text-white font-bold py-3.5 rounded-2xl shadow-lg hover:bg-[#1f2937] 
                 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 transition-all"
               >
-                Confirm Tour
+                Book Slot
               </button>
             </div>
           </form>

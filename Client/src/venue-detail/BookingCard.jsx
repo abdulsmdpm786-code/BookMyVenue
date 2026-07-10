@@ -25,25 +25,11 @@ export function BookingCard({
   const [showCalendar, setShowCalendar] = useState(false);
   const calendarRef = useRef(null);
 
-  // console.log("v...", venue);
 
   const price = data?.price;
   const slots = data?.slots;
-  console.log("sll", slots);
 
-  // Close calendar dropdown when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (calendarRef.current && !calendarRef.current.contains(event.target)) {
-        setShowCalendar(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
-  // Update final price if the API data updates externally
-  // and we are still on day 1
   useEffect(() => {
     if (price && selectedDays === 1) {
       setFinalPrice(price);
@@ -95,7 +81,7 @@ export function BookingCard({
 
       <div className="flex items-baseline gap-1 py-4 border-y border-slate-100">
         <span className="text-3xl font-black text-slate-900">
-          ${data?.price || 350}
+          ₹{data?.price || 350}
         </span>
         <span className="text-slate-500 text-sm font-semibold">/day</span>
       </div>

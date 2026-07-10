@@ -186,6 +186,7 @@ const handleSignIn = async (req, res) => {
         userId: user._id,
         userName: user.userName,
         email: user.email,
+        number: user.number,
         role: user.role,
       },
       accessToken,
@@ -267,6 +268,7 @@ const refreshToken = async (req, res) => {
         userId: decoded.id,
         userName: user.userName,
         email: user.email,
+        number: user.number,
         role: user.role,
       },
     });
@@ -297,6 +299,7 @@ const handleGetMe = async (req, res) => {
       user: {
         userName: user.userName,
         email: user.email,
+        number: user.number,
       },
     });
   } catch (error) {
