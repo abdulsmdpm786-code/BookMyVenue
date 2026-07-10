@@ -94,6 +94,8 @@ export function BookingCard({
 
         <VenueBookingWidget 
         fetchedBookings={bookedDates}
+        dateSelect={handleDateSelect}
+        date={selectedDate}
         />
       </div>
 

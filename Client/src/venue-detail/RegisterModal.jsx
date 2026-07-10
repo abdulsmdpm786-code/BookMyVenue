@@ -8,23 +8,36 @@ function RegisterModal({ onClose, bookingData, user }) {
   const [name, setName] = useState(user?.userName || "");
   const [email, setEmail] = useState(user?.email || "");
   const [number, setNumber] = useState(user?.number || "");
+  const [isLoading, setIsLoading] = useState(false);
 
   const startDate = new Date(bookingData.date);
   const endDate = new Date(startDate);
-
-  console.log(bookingData);
 
   const daysToAdd = parseInt(bookingData.days) || 0;
   endDate.setDate(startDate.getDate() + daysToAdd);
 
   const endDateString = endDate.toDateString();
 
+  const finalStart = new Date(bookingData.date);
+  const finalEnd = new Date(endDateString);
+
+  finalStart.setHours(0, 0, 0, 0);
+  finalEnd.setHours(23, 59, 59, 999);
+  
+  const bookedRanges = [
+    {
+      startDate: finalStart.toISOString(),
+      endDate: finalEnd.toISOString(),
+    },
+  ];
+
   const handleBookSlot = async () => {
+    setIsLoading(true);
     try {
       const response = await AXIOS_API.post(
         `/api/v2/list/${bookingData.venueId}/book`,
         {
-          userId: user._id,
+          userId: user.userId,
           venueId: bookingData.venueId,
           name,
           email,
@@ -32,8 +45,14 @@ function RegisterModal({ onClose, bookingData, user }) {
           bookedRanges,
         },
       );
-    } catch (error) {}
+      onClose();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
   return (
     <div>
       <div
@@ -64,7 +83,7 @@ function RegisterModal({ onClose, bookingData, user }) {
             </p>
           </div>
 
-          <form className="space-y-2">
+          <div className="space-y-2">
             <div>
               <label className="block text-[0.7rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                 Full Name
@@ -175,16 +194,24 @@ function RegisterModal({ onClose, bookingData, user }) {
               >
                 Cancel
               </button>
-              <button
-                onClick={() => handleBookSlot()}
-                type="submit"
-                className="flex-1 bg-[#111827] text-white font-bold py-3.5 rounded-2xl shadow-lg hover:bg-[#1f2937] 
+              {isLoading ? (
+                <button
+                  className="flex-1 bg-slate-700 text-white font-bold py-3.5 rounded-2xl shadow-lg hover:bg-[#1f2937] 
                 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 transition-all"
-              >
-                Book Slot
-              </button>
+                >
+                  Booking Slot...
+                </button>
+              ) : (
+                <button
+                  onClick={() => handleBookSlot()}
+                  className="flex-1 bg-[#111827] text-white font-bold py-3.5 rounded-2xl shadow-lg hover:bg-[#1f2937] 
+                hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 transition-all"
+                >
+                  Book Slot
+                </button>
+              )}
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>

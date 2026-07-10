@@ -7,6 +7,8 @@ export function VenueBookingWidget({
   venueName,
   pricePerDay,
   fetchedBookings,
+  dateSelect,
+  date
 }) {
   const [selectedDate, setSelectedDate] = useState();
   
@@ -25,8 +27,8 @@ export function VenueBookingWidget({
       <div className="p-4 flex justify-center w-full max-w-sm mx-auto overflow-hidden">
         <DayPicker
           mode="single"
-          selected={selectedDate}
-          onSelect={setSelectedDate}
+          selected={date}
+          onSelect={dateSelect}
           disabled={disabledDates}
           modifiersClassNames={{
             selected:
@@ -68,11 +70,11 @@ export function VenueBookingWidget({
 
       <div className="p-6 border-t border-slate-100 bg-slate-50 flex flex-col gap-4">
         <div className="h-6">
-          {selectedDate ? (
+          {date ? (
             <p className="text-xs font-medium text-emerald-700 flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4" />
               Selected:{" "}
-              {selectedDate.toLocaleDateString(undefined, {
+              {date.toLocaleDateString(undefined, {
                 weekday: "long",
                 month: "short",
                 day: "numeric",
