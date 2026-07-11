@@ -7,18 +7,9 @@ import RecentCampaigns from "../RecentCampaigns";
 import OrganizerMsg from "../OrganizerMsg";
 
 export default function Overview() {
-  const {
-    user,
-    users,
-    venues,
-    organizers,
-    campaigns,
-    automations,
-    handleUpdateCampaign,
-    handleDeleteCampaign,
-  } = useOutletContext();
+  const { user, users, venues, organizers } = useOutletContext();
 
-  // console.log("f...",users);
+  console.log("f...", user);
 
   const isAdmin = user?.role === "admin";
 

@@ -11,19 +11,35 @@ function RegisterModal({ onClose, bookingData, user }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
+  console.log("test-2", bookingData);
+
   const startDate = new Date(bookingData.date);
   const endDate = new Date(startDate);
 
   const daysToAdd = parseInt(bookingData.days) || 0;
   endDate.setDate(startDate.getDate() + daysToAdd);
 
+  console.log("days...", bookingData.days);
+
   const endDateString = endDate.toDateString();
 
-  const finalStart = new Date(bookingData.date);
-  const finalEnd = new Date(endDateString);
 
-  finalStart.setHours(0, 0, 0, 0);
-  finalEnd.setHours(23, 59, 59, 999);
+  function toUTCDateOnly(date, endOfDay = false) {
+    return new Date(
+      Date.UTC(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+        endOfDay ? 23 : 0,
+        endOfDay ? 59 : 0,
+        endOfDay ? 59 : 0,
+        endOfDay ? 999 : 0,
+      ),
+    );
+  }
+
+  const finalStart = toUTCDateOnly(new Date(bookingData.date));
+  const finalEnd = toUTCDateOnly(new Date(endDateString), true);
 
   const bookedRanges = [
     {
@@ -32,8 +48,10 @@ function RegisterModal({ onClose, bookingData, user }) {
     },
   ];
 
+  console.log("range..", bookedRanges);
+
   const handleBookSlot = async () => {
-    setError("")
+    setError("");
     setIsLoading(true);
     try {
       const response = await AXIOS_API.post(
@@ -41,15 +59,17 @@ function RegisterModal({ onClose, bookingData, user }) {
         {
           userId: user.userId,
           venueId: bookingData.venueId,
+          organizerId: bookingData.orgId,
           name,
           email,
           number,
+          price: bookingData.totalPrice,
           bookedRanges,
         },
       );
-      onClose();
+      window.location.reload();
     } catch (error) {
-      setError(error.response?.data?.message);
+      setError(error?.response?.data?.message);
     } finally {
       setIsLoading(false);
     }
@@ -86,7 +106,7 @@ function RegisterModal({ onClose, bookingData, user }) {
           </div>
           {error && (
             <div className="w-full bg-red-800 p-3 rounded-lg mb-2 text-white text-center  font-light">
-              <span>{error}</span>
+              <span>{error?.message}</span>
             </div>
           )}
 

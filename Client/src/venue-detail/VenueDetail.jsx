@@ -18,21 +18,23 @@ export function VenueDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState("");
-  const [modalType, setModalType] = useState(null); 
+  const [modalType, setModalType] = useState(null);
   const [registerModal, setRegisterModal] = useState(false);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedDays, setSelectedDays] = useState(0);
   const [finalPrice, setFinalPrice] = useState(0);
   const [bookedDates, setBookedDates] = useState([]);
+  const [orgId, setOrgId] = useState("");
 
-    const { user } = useAuth();
+  const { user } = useAuth();
 
   const venueDetails = async () => {
     try {
       const response = await AXIOS_API.get(`/api/v2/list/getOne/${id}`);
-      console.log("venue..", response);
+
       setData(response.data.venue);
+      setOrgId(response.data.venue.organiZerId);
       setFinalPrice(response.data.venue.price);
     } catch (error) {
       console.log(error);
@@ -53,11 +55,8 @@ export function VenueDetail() {
     }
   };
 
-
-
   const venue = venues.find((v) => v.id === parseInt(id));
 
- 
   useEffect(() => {
     window.scrollTo(0, 0);
     venueDetails();
@@ -154,7 +153,8 @@ export function VenueDetail() {
             days: selectedDays,
             totalPrice: finalPrice,
             venueName: data?.name,
-            venueId: data?._id
+            venueId: data?._id,
+            orgId: orgId
           }}
           user={user}
         />

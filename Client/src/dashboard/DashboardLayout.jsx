@@ -14,7 +14,7 @@ export default function DashboardLayout() {
   const isAdmin = user.role === "admin";
   const isOrganizer = user.role === "organizer";
   const userId = user.userId;
-  // console.log("ooo", user);
+
 
   const [users, setUsers] = useState([]);
   const [organizers, setOrganizers] = useState([]);
@@ -88,7 +88,6 @@ export default function DashboardLayout() {
     }
   };
 
-  // console.log("se...",selectedVenue.organiZerId);
 
   const org = organizers.filter(
     (i) => i.organiZerId === selectedVenue?.organiZerId,

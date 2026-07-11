@@ -38,6 +38,8 @@ const Card = ({ title, value, icon: Icon }) => {
 
 export default function MetricCards({ user, status }) {
   const isAdmin = user?.role === "admin";
+  console.log("test..",user);
+  
 
   return (
     <div className="space-y-6">
