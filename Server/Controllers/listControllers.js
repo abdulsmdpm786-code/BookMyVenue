@@ -233,18 +233,26 @@ const getBookedDates = async (req, res) => {
 
 const bookVenue = async (req, res) => {
   try {
-    const { bookedRanges, userId, venueId, name, email, number } = req.body;
+    const {
+      bookedRanges,
+      userId,
+      venueId,
+      name,
+      email,
+      number,
+      price,
+      organizerId,
+    } = req.body;
     const { id } = req.params;
 
-    if(!name || !email ||  !number){
+    if (!name || !email || !number) {
       return res.status(400).json({
-        message: "All fields are required.."
-      })
+        message: "All fields are required..",
+      });
     }
 
     const reqStart = new Date(bookedRanges[0].startDate);
     const reqEnd = new Date(bookedRanges[0].endDate);
-
 
     const isBooked = await bookingModel.findOne({
       venueId: id,
@@ -269,11 +277,32 @@ const bookVenue = async (req, res) => {
       email,
       number,
       bookedRanges,
+      organizerId,
+      price,
     });
 
     res.status(200).json({ message: "Booking successful!", booking });
   } catch (error) {
-    res.status(500).json({ error: "Server error during booking" });
+    res.status(500).json({ message: error });
+  }
+};
+
+const getBookedVenue = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const response = await bookingModel.find({ organizerId: id });
+    if (!response) {
+      return res.status(404).json({
+        message: "No Bookings found",
+      });
+    }
+    res.status(200).json({
+      Bookings: response,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error,
+    });
   }
 };
 
@@ -287,4 +316,5 @@ export {
   getVenueOrg,
   getBookedDates,
   bookVenue,
+  getBookedVenue
 };

@@ -8,6 +8,10 @@ const bookingSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  organizerId: {
+    type: String,
+    required: true,
+  },
   name: {
     type: String,
     required: true,
@@ -17,6 +21,10 @@ const bookingSchema = mongoose.Schema({
     required: true,
   },
   number: {
+    type: String,
+    required: true,
+  },
+  price: {
     type: String,
     required: true,
   },
