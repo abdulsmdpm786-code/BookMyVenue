@@ -36,10 +36,16 @@ const Card = ({ title, value, icon: Icon }) => {
   );
 };
 
-export default function MetricCards({ user, status }) {
+export default function MetricCards({ user, status, booked }) {
   const isAdmin = user?.role === "admin";
-  console.log("test..",user);
-  
+
+  const totalPrice = booked.reduce(
+    (sum, product) => sum + Number(product.price),
+    0,
+  );
+
+  const userIds = [...new Set(booked.map((item) => item.userId))];
+
 
   return (
     <div className="space-y-6">
@@ -71,7 +77,11 @@ export default function MetricCards({ user, status }) {
           value={status.venues.length}
           icon={University}
         />
-        <Card title="Users" value={status.users.length} icon={Users} />
+        {isAdmin ? (
+          <Card title="Users" value={status.users.length} icon={Users} />
+        ) : (
+          <Card title="Users" value={userIds.length} icon={Users} />
+        )}
         {isAdmin ? (
           <Card
             title="Organizers"
@@ -79,9 +89,9 @@ export default function MetricCards({ user, status }) {
             icon={UserPen}
           />
         ) : (
-          <Card title="Revenue" value={0} icon={CircleDollarSign} />
+          <Card title="Revenue" value={totalPrice} icon={CircleDollarSign} />
         )}
-        <Card title="Bookings" value={0} icon={CalendarCog} />
+        <Card title="Bookings" value={booked.length} icon={CalendarCog} />
       </div>
     </div>
   );

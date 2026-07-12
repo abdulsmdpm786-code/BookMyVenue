@@ -15,7 +15,6 @@ export default function DashboardLayout() {
   const isOrganizer = user.role === "organizer";
   const userId = user.userId;
 
-
   const [users, setUsers] = useState([]);
   const [organizers, setOrganizers] = useState([]);
   const [venues, setVenues] = useState([]);
@@ -33,6 +32,8 @@ export default function DashboardLayout() {
 
   const [editData, setEditData] = useState("");
   const [editModal, setEditModal] = useState(false);
+
+  const [bookedVenues, setBookedVenues] = useState([]);
 
   const handleUserFetch = async () => {
     try {
@@ -87,7 +88,6 @@ export default function DashboardLayout() {
       setDetailModal(false);
     }
   };
-
 
   const org = organizers.filter(
     (i) => i.organiZerId === selectedVenue?.organiZerId,
@@ -182,9 +182,31 @@ export default function DashboardLayout() {
     }
   };
 
+  const fetchBookedVenues = async () => {
+    try {
+      const response = await AXIOS_API.get(
+        `/api/v2/list/${user.userId}/venueBook`,
+      );
+
+      setBookedVenues(response?.data?.Bookings)
+    } catch (error) {}
+  };
+
+  const fetchBookedUser = async ()=>{
+    try {
+      
+    } catch (error) {
+      
+    }
+  }
+
+  console.log("there....",bookedVenues);
+  
+
   useEffect(() => {
     handleUserFetch();
     handleVenueFetch();
+    fetchBookedVenues()
   }, []);
 
   return (
@@ -264,6 +286,7 @@ export default function DashboardLayout() {
               handleAdd,
               handleVenueDelete,
               handleEdit,
+              bookedVenues
             }}
           />
         </main>

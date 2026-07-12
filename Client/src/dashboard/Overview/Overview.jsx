@@ -7,9 +7,9 @@ import RecentCampaigns from "../RecentCampaigns";
 import OrganizerMsg from "../OrganizerMsg";
 
 export default function Overview() {
-  const { user, users, venues, organizers } = useOutletContext();
+  const { user, users, venues, organizers, bookedVenues } = useOutletContext();
 
-  console.log("f...", user);
+  console.log("f...", bookedVenues);
 
   const isAdmin = user?.role === "admin";
 
@@ -22,6 +22,7 @@ export default function Overview() {
           venues: venues,
           organizers: organizers,
         }}
+        booked={bookedVenues}
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
