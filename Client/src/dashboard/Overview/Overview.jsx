@@ -31,7 +31,7 @@ export default function Overview() {
         </div>
 
         <div className="lg:col-span-3  animate-fade-in-up-stagger delay-450">
-          <CampaignTypesChart users={users} />
+          <CampaignTypesChart booked={bookedVenues} users={users} isAdmin={isAdmin}/>
         </div>
 
         <div className="lg:col-span-3  animate-fade-in-up-stagger delay-525">

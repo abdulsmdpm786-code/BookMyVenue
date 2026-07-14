@@ -192,14 +192,6 @@ export default function DashboardLayout() {
     } catch (error) {}
   };
 
-  const fetchBookedUser = async ()=>{
-    try {
-      
-    } catch (error) {
-      
-    }
-  }
-
   console.log("there....",bookedVenues);
   
 
