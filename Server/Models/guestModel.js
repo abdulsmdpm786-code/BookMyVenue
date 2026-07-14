@@ -25,4 +25,4 @@ const guestSchema = mongoose.Schema(
   { timestamp: true },
 );
 
-const guestModel = mongoose.model("guest", guestSchema)
+export const guestModel = mongoose.model("guest", guestSchema)

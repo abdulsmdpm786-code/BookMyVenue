@@ -1,4 +1,6 @@
 import { bookingModel } from "../Models/bookingModel.js";
+import { guestModel } from "../Models/guestModel.js";
+import { userModel } from "../Models/registerModel.js";
 import { venueModel } from "../Models/venueModel.js";
 import { uploadCloudinary } from "../utilities/cloudinaryUtility.js";
 import fs from "fs";
@@ -306,6 +308,19 @@ const getBookedVenue = async (req, res) => {
   }
 };
 
+// const getBookedUsers = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const users = userModel.find({ _id: id });
+//     const guest = guestModel.find({ _id: id });
+//     if (!users) {
+//       return res.status(404).json({
+//         message: "No users found..",
+//       });
+//     }
+//   } catch (error) {}
+// };
+
 export {
   getAll,
   handleRegister,
@@ -316,5 +331,7 @@ export {
   getVenueOrg,
   getBookedDates,
   bookVenue,
-  getBookedVenue
+  getBookedVenue,
 };
+
+

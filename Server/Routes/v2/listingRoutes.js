@@ -24,7 +24,8 @@ listingRoutes.put("/verify/:id", verifyVenue);
 
 listingRoutes.get("/venueOrg/:id", getVenueOrg);
 listingRoutes.get("/:id/booked-dates", getBookedDates);
-listingRoutes.post("/:id/book", bookVenue);
+listingRoutes.post("/:id/book", bookVenue); 
 
 listingRoutes.get("/:id/venueBook", getBookedVenue);
+// listingRoutes.get("/:id/bookedUsers", getBookedUsers);
 export default listingRoutes;
