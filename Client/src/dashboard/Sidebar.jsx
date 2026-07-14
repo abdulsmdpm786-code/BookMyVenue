@@ -87,7 +87,7 @@ export default function Sidebar({
           id: "bookings",
           label: "Bookings",
           icon: NotepadText,
-          // path: ""
+          path: "bookings",
         },
         {
           id: "users",

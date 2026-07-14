@@ -183,22 +183,26 @@ export default function DashboardLayout() {
   };
 
   const fetchBookedVenues = async () => {
+    setIsLoading(true);
     try {
       const response = await AXIOS_API.get(
         `/api/v2/list/${user.userId}/venueBook`,
       );
 
-      setBookedVenues(response?.data?.Bookings)
-    } catch (error) {}
+      setBookedVenues(response?.data?.Bookings);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  console.log("there....",bookedVenues);
-  
+  console.log("there....", bookedVenues);
 
   useEffect(() => {
     handleUserFetch();
     handleVenueFetch();
-    fetchBookedVenues()
+    fetchBookedVenues();
   }, []);
 
   return (
@@ -278,7 +282,7 @@ export default function DashboardLayout() {
               handleAdd,
               handleVenueDelete,
               handleEdit,
-              bookedVenues
+              bookedVenues,
             }}
           />
         </main>
