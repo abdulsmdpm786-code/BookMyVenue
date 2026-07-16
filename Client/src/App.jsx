@@ -83,7 +83,19 @@ function App() {
                 Dashboard
               </Link>
             )}
-            <Link href="#" className="transition-opacity hover:opacity-75">
+            {hasRole("user") && (
+              <Link
+                to={"/profile"}
+                className="transition-opacity hover:opacity-75"
+              >
+                Profile
+              </Link>
+            )}
+
+            <Link
+              to={"/contact"}
+              className="transition-opacity hover:opacity-75"
+            >
               Contact
             </Link>
           </div>

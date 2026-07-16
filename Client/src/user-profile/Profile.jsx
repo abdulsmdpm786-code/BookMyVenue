@@ -162,7 +162,7 @@ export function Profile() {
       {/* Navbar */}
       <VenueNavbar />
 
-      <main className="max-w-5xl mx-auto px-6 md:px-12 mt-10 relative z-10">
+      <main className="max-w-7xl mx-auto px-6 md:px-12 mt-10 relative z-10">
         
         {/* Dynamic header greeting */}
         <div className="mb-8 animate-fade-in-up" style={{ opacity: 0 }}>

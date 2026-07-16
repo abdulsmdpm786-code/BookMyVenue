@@ -4,7 +4,6 @@ import logo from "../assets/logo.png";
 import useAuth from "../Auth/useAuth";
 
 export function VenueNavbar() {
-
   const { user, logout, hasRole } = useAuth();
   return (
     <div className="w-full relative z-30 px-6 md:px-12 pt-6 animate-fade-in">
@@ -38,12 +37,26 @@ export function VenueNavbar() {
             <span className="w-1.5 h-1.5 rounded-full bg-ticket-orange animate-pulse"></span>
             Venues
           </Link>
-          <Link
-            to="/dashboard"
-            className="transition-colors hover:text-slate-900"
-          >
-            Dashboard
+          {hasRole("user") && (
+            <Link
+              to={"/profile"}
+              className="transition-opacity hover:opacity-75"
+            >
+              Profile
+            </Link>
+          )}
+
+          <Link to={"/contact"} className="transition-opacity hover:opacity-75">
+            Contact
           </Link>
+          {hasRole(["admin", "organizer"]) && (
+            <Link
+              to={"/dashboard"}
+              className="transition-opacity hover:opacity-75"
+            >
+              Dashboard
+            </Link>
+          )}
         </div>
 
         {user ? (

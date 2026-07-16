@@ -30,16 +30,16 @@ export default function Contact() {
   return (
     <div className="min-h-screen w-full font-sans bg-gradient-to-b from-[#D4CEB8] via-[#F4F1E6] to-[#FAF9F6] text-slate-800 selection:bg-ticket-yellow selection:text-slate-900 pb-20 relative overflow-x-hidden">
       
-      {/* Background Decorative Glows */}
+     
       <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-ticket-orange/5 rounded-full blur-[160px] pointer-events-none"></div>
       <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] bg-ticket-yellow/10 rounded-full blur-[140px] pointer-events-none"></div>
 
-      {/* Navbar */}
+      
       <VenueNavbar />
 
-      <main className="max-w-5xl mx-auto px-6 md:px-12 mt-12 relative z-10">
+      <main className="max-w-7xl mx-auto px-6 md:px-12 mt-12 relative z-10">
         
-        {/* Header Greeting */}
+       
         <div className="mb-10 text-center animate-fade-in-up" style={{ opacity: 0 }}>
           <span className="text-xs font-bold text-ticket-orange uppercase tracking-widest pl-0.5">Contact Us</span>
           <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mt-2">
@@ -52,7 +52,7 @@ export default function Contact() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mt-6">
           
-          {/* Left Column: Contact details card (Span 5) */}
+          
           <div className="lg:col-span-5 animate-fade-in-up" style={{ animationDelay: '0.15s', opacity: 0 }}>
             <div className="bg-white rounded-3xl border border-slate-200/80 p-6 md:p-8 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] space-y-6">
               
@@ -63,7 +63,7 @@ export default function Contact() {
 
               <hr className="border-slate-100" />
 
-              {/* Info Elements */}
+            
               <div className="space-y-4.5">
                 <a 
                   href="tel:+15553049900"
@@ -104,7 +104,6 @@ export default function Contact() {
 
               <hr className="border-slate-100" />
 
-              {/* Social Channels */}
               <div>
                 <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-3">Connect on Socials</span>
                 <div className="flex gap-3">
@@ -127,7 +126,7 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Right Column: Contact Us Form (Span 7) */}
+   
           <div className="lg:col-span-7 animate-fade-in-up" style={{ animationDelay: '0.3s', opacity: 0 }}>
             <div className="bg-white rounded-3xl border border-slate-200/80 p-6 md:p-8 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)]">
               
