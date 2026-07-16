@@ -7,6 +7,7 @@ import AXIOS_API from "../Api/api";
 import DetailModal from "./NewVenues/DetailModal";
 import VenueAddModal from "./Venues/VenueAddModal";
 import EditModal from "./Venues/EditModal";
+import BookingCard from "./Bookings/BookingCard";
 
 export default function DashboardLayout() {
   const { user, logout } = useAuth();
@@ -34,6 +35,9 @@ export default function DashboardLayout() {
   const [editModal, setEditModal] = useState(false);
 
   const [bookedVenues, setBookedVenues] = useState([]);
+
+  const [bookingDetailModal, setBookingDetailModal] = useState(false);
+  const [bookingData, setBookingData] = useState("")
 
   const handleUserFetch = async () => {
     try {
@@ -197,6 +201,11 @@ export default function DashboardLayout() {
     }
   };
 
+  const handleBooking = (data) => {
+    setBookingDetailModal(true);
+    setBookingData(data)
+  };
+
   console.log("there....", bookedVenues);
 
   useEffect(() => {
@@ -263,6 +272,12 @@ export default function DashboardLayout() {
         />
       )}
 
+      {bookingDetailModal && (
+        <BookingCard
+        data={bookingData}
+        onClose={() => setBookingDetailModal(false)} />
+      )}
+
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <Header onToggleMobileSidebar={() => setMobileSidebarOpen(true)} />
 
@@ -283,6 +298,7 @@ export default function DashboardLayout() {
               handleVenueDelete,
               handleEdit,
               bookedVenues,
+              handleBooking,
             }}
           />
         </main>

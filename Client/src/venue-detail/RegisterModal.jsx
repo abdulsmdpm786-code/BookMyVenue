@@ -23,7 +23,6 @@ function RegisterModal({ onClose, bookingData, user }) {
 
   const endDateString = endDate.toDateString();
 
-
   function toUTCDateOnly(date, endOfDay = false) {
     return new Date(
       Date.UTC(
@@ -48,7 +47,7 @@ function RegisterModal({ onClose, bookingData, user }) {
     },
   ];
 
-  console.log("range..", bookedRanges);
+  console.log("range..", bookingData);
 
   const handleBookSlot = async () => {
     setError("");
@@ -60,6 +59,7 @@ function RegisterModal({ onClose, bookingData, user }) {
           userId: user.userId,
           venueId: bookingData.venueId,
           organizerId: bookingData.orgId,
+          venueName: bookingData.venueName,
           name,
           email,
           number,
