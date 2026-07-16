@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import VenueNavbar from '../venue-list/VenueNavbar';
 import { Mail, Phone, MapPin, Send, Check, Globe } from 'lucide-react';
 
+
 export default function Contact() {
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',

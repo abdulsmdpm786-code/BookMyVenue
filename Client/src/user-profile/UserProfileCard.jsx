@@ -9,6 +9,7 @@ const AVATAR_OPTIONS = [
 ];
 
 export default function UserProfileCard({ user, onSave }) {
+    console.log("user...", user);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({ ...user });
   const [showAvatarSelector, setShowAvatarSelector] = useState(false);
@@ -91,13 +92,11 @@ export default function UserProfileCard({ user, onSave }) {
 
           {!isEditing ? (
             <>
-              <h2 className="text-2xl font-bold text-slate-800 mt-4 tracking-tight">{user.name}</h2>
+              <h2 className="text-2xl font-bold text-slate-800 mt-4 tracking-tight">{user?.userName}</h2>
               <span className="mt-1.5 px-3 py-1 bg-ticket-orange/10 border border-ticket-orange/20 text-ticket-orange text-xs font-bold rounded-full uppercase tracking-wider flex items-center gap-1">
-                <Shield className="w-3 h-3" /> {user.role}
+                <Shield className="w-3 h-3" /> {user?.role}
               </span>
-              <p className="mt-4 text-sm text-slate-500 text-center max-w-sm font-medium leading-relaxed">
-                "{user.bio}"
-              </p>
+         
             </>
           ) : (
             <span className="mt-3 text-xs text-slate-400 font-medium">Click the camera icon to change avatar</span>
@@ -115,7 +114,7 @@ export default function UserProfileCard({ user, onSave }) {
               </div>
               <div>
                 <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Full Name</div>
-                <div className="text-sm font-bold text-slate-700">{user.name}</div>
+                <div className="text-sm font-bold text-slate-700">{user?.userName}</div>
               </div>
             </div>
 
@@ -125,7 +124,7 @@ export default function UserProfileCard({ user, onSave }) {
               </div>
               <div>
                 <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Email Address</div>
-                <div className="text-sm font-bold text-slate-700">{user.email}</div>
+                <div className="text-sm font-bold text-slate-700">{user?.email}</div>
               </div>
             </div>
 
@@ -135,13 +134,10 @@ export default function UserProfileCard({ user, onSave }) {
               </div>
               <div>
                 <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Phone Number</div>
-                <div className="text-sm font-bold text-slate-700">{user.phone}</div>
+                <div className="text-sm font-bold text-slate-700">{user?.number}</div>
               </div>
             </div>
 
-            <div className="text-center pt-2">
-              <span className="text-[11px] text-slate-400 font-medium">Member since {user.memberSince}</span>
-            </div>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -150,7 +146,7 @@ export default function UserProfileCard({ user, onSave }) {
               <input
                 type="text"
                 name="name"
-                value={formData.name}
+                value={formData.userName}
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-ticket-orange focus:ring-2 focus:ring-ticket-orange/20 transition-all outline-none text-slate-700 font-medium text-sm"
@@ -174,23 +170,14 @@ export default function UserProfileCard({ user, onSave }) {
               <input
                 type="text"
                 name="phone"
-                value={formData.phone}
+                value={formData.number}
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-ticket-orange focus:ring-2 focus:ring-ticket-orange/20 transition-all outline-none text-slate-700 font-medium text-sm"
               />
             </div>
 
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5 pl-1">Bio</label>
-              <textarea
-                name="bio"
-                value={formData.bio}
-                onChange={handleChange}
-                rows="3"
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-ticket-orange focus:ring-2 focus:ring-ticket-orange/20 transition-all outline-none text-slate-700 font-medium text-sm resize-none"
-              />
-            </div>
+
 
             <div className="flex gap-3 pt-2">
               <button
