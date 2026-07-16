@@ -7,18 +7,9 @@ import RecentCampaigns from "../RecentCampaigns";
 import OrganizerMsg from "../OrganizerMsg";
 
 export default function Overview() {
-  const {
-    user,
-    users,
-    venues,
-    organizers,
-    campaigns,
-    automations,
-    handleUpdateCampaign,
-    handleDeleteCampaign,
-  } = useOutletContext();
+  const { user, users, venues, organizers, bookedVenues } = useOutletContext();
 
-  // console.log("f...",users);
+  console.log("f...", bookedVenues);
 
   const isAdmin = user?.role === "admin";
 
@@ -31,6 +22,7 @@ export default function Overview() {
           venues: venues,
           organizers: organizers,
         }}
+        booked={bookedVenues}
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
@@ -39,7 +31,7 @@ export default function Overview() {
         </div>
 
         <div className="lg:col-span-3  animate-fade-in-up-stagger delay-450">
-          <CampaignTypesChart users={users} />
+          <CampaignTypesChart booked={bookedVenues} users={users} isAdmin={isAdmin}/>
         </div>
 
         <div className="lg:col-span-3  animate-fade-in-up-stagger delay-525">

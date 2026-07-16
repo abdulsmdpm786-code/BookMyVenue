@@ -4,9 +4,9 @@ import { BedDouble, Bath, Maximize2, Car, Shield, X, MapPin } from 'lucide-react
 export function VenueFeatures({ venue }) {
   const [mapOpen, setMapOpen] = useState(false);
 
-  // Helper to generate safety dot classes
+  
   const renderSafetyDots = (score) => {
-    // scale is 0 to 5
+   
     const dots = [];
     const fullDots = Math.floor(score);
     for (let i = 1; i <= 5; i++) {

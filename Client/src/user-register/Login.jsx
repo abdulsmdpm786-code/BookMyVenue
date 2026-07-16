@@ -32,24 +32,7 @@ export default function Login() {
     } finally {
       setIsLoading(false);
     }
-    // try {
-    //   const loginResponse = await AXIOS_API.post("/api/v1/register/signIn", {
-    //     email,
-    //     password,
-    //   });
 
-    //   if (loginResponse.status === 200) {
-    //     console.log("Logged..");
-
-    //     setEmail("");
-    //     setPassword("");
-    //     setIsLoading(false);
-    //     navigate("/", { replace: true });
-    //   }
-    // } catch (error) {
-    //   setError(error.response?.data?.message || "Registration failed");
-    //   setIsLoading(false);
-    // }
   };
 
   return (

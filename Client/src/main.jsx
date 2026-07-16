@@ -16,9 +16,9 @@ import Venues from "./dashboard/Venues/Venues.jsx";
 import Users from "./dashboard/Users/Users.jsx";
 import Organizers from "./dashboard/Organizers/Organizers.jsx";
 import RoleBasedRoute from "./Role-Route/RoleBasedRoute.jsx";
+import BookingsDetails from "./dashboard/Bookings/BookingsDetails.jsx";
 
 createRoot(document.getElementById("root")).render(
-  
   <StrictMode>
     <BrowserRouter>
       <AuthProvider>
@@ -31,14 +31,14 @@ createRoot(document.getElementById("root")).render(
           <Route element={<ProtectedLayout role={["admin", "organizer"]} />}>
             <Route path="/dashboard" element={<DashboardLayout />}>
               <Route index element={<Overview />} />
-              <Route path="new-venues" element={
-                <RoleBasedRoute 
-                adminComponent={<NewVenues />}
-                />
-                } />
+              <Route
+                path="new-venues"
+                element={<RoleBasedRoute adminComponent={<NewVenues />} />}
+              />
               <Route path="venues" element={<Venues />} />
               <Route path="users" element={<Users />} />
               <Route path="organizers" element={<Organizers />} />
+              <Route path="bookings" element={<BookingsDetails />} />
             </Route>
           </Route>
         </Routes>

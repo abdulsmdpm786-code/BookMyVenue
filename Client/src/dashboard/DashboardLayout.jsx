@@ -7,6 +7,7 @@ import AXIOS_API from "../Api/api";
 import DetailModal from "./NewVenues/DetailModal";
 import VenueAddModal from "./Venues/VenueAddModal";
 import EditModal from "./Venues/EditModal";
+import BookingCard from "./Bookings/BookingCard";
 
 export default function DashboardLayout() {
   const { user, logout } = useAuth();
@@ -14,7 +15,6 @@ export default function DashboardLayout() {
   const isAdmin = user.role === "admin";
   const isOrganizer = user.role === "organizer";
   const userId = user.userId;
-  // console.log("ooo", user);
 
   const [users, setUsers] = useState([]);
   const [organizers, setOrganizers] = useState([]);
@@ -33,6 +33,11 @@ export default function DashboardLayout() {
 
   const [editData, setEditData] = useState("");
   const [editModal, setEditModal] = useState(false);
+
+  const [bookedVenues, setBookedVenues] = useState([]);
+
+  const [bookingDetailModal, setBookingDetailModal] = useState(false);
+  const [bookingData, setBookingData] = useState("")
 
   const handleUserFetch = async () => {
     try {
@@ -87,8 +92,6 @@ export default function DashboardLayout() {
       setDetailModal(false);
     }
   };
-
-  // console.log("se...",selectedVenue.organiZerId);
 
   const org = organizers.filter(
     (i) => i.organiZerId === selectedVenue?.organiZerId,
@@ -183,9 +186,32 @@ export default function DashboardLayout() {
     }
   };
 
+  const fetchBookedVenues = async () => {
+    setIsLoading(true);
+    try {
+      const response = await AXIOS_API.get(
+        `/api/v2/list/${user.userId}/venueBook`,
+      );
+
+      setBookedVenues(response?.data?.Bookings);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleBooking = (data) => {
+    setBookingDetailModal(true);
+    setBookingData(data)
+  };
+
+  console.log("there....", bookedVenues);
+
   useEffect(() => {
     handleUserFetch();
     handleVenueFetch();
+    fetchBookedVenues();
   }, []);
 
   return (
@@ -246,6 +272,12 @@ export default function DashboardLayout() {
         />
       )}
 
+      {bookingDetailModal && (
+        <BookingCard
+        data={bookingData}
+        onClose={() => setBookingDetailModal(false)} />
+      )}
+
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <Header onToggleMobileSidebar={() => setMobileSidebarOpen(true)} />
 
@@ -265,6 +297,8 @@ export default function DashboardLayout() {
               handleAdd,
               handleVenueDelete,
               handleEdit,
+              bookedVenues,
+              handleBooking,
             }}
           />
         </main>
