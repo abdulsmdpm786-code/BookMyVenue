@@ -17,6 +17,8 @@ import Users from "./dashboard/Users/Users.jsx";
 import Organizers from "./dashboard/Organizers/Organizers.jsx";
 import RoleBasedRoute from "./Role-Route/RoleBasedRoute.jsx";
 import BookingsDetails from "./dashboard/Bookings/BookingsDetails.jsx";
+import Profile from "./user-profile/Profile.jsx";
+import Contact from "./contact/Contact.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -28,6 +30,8 @@ createRoot(document.getElementById("root")).render(
           <Route path="/signup" element={<Signup />} />
           <Route path="/venues" element={<VenueList />} />
           <Route path="/venues/:id" element={<VenueDetail />} />
+          <Route path="/profile" element={<Profile />} />
+            <Route path="/contact" element={<Contact />} />
           <Route element={<ProtectedLayout role={["admin", "organizer"]} />}>
             <Route path="/dashboard" element={<DashboardLayout />}>
               <Route index element={<Overview />} />
