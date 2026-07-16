@@ -12,6 +12,7 @@ export default function Overview() {
   console.log("f...", bookedVenues);
 
   const isAdmin = user?.role === "admin";
+  const isOrganizer = user?.role === "organizer"
 
   return (
     <div className="max-w-7xl mx-auto space-y-8 animate-fade-in-up">
@@ -31,7 +32,7 @@ export default function Overview() {
         </div>
 
         <div className="lg:col-span-3  animate-fade-in-up-stagger delay-450">
-          <CampaignTypesChart booked={bookedVenues} users={users} isAdmin={isAdmin}/>
+          <CampaignTypesChart booked={bookedVenues} users={users} isAdmin={isAdmin} isOrganizer={isOrganizer}/>
         </div>
 
         <div className="lg:col-span-3  animate-fade-in-up-stagger delay-525">
