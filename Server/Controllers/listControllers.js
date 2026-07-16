@@ -239,6 +239,7 @@ const bookVenue = async (req, res) => {
       bookedRanges,
       userId,
       venueId,
+      venueName,
       name,
       email,
       number,
@@ -275,6 +276,7 @@ const bookVenue = async (req, res) => {
     const booking = await bookingModel.create({
       userId,
       venueId: id,
+      venueName,
       name,
       email,
       number,
@@ -308,18 +310,6 @@ const getBookedVenue = async (req, res) => {
   }
 };
 
-// const getBookedUsers = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const users = userModel.find({ _id: id });
-//     const guest = guestModel.find({ _id: id });
-//     if (!users) {
-//       return res.status(404).json({
-//         message: "No users found..",
-//       });
-//     }
-//   } catch (error) {}
-// };
 
 export {
   getAll,

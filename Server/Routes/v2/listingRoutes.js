@@ -27,5 +27,4 @@ listingRoutes.get("/:id/booked-dates", getBookedDates);
 listingRoutes.post("/:id/book", bookVenue); 
 
 listingRoutes.get("/:id/venueBook", getBookedVenue);
-// listingRoutes.get("/:id/bookedUsers", getBookedUsers);
 export default listingRoutes;

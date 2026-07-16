@@ -12,6 +12,10 @@ const bookingSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  venueName: {
+    type: String,
+    required: true,
+  },
   name: {
     type: String,
     required: true,
