@@ -174,7 +174,7 @@ export default function BookedVenues({ bookings, onCancelBooking }) {
                 Go Back
               </button>
               <button
-                onClick={handleConfirmCancel}
+            
                 className="flex-1 px-4 py-2.5 bg-red-650 hover:bg-red-700 text-white rounded-xl font-bold text-xs transition-colors shadow-md shadow-red-200"
               >
                 Yes, Cancel

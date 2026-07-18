@@ -7,101 +7,15 @@ import { Calendar, Mail } from "lucide-react";
 import { AuthContext } from "../Auth/AuthContext";
 import AXIOS_API from "../Api/api";
 
-const DEFAULT_USER = {
-  name: "Alex Mercer",
-  email: "alex.mercer@ticketseats.com",
-  phone: "+1 (555) 382-9901",
-  bio: "Avid traveler, event coordinator, and workspace enthusiast. Love finding hidden gems and unique cabins for remote work and team syncs.",
-  avatar:
-    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop",
-  memberSince: "Jan 2024",
-  role: "Premium Member",
-};
 
-const DEFAULT_BOOKINGS = [
-  {
-    id: "bk-101",
-    venueId: 1,
-    venueName: "Aura Oceanfront Estate",
-    venueLocation: "Malibu, California",
-    venueImage:
-      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=600&auto=format&fit=crop",
-    checkIn: "2026-07-20",
-    checkOut: "2026-07-22",
-    guests: 4,
-    totalPaid: 1750,
-    status: "Confirmed",
-    hostName: "Elena Rostova",
-    hostMessage:
-      "Hi Alex, we are looking forward to hosting you next week! Valet instructions will be sent 24 hours prior.",
-  },
-  {
-    id: "bk-102",
-    venueId: 2,
-    venueName: "The Skylight Greenhouse",
-    venueLocation: "Brooklyn, New York",
-    venueImage:
-      "https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=600&auto=format&fit=crop",
-    checkIn: "2026-08-05",
-    checkOut: "2026-08-06",
-    guests: 2,
-    totalPaid: 560,
-    status: "Pending Admin Approval",
-    hostName: "Marcus Sterling",
-    hostMessage:
-      "Welcome! We are reviewing the calendar for your requested slot and will approve shortly.",
-  },
-];
 
-const DEFAULT_MESSAGES = [
-  {
-    id: "msg-001",
-    sender: "TicketSeats Admin",
-    senderRole: "Platform Administrator",
-    avatar:
-      "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?q=80&w=150&auto=format&fit=crop",
-    content:
-      "Hi Alex, welcome to TicketSeats! Your account has been upgraded to 'Premium Member' status. You can now enjoy 10% off on your bookings.",
-    timestamp: "2026-07-10T10:00:00Z",
-    read: false,
-    replies: [
-      {
-        sender: "TicketSeats Admin",
-        text: "Hi Alex, welcome to TicketSeats! Your account has been upgraded to 'Premium Member' status. You can now enjoy 10% off on your bookings.",
-        timestamp: "2026-07-10T10:00:00Z",
-        isAdmin: true,
-      },
-    ],
-  },
-  {
-    id: "msg-002",
-    sender: "Elena Rostova",
-    senderRole: "Aura Oceanfront Estate Host",
-    avatar:
-      "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=150&auto=format&fit=crop",
-    content:
-      "Hi Alex! I noticed you requested an early check-in for Aura Oceanfront Estate. We can accommodate you from 12:00 PM instead of 3:00 PM. Let me know if that works!",
-    timestamp: "2026-07-09T14:30:00Z",
-    read: true,
-    replies: [
-      {
-        sender: "Elena Rostova",
-        text: "Hi Alex! I noticed you requested an early check-in for Aura Oceanfront Estate. We can accommodate you from 12:00 PM instead of 3:00 PM. Let me know if that works!",
-        timestamp: "2026-07-09T14:30:00Z",
-        isAdmin: true,
-      },
-    ],
-  },
-];
 
 export function Profile() {
   const { user } = useContext(AuthContext);
   console.log("uuu", user?.userId);
   const userId = user?.userId;
 
-  const [users, setUser] = useState(DEFAULT_USER);
-  const [bookings, setBookings] = useState(DEFAULT_BOOKINGS);
-  const [messages, setMessages] = useState(DEFAULT_MESSAGES);
+  
   const [activeTab, setActiveTab] = useState("bookings");
   const [userVenue, setUserVenue] = useState([]);
 
@@ -114,73 +28,15 @@ export function Profile() {
     }
   };
 
-  // Load from localStorage
+ 
   useEffect(() => {
     if (userId) {
       userVenues();
     }
-    const storedUser = localStorage.getItem("ts_user");
-    const storedBookings = localStorage.getItem("ts_bookings");
-    const storedMessages = localStorage.getItem("ts_messages");
 
-    if (storedUser) setUser(JSON.parse(storedUser));
-    else localStorage.setItem("ts_user", JSON.stringify(DEFAULT_USER));
-
-    if (storedBookings) setBookings(JSON.parse(storedBookings));
-    else localStorage.setItem("ts_bookings", JSON.stringify(DEFAULT_BOOKINGS));
-
-    if (storedMessages) setMessages(JSON.parse(storedMessages));
-    else localStorage.setItem("ts_messages", JSON.stringify(DEFAULT_MESSAGES));
+    
   }, [userId]);
 
-  // Handlers that update state and localStorage
-  const handleSaveUser = (updatedUser) => {
-    setUser(updatedUser);
-    localStorage.setItem("ts_user", JSON.stringify(updatedUser));
-  };
-
-  const handleCancelBooking = (bookingId) => {
-    const updatedBookings = bookings.map((b) =>
-      b.id === bookingId ? { ...b, status: "Cancelled" } : b,
-    );
-    setBookings(updatedBookings);
-    localStorage.setItem("ts_bookings", JSON.stringify(updatedBookings));
-  };
-
-  const handleToggleRead = (messageId) => {
-    const updatedMessages = messages.map((m) =>
-      m.id === messageId ? { ...m, read: !m.read } : m,
-    );
-    setMessages(updatedMessages);
-    localStorage.setItem("ts_messages", JSON.stringify(updatedMessages));
-  };
-
-  const handleAddReply = (messageId, replyText) => {
-    const updatedMessages = messages.map((m) => {
-      if (m.id === messageId) {
-        const newReply = {
-          sender: users.name,
-          text: replyText,
-          timestamp: new Date().toISOString(),
-          isAdmin: false,
-        };
-        return {
-          ...m,
-          read: true, // Auto-mark read on reply
-          replies: [...(m.replies || []), newReply],
-        };
-      }
-      return m;
-    });
-    setMessages(updatedMessages);
-    localStorage.setItem("ts_messages", JSON.stringify(updatedMessages));
-  };
-
-  // Computations for notification counters
-  const pendingBookingsCount = bookings.filter(
-    (b) => b.status === "Confirmed" || b.status === "Pending Admin Approval",
-  ).length;
-  const unreadMessagesCount = messages.filter((m) => !m.read).length;
 
   console.log("ve...", userVenue.length);
 
@@ -216,7 +72,7 @@ export function Profile() {
             className="lg:col-span-4 animate-fade-in-up"
             style={{ animationDelay: "0.15s", opacity: 0 }}
           >
-            <UserProfileCard user={user} onSave={handleSaveUser} />
+            <UserProfileCard user={user}  />
           </div>
 
           <div
@@ -259,7 +115,7 @@ export function Profile() {
               >
                 <Mail className="w-4 h-4" />
                 Messages Center
-                {unreadMessagesCount > 0 && (
+                {/* {unreadMessagesCount > 0 && (
                   <span
                     className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold transition-colors ${
                       activeTab === "messages"
@@ -269,7 +125,7 @@ export function Profile() {
                   >
                     {unreadMessagesCount}
                   </span>
-                )}
+                )} */}
               </button>
             </div>
 
@@ -282,13 +138,12 @@ export function Profile() {
               {activeTab === "bookings" ? (
                 <BookedVenues
                   bookings={userVenue}
-                  onCancelBooking={handleCancelBooking}
+                 
                 />
               ) : (
                 <AdminMessages
-                  messages={messages}
-                  onToggleRead={handleToggleRead}
-                  onAddReply={handleAddReply}
+                  // messages={messages}
+   
                 />
               )}
             </div>
