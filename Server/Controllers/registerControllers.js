@@ -201,7 +201,7 @@ const handleSignIn = async (req, res) => {
 const refreshToken = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
-    console.log("token..", req.cookies.refreshToken);
+    // console.log("token..", req.cookies.refreshToken);
 
     if (!refreshToken) {
       return res.status(401).json({
@@ -216,11 +216,11 @@ const refreshToken = async (req, res) => {
       user: decoded.id,
       revoked: false,
     });
-    console.log("session", session);
+    // console.log("session", session);
     const user = await userModel.findOne({
       _id: decoded.id,
     });
-    console.log("user...in refresh", user);
+    // console.log("user...in refresh", user);
 
     if (!session) {
       return res.status(401).json({
@@ -396,6 +396,7 @@ const getAllUsers = async (req, res) => {
 const getOrganizer = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log("iii", id);
 
     const organizer = await userModel.findOne({ _id: id });
 

@@ -310,6 +310,36 @@ const getBookedVenue = async (req, res) => {
   }
 };
 
+const userBookedVenue = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log("iii", id);
+    const bookings = await bookingModel.find({ userId: id });
+    if (!bookings) {
+      return res.status(404).json({
+        message: "No booked venue found..",
+      });
+    }
+    // console.log("res", bookings);
+
+    // const venueIds = await bookings.map((booking) => booking.venueId);
+
+    // const venues = await venueModel.find({ _id: { $in: venueIds } });
+    // console.log("vee", venues);
+    // if (!venues) {
+    //   return res.status(404).json({
+    //     message: "No booked venue found..",
+    //   });
+    // }
+    res.status(200).json({
+      bookings,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error,
+    });
+  }
+};
 
 export {
   getAll,
@@ -322,6 +352,5 @@ export {
   getBookedDates,
   bookVenue,
   getBookedVenue,
+  userBookedVenue,
 };
-
-

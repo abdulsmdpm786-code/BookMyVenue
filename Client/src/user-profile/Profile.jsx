@@ -4,7 +4,8 @@ import UserProfileCard from "./UserProfileCard";
 import BookedVenues from "./BookedVenues";
 import AdminMessages from "./AdminMessages";
 import { Calendar, Mail } from "lucide-react";
-import { AuthContext } from '../Auth/AuthContext';
+import { AuthContext } from "../Auth/AuthContext";
+import AXIOS_API from "../Api/api";
 
 const DEFAULT_USER = {
   name: "Alex Mercer",
@@ -95,15 +96,29 @@ const DEFAULT_MESSAGES = [
 
 export function Profile() {
   const { user } = useContext(AuthContext);
-
+  console.log("uuu", user?.userId);
+  const userId = user?.userId;
 
   const [users, setUser] = useState(DEFAULT_USER);
   const [bookings, setBookings] = useState(DEFAULT_BOOKINGS);
   const [messages, setMessages] = useState(DEFAULT_MESSAGES);
-  const [activeTab, setActiveTab] = useState("bookings"); // "bookings" | "messages"
+  const [activeTab, setActiveTab] = useState("bookings");
+  const [userVenue, setUserVenue] = useState([]);
+
+  const userVenues = async () => {
+    try {
+      const response = await AXIOS_API.get(`/api/v2/list/${userId}/venueUser`);
+      setUserVenue(response.data.bookings);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // Load from localStorage
   useEffect(() => {
+    if (userId) {
+      userVenues();
+    }
     const storedUser = localStorage.getItem("ts_user");
     const storedBookings = localStorage.getItem("ts_bookings");
     const storedMessages = localStorage.getItem("ts_messages");
@@ -116,7 +131,7 @@ export function Profile() {
 
     if (storedMessages) setMessages(JSON.parse(storedMessages));
     else localStorage.setItem("ts_messages", JSON.stringify(DEFAULT_MESSAGES));
-  }, []);
+  }, [userId]);
 
   // Handlers that update state and localStorage
   const handleSaveUser = (updatedUser) => {
@@ -167,17 +182,19 @@ export function Profile() {
   ).length;
   const unreadMessagesCount = messages.filter((m) => !m.read).length;
 
+  console.log("ve...", userVenue.length);
+
   return (
     <div className="min-h-screen w-full font-sans bg-gradient-to-b from-[#D4CEB8] via-[#F4F1E6] to-[#FAF9F6] text-slate-800 selection:bg-ticket-yellow selection:text-slate-900 pb-20 relative overflow-x-hidden">
-      {/* Decorative Glows */}
+     
       <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-ticket-orange/5 rounded-full blur-[160px] pointer-events-none"></div>
       <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] bg-ticket-yellow/10 rounded-full blur-[140px] pointer-events-none"></div>
 
-      {/* Navbar */}
+      
       <VenueNavbar />
 
       <main className="max-w-7xl mx-auto px-6 md:px-12 mt-10 relative z-10">
-        {/* Dynamic header greeting */}
+       
         <div className="mb-8 animate-fade-in-up" style={{ opacity: 0 }}>
           <span className="text-xs font-bold text-ticket-orange uppercase tracking-widest pl-0.5">
             User Dashboard
@@ -185,7 +202,7 @@ export function Profile() {
           <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight mt-1">
             Welcome back,{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-slate-850 to-ticket-orange">
-              {users.name.split(" ")[0]}
+              {user?.userName}
             </span>
           </h1>
           <p className="text-sm text-slate-500 font-medium mt-1">
@@ -194,7 +211,7 @@ export function Profile() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left Column: User Profile Details (Span 4) */}
+         
           <div
             className="lg:col-span-4 animate-fade-in-up"
             style={{ animationDelay: "0.15s", opacity: 0 }}
@@ -202,16 +219,15 @@ export function Profile() {
             <UserProfileCard user={user} onSave={handleSaveUser} />
           </div>
 
-          {/* Right Column: Bookings & Messages Center Tabs (Span 8) */}
           <div
             className="lg:col-span-8 space-y-6 animate-fade-in-up"
-            style={{ animationDelay: "0.3s", opacity: 0 }}
+            style={{ animationDelay: "0.4s", opacity: 0 }}
           >
-            {/* Tabs Selector Navigation */}
             <div className="bg-white border border-slate-200/80 p-2 rounded-2xl flex gap-2.5 shadow-sm">
               <button
                 onClick={() => setActiveTab("bookings")}
-                className={`flex-1 py-3 px-4 rounded-xl font-bold text-xs md:text-sm flex items-center justify-center gap-2 transition-all duration-300 ${
+                className={`flex-1 py-3 px-4 rounded-xl font-bold text-xs md:text-sm flex items-center justify-center gap-2 
+                  transition-all duration-300 ${
                   activeTab === "bookings"
                     ? "bg-slate-900 text-white shadow-md"
                     : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
@@ -219,7 +235,7 @@ export function Profile() {
               >
                 <Calendar className="w-4 h-4" />
                 My Bookings
-                {pendingBookingsCount > 0 && (
+                {userVenue?.length > 0 && (
                   <span
                     className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold transition-colors ${
                       activeTab === "bookings"
@@ -227,14 +243,15 @@ export function Profile() {
                         : "bg-slate-100 text-slate-600"
                     }`}
                   >
-                    {pendingBookingsCount}
+                    {userVenue?.length}
                   </span>
                 )}
               </button>
 
               <button
                 onClick={() => setActiveTab("messages")}
-                className={`flex-1 py-3 px-4 rounded-xl font-bold text-xs md:text-sm flex items-center justify-center gap-2 transition-all duration-300 ${
+                className={`flex-1 py-3 px-4 rounded-xl font-bold text-xs md:text-sm flex items-center justify-center gap-2 
+                  transition-all duration-300 ${
                   activeTab === "messages"
                     ? "bg-slate-900 text-white shadow-md"
                     : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
@@ -256,7 +273,7 @@ export function Profile() {
               </button>
             </div>
 
-            {/* Render Active Component with Transition key & fadeInUp animation */}
+           
             <div
               key={activeTab}
               className="bg-transparent rounded-2xl animate-fade-in-up"
@@ -264,7 +281,7 @@ export function Profile() {
             >
               {activeTab === "bookings" ? (
                 <BookedVenues
-                  bookings={bookings}
+                  bookings={userVenue}
                   onCancelBooking={handleCancelBooking}
                 />
               ) : (

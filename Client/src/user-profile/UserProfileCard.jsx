@@ -9,7 +9,7 @@ const AVATAR_OPTIONS = [
 ];
 
 export default function UserProfileCard({ user, onSave }) {
-    console.log("user...", user);
+   
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({ ...user });
   const [showAvatarSelector, setShowAvatarSelector] = useState(false);

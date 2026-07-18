@@ -9,6 +9,7 @@ import {
   handleDelete,
   handleEdit,
   handleRegister,
+  userBookedVenue,
   verifyVenue,
 } from "../../Controllers/listControllers.js";
 import upload from "../../Middlewares/multer.js";
@@ -26,5 +27,7 @@ listingRoutes.get("/venueOrg/:id", getVenueOrg);
 listingRoutes.get("/:id/booked-dates", getBookedDates);
 listingRoutes.post("/:id/book", bookVenue); 
 
-listingRoutes.get("/:id/venueBook", getBookedVenue);
+listingRoutes.get("/:id/venueBook", getBookedVenue); 
+listingRoutes.get("/:id/venueUser", userBookedVenue);
+
 export default listingRoutes;
