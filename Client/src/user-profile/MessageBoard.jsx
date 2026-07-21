@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Mail, Inbox, X, ArrowRight } from "lucide-react";
 
 export default function MessageBoard({selectedMessage, isLoading = false, onClose }) {
-console.log("..",selectedMessage);
 
 
   return (
