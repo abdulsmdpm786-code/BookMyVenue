@@ -6,18 +6,19 @@ import AdminMessages from "./AdminMessages";
 import { Calendar, Mail } from "lucide-react";
 import { AuthContext } from "../Auth/AuthContext";
 import AXIOS_API from "../Api/api";
-
-
-
+import MessageBoard from "./MessageBoard";
 
 export function Profile() {
   const { user } = useContext(AuthContext);
   console.log("uuu", user?.userId);
   const userId = user?.userId;
 
-  
   const [activeTab, setActiveTab] = useState("bookings");
   const [userVenue, setUserVenue] = useState([]);
+  const [message, setMessage] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedMessage, setSelectedMessage] = useState("");
+  const [messageModal, setMessageModal] = useState(false);
 
   const userVenues = async () => {
     try {
@@ -28,29 +29,42 @@ export function Profile() {
     }
   };
 
- 
+  const userMessage = async () => {
+    setIsLoading(true);
+    try {
+      const response = await AXIOS_API.get(`/api/v2/message/${userId}/get`);
+      setMessage(response.data.message);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (userId) {
       userVenues();
     }
-
-    
+    userMessage();
   }, [userId]);
 
+  const handleSelect = (data) => {
+    console.log("ans..",data);
+    
+    setSelectedMessage(data);
+    setMessageModal(true)
+  };
 
-  console.log("ve...", userVenue.length);
+  console.log("ve...", selectedMessage);
 
   return (
     <div className="min-h-screen w-full font-sans bg-gradient-to-b from-[#D4CEB8] via-[#F4F1E6] to-[#FAF9F6] text-slate-800 selection:bg-ticket-yellow selection:text-slate-900 pb-20 relative overflow-x-hidden">
-     
       <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-ticket-orange/5 rounded-full blur-[160px] pointer-events-none"></div>
       <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] bg-ticket-yellow/10 rounded-full blur-[140px] pointer-events-none"></div>
 
-      
       <VenueNavbar />
 
       <main className="max-w-7xl mx-auto px-6 md:px-12 mt-10 relative z-10">
-       
         <div className="mb-8 animate-fade-in-up" style={{ opacity: 0 }}>
           <span className="text-xs font-bold text-ticket-orange uppercase tracking-widest pl-0.5">
             User Dashboard
@@ -67,12 +81,11 @@ export function Profile() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-         
           <div
             className="lg:col-span-4 animate-fade-in-up"
             style={{ animationDelay: "0.15s", opacity: 0 }}
           >
-            <UserProfileCard user={user}  />
+            <UserProfileCard user={user} />
           </div>
 
           <div
@@ -84,10 +97,10 @@ export function Profile() {
                 onClick={() => setActiveTab("bookings")}
                 className={`flex-1 py-3 px-4 rounded-xl font-bold text-xs md:text-sm flex items-center justify-center gap-2 
                   transition-all duration-300 ${
-                  activeTab === "bookings"
-                    ? "bg-slate-900 text-white shadow-md"
-                    : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
-                }`}
+                    activeTab === "bookings"
+                      ? "bg-slate-900 text-white shadow-md"
+                      : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
+                  }`}
               >
                 <Calendar className="w-4 h-4" />
                 My Bookings
@@ -108,10 +121,10 @@ export function Profile() {
                 onClick={() => setActiveTab("messages")}
                 className={`flex-1 py-3 px-4 rounded-xl font-bold text-xs md:text-sm flex items-center justify-center gap-2 
                   transition-all duration-300 ${
-                  activeTab === "messages"
-                    ? "bg-slate-900 text-white shadow-md"
-                    : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
-                }`}
+                    activeTab === "messages"
+                      ? "bg-slate-900 text-white shadow-md"
+                      : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
+                  }`}
               >
                 <Mail className="w-4 h-4" />
                 Messages Center
@@ -129,27 +142,29 @@ export function Profile() {
               </button>
             </div>
 
-           
             <div
               key={activeTab}
               className="bg-transparent rounded-2xl animate-fade-in-up"
               style={{ opacity: 0, animationDuration: "350ms" }}
             >
               {activeTab === "bookings" ? (
-                <BookedVenues
-                  bookings={userVenue}
-                 
-                />
+                <BookedVenues bookings={userVenue} />
               ) : (
                 <AdminMessages
                   // messages={messages}
-   
+                  message={message}
+                  isLoading={isLoading}
+                  handleSelect={handleSelect}
                 />
               )}
             </div>
           </div>
         </div>
       </main>
+      {messageModal && <MessageBoard 
+      selectedMessage={selectedMessage}
+      onClose={()=> setMessageModal(false)}
+      />}
     </div>
   );
 }
