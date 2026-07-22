@@ -320,17 +320,7 @@ const userBookedVenue = async (req, res) => {
         message: "No booked venue found..",
       });
     }
-    // console.log("res", bookings);
 
-    // const venueIds = await bookings.map((booking) => booking.venueId);
-
-    // const venues = await venueModel.find({ _id: { $in: venueIds } });
-    // console.log("vee", venues);
-    // if (!venues) {
-    //   return res.status(404).json({
-    //     message: "No booked venue found..",
-    //   });
-    // }
     res.status(200).json({
       bookings,
     });
