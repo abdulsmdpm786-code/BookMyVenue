@@ -37,6 +37,6 @@ export const sendMail = async (to, subject, text, html) => {
     console.log("Message sent: %s", info.messageId);
     console.log(`Preview URL: %s`, nodemailer.getTestMessageUrl(info));
   } catch (error) {
-    throw new Error("SMTP_Failure provide a valid email", error.message);
+    throw new Error(  error || "SMTP_Failure provide a valid email" );
   }
 };
