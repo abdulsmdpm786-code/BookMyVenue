@@ -5,6 +5,7 @@ import { sendMail } from "../Services/emailServices.js";
 import { otpModel } from "../Models/otpModel.js";
 import jwt from "jsonwebtoken";
 import { sessionModel } from "../Models/sessionModel.js";
+import { mailSend } from "../Services/emailBravo.js";
 
 const handleSignUp = async (req, res) => {
   try {
@@ -50,7 +51,8 @@ const handleSignUp = async (req, res) => {
       otpHash,
     });
 
-    await sendMail(email, "OTP Verification", `Your OTP code is${otp}`, html);
+    await mailSend(email, "OTP Verification", `Your OTP code is${otp}`, html);
+    // await sendMail(email, "OTP Verification", `Your OTP code is${otp}`, html);
 
     res.status(200).json({
       message: "User registered successfully",

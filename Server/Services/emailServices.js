@@ -40,3 +40,5 @@ export const sendMail = async (to, subject, text, html) => {
     throw new Error(error || "SMTP_Failure provide a valid email");
   }
 };
+
+
