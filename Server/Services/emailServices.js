@@ -1,7 +1,9 @@
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
   auth: {
     type: "OAuth2",
     user: process.env.GOOGLE_USER,
@@ -32,7 +34,6 @@ export const sendMail = async (to, subject, text, html) => {
     console.log("Message sent: %s", info.messageId);
     console.log(`Preview URL: %s`, nodemailer.getTestMessageUrl(info));
   } catch (error) {
-    
-   throw new Error("SMTP_Failure provide a valid email",error.message)
+    throw new Error("SMTP_Failure provide a valid email", error.message);
   }
 };
