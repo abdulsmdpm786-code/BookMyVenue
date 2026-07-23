@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "axios"
 
 export const mailSend = async (to, subject, text, html) => {
   const url = "https://api.brevo.com/v3/smtp/email";
