@@ -22,7 +22,7 @@ export default function TopAutomations({ organizers }) {
         </div>
       </div>
 
-      <div className="space-y-4 flex-1">
+      <div className="space-y-4 flex-1 max-h-72 overflow-hidden  overflow-y-scroll">
         {organizers.map((item, index) => {
           return (
             <div

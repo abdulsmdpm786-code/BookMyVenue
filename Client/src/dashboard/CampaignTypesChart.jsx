@@ -13,7 +13,7 @@ export default function CampaignTypesChart({
 
   return (
     <div
-      className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm w-full max-w-md flex flex-col gap-4 
+      className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm w-full max-w-md flex flex-col   gap-4 
     "
     >
       <div className="flex justify-between items-start mb-2">
@@ -27,7 +27,7 @@ export default function CampaignTypesChart({
       {isAdmin && (
         <div>
           {users.length > 0 ? (
-            <div className="flex flex-col gap-4 overflow-hidden  overflow-y-scroll p-2">
+            <div className="flex flex-col gap-4 max-h-72 overflow-hidden  overflow-y-scroll p-2">
               {users.map((item, index) => (
                 <div
                   key={index}

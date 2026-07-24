@@ -7,7 +7,6 @@ export const authApi = {
         email,
         password,
       });
-      console.log("Success:", res.data);
       return res.data;
     } catch (error) {
       const errorMessage = error.response?.data?.message || "Login failed";
@@ -29,7 +28,6 @@ export const authApi = {
   refresh: async () => {
     try {
       const res = await AXIOS_API.get("/api/v1/register/refresh");
-      console.log("...",res);
       return res.data;
     } catch (error) {
       const errorMessage = error.response?.data?.message || "Refresh failed";

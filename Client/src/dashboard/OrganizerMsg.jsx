@@ -6,7 +6,7 @@ function OrganizerMsg() {
     <div
       className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm hover:shadow-md hover:border-slate-350
      hover:-translate-y-1.5 transition-all
-      duration-400 select-none  flex flex-col justify-between animate-fade-in-up"
+      duration-400 select-none  flex flex-col justify-between animate-fade-in-up "
     >
       <div className="flex items-center justify-between gap-4 mb-4">
         <div>
